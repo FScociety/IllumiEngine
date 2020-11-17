@@ -43,9 +43,6 @@ public class Text extends GameBehaviour {
 	}
 
 	public void render() {
-		d.setColor(Color.BLACK);
-		Vector2 textBScale = new Vector2(d.g.getFontMetrics().stringWidth(this.text), this.font.getSize());
-		d.fillRect(new Vector2(Vector2.divide(textBScale, 2).x, -this.font.getSize()/2), textBScale);
 		d.setFont(this.font);
 		d.setColor(this.color);
 		d.drawString(this.text);

@@ -48,6 +48,7 @@ public class Drawing {
 		
 		this.g.rotate(Math.toRadians(transform.rotation));
 		transform.position.rotate(-transform.rotation);
+		this.g.scale(transform.scale.x, transform.scale.y);
 		this.g.translate(transform.position.x / transform.scale.x, transform.position.y / transform.scale.y); //Apply Object Position
 	}
 	

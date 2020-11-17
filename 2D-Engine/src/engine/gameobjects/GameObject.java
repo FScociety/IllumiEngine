@@ -99,7 +99,7 @@ public class GameObject {
 
 		/*GameContainer.d.setColor(Color.GREEN);
 		
-		Vector2 pos = Vector2.addVector2(Vector2.subtractVector2(this.getTransform().position, GameContainer.d.cameraOffset), Vector2.divideVector2(GameContainer.windowSize, new Vector2(2)));
+		Vector2 pos = Vector2.add(Vector2.substract(this.getTransform().position, GameContainer.d.cameraOffset), Vector2.divide(GameContainer.windowSize, new Vector2(2)));
 		GameContainer.d.fillRect(pos, new Vector2(4));*/
 	}
 

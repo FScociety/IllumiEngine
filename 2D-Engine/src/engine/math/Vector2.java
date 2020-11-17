@@ -126,6 +126,11 @@ public class Vector2 {
 		this.add(pivot);
 	}
 	
+	public void round() {
+		this.x = Math.round(this.x);
+		this.y = Math.round(this.y);
+	}
+	
 	public static Vector2 abs(Vector2 vec) {
 		return new Vector2(Math.abs(vec.x), Math.abs(vec.y));
 	}

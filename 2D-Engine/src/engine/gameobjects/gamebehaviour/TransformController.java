@@ -2,6 +2,7 @@ package engine.gameobjects.gamebehaviour;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import engine.game.GameContainer;
 import engine.gameobjects.Transform;
@@ -18,8 +19,11 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	Vector2 oldMousePos;
 	Vector2 oldObjectPos;
+	
 	float oldRotation;
+	
 	Vector2 oldScale;
+	float oldMouseObjectDistance;
 	
 	
 	public TransformController() {
@@ -49,6 +53,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			} else if (GameContainer.input.isKeyDown(KeyEvent.VK_S)) {
 				this.state = 4;
 				this.oldScale = this.gameObject.getTransformWithCaution().scale;
+				this.oldMouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
 			}
 			
 			tryExit();
@@ -60,19 +65,19 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			
 			tryExit();
 		} else if (this.state == 4) { //Scaling
-			float mouseObjectDistance = Vector2.substract(this.oldScale, this.gameObject.getTransformWithCaution().scale).length();
-			this.gameObject.setScale(new Vector2(10));
+			float mouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
+			this.gameObject.setScale(Vector2.multiply(this.oldScale, mouseObjectDistance / oldMouseObjectDistance));
 			tryExit();
 		}
 	}
 	
 	private void tryExit() {
-		if (GameContainer.input.isKey(KeyEvent.VK_ENTER)) {
+		if (GameContainer.input.isKey(KeyEvent.VK_ENTER) | GameContainer.input.isButton(MouseEvent.BUTTON1)) {
 			state = 0;
 			this.listenButton.setWire(false);
 			this.listenButton.setBaseColor(this.oldButtonC);
 		}
-	}
+ 	}
 	
 	@Override
 	public void ButtonClicked() {

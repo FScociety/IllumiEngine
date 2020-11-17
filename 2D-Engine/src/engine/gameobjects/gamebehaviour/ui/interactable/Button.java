@@ -145,10 +145,10 @@ public class Button extends GameBehaviour {
 			mousePos.rotate(-this.gameObject.getTransformWithCaution().rotation, this.gameObject.getTransformWithCaution().position);
 		} //Normalize the MousePos rotation relative to button
 	
-		return  this.gameObject.getTransformWithCaution().position.x - this.sizes[0].x/2 <= mousePos.x &&
-				this.gameObject.getTransformWithCaution().position.x + this.sizes[0].x/2 >= mousePos.x &&
-				this.gameObject.getTransformWithCaution().position.y - this.sizes[0].y/2 <= mousePos.y &&
-				this.gameObject.getTransformWithCaution().position.y + this.sizes[0].y/2 >= mousePos.y;
+		return  this.gameObject.getTransformWithCaution().position.x - this.sizes[0].x/2 * this.gameObject.getTransformWithCaution().scale.x <= mousePos.x &&
+				this.gameObject.getTransformWithCaution().position.x + this.sizes[0].x/2 * this.gameObject.getTransformWithCaution().scale.x >= mousePos.x &&
+				this.gameObject.getTransformWithCaution().position.y - this.sizes[0].y/2 * this.gameObject.getTransformWithCaution().scale.y <= mousePos.y &&
+				this.gameObject.getTransformWithCaution().position.y + this.sizes[0].y/2 * this.gameObject.getTransformWithCaution().scale.y >= mousePos.y;
 	}
 	
 	public String toString() { 
