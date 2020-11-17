@@ -61,7 +61,10 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 	
 	public Vector2 getMousePosToWorld() {
-		return Vector2.substract(Vector2.add(mousePos, Camera.activeCam.gameObject.getTransformWithCaution().position), Vector2.divide(GameContainer.windowSize, 2));
+		Vector2 newMousePos = Vector2.add(mousePos, Camera.activeCam.gameObject.getTransformWithCaution().position); //MousePos relative to Camera
+		newMousePos.substract(Vector2.divide(GameContainer.windowSize, 2)); //Center the MousePos to Screen
+		newMousePos.scale(Camera.activeCam.gameObject.getTransformWithCaution().position, 1 / Camera.activeCam.zoom); //Apply Camera Zoom to Mouse Pos
+		return newMousePos;
 	}
 
 	public int getScroll() {

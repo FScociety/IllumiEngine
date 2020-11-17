@@ -20,7 +20,6 @@ public class Profile extends GameBehaviour {
 	@Override
 	public void render() {
 		d.setColor(Color.DARK_GRAY);
-		d.fillRect(new Vector2(50), new Vector2(100));
 		d.setColor(Color.WHITE);
 		d.setFont(Window.standartFont);
 		d.drawString("FramesPerSecond: " + GameContainer.fps, new Vector2(0, 10));
