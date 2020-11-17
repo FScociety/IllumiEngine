@@ -40,12 +40,12 @@ public class Button extends GameBehaviour {
 		this.sizes[1] = this.sizes[0].getCopy();
 		this.sizes[2] = this.sizes[0].getCopy();
 		
-		this.sizes[1].substract(new Vector2(2));
-		this.sizes[2].substract(new Vector2(5));
+		this.sizes[1].multiply(.95f);
+		this.sizes[2].multiply(.9f);
 	}
 
 	public Vector2 getSize() {
-		return this.sizes[0];
+		return this.sizes[state];
 	}
 
 	public boolean isWire() {
@@ -61,9 +61,6 @@ public class Button extends GameBehaviour {
 		} else {
 			d.fillRect(this.sizes[state]);	
 		}
-		
-		d.setColor(Color.PINK);
-		d.drawString(state+"");
 	}
 
 	public void setBaseColor(final Color c) {

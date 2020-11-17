@@ -3,6 +3,7 @@ package engine.gameobjects.gamebehaviour.ui.interactable;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.gameobjects.gamebehaviour.Text;
@@ -12,7 +13,6 @@ import engine.math.Vector2;
 
 public class CheckBox extends GameBehaviour implements ButtonListener {
 	private int size;
-	private Text t;
 	private Button b;
 	public boolean clicked;
 	private Color standaloneC;
@@ -34,14 +34,6 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 
 	public void addCheckBoxListener(final CheckBoxListener cbl) {
 		this.listener.add(cbl);
-	}
-
-	public void addText(final Text t) {
-		this.t = t;
-		this.textb = true;
-		if (this.started) {
-			this.createText();
-		}
 	}
 
 	@Override
@@ -70,12 +62,6 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 		this.setClicked(!this.isClicked());
 	}
 
-	private void createText() {
-		final GameObject textG = new GameObject(new Vector2(this.size * 3 / 2, this.size), this.gameObject);
-		this.t.setFont(this.t.getFont().deriveFont(this.size));
-		textG.addComponent(this.t);
-	}
-
 	public Button getB() {
 		return this.b;
 	}
@@ -96,8 +82,7 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 	public void render() {
 		if (this.isClicked()) {
 			this.d.setColor(this.getFillC());
-			this.d.fillRect((int) this.gameObject.getTransform().position.x,
-					(int) this.gameObject.getTransform().position.y, this.size, this.size);
+			this.d.fillRect(this.b.getSize());
 		}
 	}
 
@@ -119,17 +104,16 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 
 	@Override
 	public void start() {
-		(this.b = new Button(this.getStandaloneC(), new Vector2(this.size))).addButtonListener(this);
+		this.b = new Button(new Vector2(this.size));
+		this.b.setBaseColor(this.getStandaloneC());
+		this.b.addButtonListener(this);
 		this.b.setWire(true);
 		this.gameObject.addComponent(this.b);
-		if (this.textb) {
-			this.createText();
-		}
 	}
 
 	@Override
 	public void update() {
-		if (this.gc.getInput().isKey(48)) {
+		if (GameContainer.input.isKey(48)) {
 			this.gameObject.setPosition(new Vector2(0));
 		}
 	}

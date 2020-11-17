@@ -55,7 +55,7 @@ public class Drawing {
 	public void drawString(String text) {
 		Font f = this.g.getFont();
 		this.g.setFont(this.g.getFont().deriveFont(zoom * 10));
-		this.g.drawString(text, 0, 0);
+		this.g.drawString(text, -this.g.getFontMetrics().stringWidth(text) / 2, zoom * 5);
 		this.g.setFont(f);
 	}
 	
