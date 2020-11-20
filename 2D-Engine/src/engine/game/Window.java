@@ -12,9 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -25,10 +23,10 @@ import engine.math.Vector2;
 public class Window extends Canvas {
 	public static JFrame frame;
 	public static Font standartFont;
-	public BufferStrategy bs;
-	public Graphics g;
-	
 	public static String currentDir;
+	public BufferStrategy bs;
+	
+	public Graphics g;
 
 	public Window(final GameContainer gc) {
 
@@ -57,6 +55,7 @@ public class Window extends Canvas {
 		Window.frame.add(panel);
 
 		Window.frame.addComponentListener(new ComponentAdapter() {
+			@Override
 			public void componentResized(ComponentEvent evt) {
 				GameContainer.windowSize = new Vector2(Window.frame.getWidth(), Window.frame.getHeight());
 				final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);

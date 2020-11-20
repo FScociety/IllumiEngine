@@ -52,19 +52,19 @@ public class CoordinateSystem extends GameBehaviour {
 	}
 
 	public float getMaxX() {
-		return (float) this.maxX;
+		return this.maxX;
 	}
 
 	public float getMaxY() {
-		return (float) this.maxY;
+		return this.maxY;
 	}
 
 	public float getMinX() {
-		return (float) this.minX;
+		return this.minX;
 	}
 
 	public float getMinY() {
-		return (float) this.minY;
+		return this.minY;
 	}
 
 	public int getPixelPerUnit() {

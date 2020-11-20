@@ -1,7 +1,5 @@
 package engine.gameobjects;
 
-import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.Camera;
 import engine.math.Vector2;
 
 public class Transform {

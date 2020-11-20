@@ -59,6 +59,7 @@ public class GameContainer {
 		System.out.println("RenderThread...");
 		renderThread = new Thread(new Runnable() {
 
+			@Override
 			public void run() {
 
 				int frame = 0;
@@ -82,7 +83,6 @@ public class GameContainer {
 					try {
 					window.bs.show(); // Flipp the Buffer
 					} catch (IllegalStateException e) {
-						System.err.println("Critical Error with buffer, but dont worry its normalllll (:");
 					}
 
 					lastTime = startTime;
@@ -96,7 +96,7 @@ public class GameContainer {
 						frame++;
 					}
 
-					GameContainer.window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
+					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
 					/*try {
 						 Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
 					} catch (InterruptedException e) {
@@ -112,6 +112,7 @@ public class GameContainer {
 	private void startUpdateThread() {
 		System.out.println("UpdateThread...");
 		updateThread = new Thread(new Runnable() {
+			@Override
 			public void run() {
 				game.start();
 				

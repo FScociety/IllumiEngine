@@ -34,12 +34,54 @@ public class TransformController extends GameBehaviour implements ButtonListener
 		listenButton = b;
 	}
 	
+	@Override
+	public void ButtonClicked() {
+		if (this.state == 2 || this.state == 3 || this.state == 4) {
+			this.state = 0;
+			this.listenButton.setWire(false);
+			this.listenButton.setBaseColor(this.oldButtonC);
+		} else {
+			Vector2 newMousePos = GameContainer.input.getMousePosToWorld();
+			state = 0;
+			if (Math.abs(Vector2.substract(newMousePos, this.oldMousePos).length()) <= 2) { //Not moving mouseMuch
+				this.listenButton.setBaseColor(new Color(255, 100, 100));
+				this.state = 2;
+				this.listenButton.setWire(true);
+			}
+		}
+	}
+	
+	@Override
+	public void ButtonHover() {
+		
+	}
+	
+	@Override
+	public void ButtonPress() {
+		if (this.state == 2) { //If the button is clicked you dont want to move it
+			return;
+		}
+		this.state = 1;
+		this.oldMousePos = GameContainer.input.getMousePosToWorld();
+		this.oldObjectPos = this.gameObject.getTransformWithCaution().position;
+	}
+	
+	@Override
 	public void start() {
 		listenButton.addButtonListener(this);
 		this.gameObject.addComponent(listenButton);
 		this.oldButtonC = this.listenButton.getBaseColor();
 	}
-	
+
+	private void tryExit() {
+		if (GameContainer.input.isKey(KeyEvent.VK_ENTER) | GameContainer.input.isButton(MouseEvent.BUTTON1)) {
+			state = 0;
+			this.listenButton.setWire(false);
+			this.listenButton.setBaseColor(this.oldButtonC);
+		}
+ 	}
+
+	@Override
 	public void update() {
 		Vector2 mousePos = GameContainer.input.getMousePosToWorld();
 		Transform objectTrans = this.gameObject.getTransformWithCaution();
@@ -69,46 +111,6 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			this.gameObject.setScale(Vector2.multiply(this.oldScale, mouseObjectDistance / oldMouseObjectDistance));
 			tryExit();
 		}
-	}
-	
-	private void tryExit() {
-		if (GameContainer.input.isKey(KeyEvent.VK_ENTER) | GameContainer.input.isButton(MouseEvent.BUTTON1)) {
-			state = 0;
-			this.listenButton.setWire(false);
-			this.listenButton.setBaseColor(this.oldButtonC);
-		}
- 	}
-	
-	@Override
-	public void ButtonClicked() {
-		if (this.state == 2 || this.state == 3 || this.state == 4) {
-			this.state = 0;
-			this.listenButton.setWire(false);
-			this.listenButton.setBaseColor(this.oldButtonC);
-		} else {
-			Vector2 newMousePos = GameContainer.input.getMousePosToWorld();
-			state = 0;
-			if (Math.abs(Vector2.substract(newMousePos, this.oldMousePos).length()) <= 2) { //Not moving mouseMuch
-				this.listenButton.setBaseColor(new Color(255, 100, 100));
-				this.state = 2;
-				this.listenButton.setWire(true);
-			}
-		}
-	}
-
-	@Override
-	public void ButtonHover() {
-		
-	}
-
-	@Override
-	public void ButtonPress() {
-		if (this.state == 2) { //If the button is clicked you dont want to move it
-			return;
-		}
-		this.state = 1;
-		this.oldMousePos = GameContainer.input.getMousePosToWorld();
-		this.oldObjectPos = this.gameObject.getTransformWithCaution().position;
 	}
 
 }

@@ -2,8 +2,6 @@ package engine.gameobjects.gamebehaviour;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.FontFormatException;
-import java.io.IOException;
 
 import engine.game.Window;
 import engine.math.Vector2;
@@ -42,6 +40,7 @@ public class Text extends GameBehaviour {
 		return this.size;
 	}
 
+	@Override
 	public void render() {
 		d.setFont(this.font);
 		d.setColor(this.color);

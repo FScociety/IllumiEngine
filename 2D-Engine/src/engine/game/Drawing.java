@@ -14,11 +14,11 @@ import engine.math.Vector2;
 
 public class Drawing {
 
+	public static float lineMultiplier = 3520f;
 	public Graphics2D g;
 	private AffineTransform af;
-	private Color c;
 	
-	public static float lineMultiplier = 3520f;
+	private Color c;
 	
 	public Vector2 cameraOffset = new Vector2();
 	
@@ -52,6 +52,35 @@ public class Drawing {
 		this.g.translate(transform.position.x / transform.scale.x, transform.position.y / transform.scale.y); //Apply Object Position
 	}
 	
+	public void drawCircle(Vector2 scale) {
+		this.g.drawOval((int) - (scale.x * zoom) / 2, (int) - (scale.y * zoom) / 2, (int) (scale.x * zoom), (int) (scale.y * zoom));
+	}
+	
+	public void drawCircle(Vector2 pos, Vector2 scale) {
+		this.g.drawOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2), (int) (scale.x * zoom), (int) (scale.y * zoom));
+	}
+	
+	public void drawImage(BufferedImage img) {
+		this.g.drawImage(img, (int) -((img.getWidth() * zoom) / 2), (int) -((img.getHeight() * zoom) / 2), (int) (img.getWidth() * zoom), (int) (img.getHeight() * zoom), null);
+	}
+	
+	public void drawLine(Vector2 vec) {
+		this.g.drawLine(0, 0, (int)(vec.x * zoom), (int)(vec.y * zoom));
+	}
+	
+	public void drawLine(Vector2 vec1, Vector2 vec2) {
+		vec2.scale(vec1, zoom);
+		this.g.drawLine((int)vec1.x, (int)vec1.y, (int)vec2.x, (int)vec2.y);
+	}
+	
+	public void drawRect(Vector2 scale) {
+		this.g.drawRect((int) - (scale.x * zoom) / 2, (int) - (scale.y * zoom) / 2, (int) (scale.x * zoom), (int) (scale.y * zoom));
+	}
+
+	public void drawRect(Vector2 pos, Vector2 scale) {
+		this.g.drawRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2), (int) (scale.x * zoom), (int) (scale.y * zoom));
+	}
+
 	public void drawString(String text) {
 		Font f = this.g.getFont();
 		this.g.setFont(this.g.getFont().deriveFont(zoom * 10));
@@ -66,41 +95,12 @@ public class Drawing {
 		this.g.setFont(f);
 	}
 	
-	public void drawLine(Vector2 vec1, Vector2 vec2) {
-		vec2.scale(vec1, zoom);
-		this.g.drawLine((int)vec1.x, (int)vec1.y, (int)vec2.x, (int)vec2.y);
-	}
-	
-	public void drawLine(Vector2 vec) {
-		this.g.drawLine(0, 0, (int)(vec.x * zoom), (int)(vec.y * zoom));
-	}
-	
-	public void drawImage(BufferedImage img) {
-		this.g.drawImage(img, (int) -((img.getWidth() * zoom) / 2), (int) -((img.getHeight() * zoom) / 2), (int) (img.getWidth() * zoom), (int) (img.getHeight() * zoom), null);
-	}
-	
-	public void drawCircle(Vector2 scale) {
-		this.g.drawOval((int) - (scale.x * zoom) / 2, (int) - (scale.y * zoom) / 2, (int) (scale.x * zoom), (int) (scale.y * zoom));
-	}
-
-	public void drawCircle(Vector2 pos, Vector2 scale) {
-		this.g.drawOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2), (int) (scale.x * zoom), (int) (scale.y * zoom));
-	}
-
 	public void fillCircle(Vector2 scale) {
 		this.g.fillOval((int) - (scale.x * zoom) / 2, (int) - (scale.y * zoom) / 2, (int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
-	
+
 	public void fillCircle(Vector2 pos, Vector2 scale) {
 		this.g.fillOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2), (int) (scale.x * zoom), (int) (scale.y * zoom));
-	}
-	
-	public void drawRect(Vector2 scale) {
-		this.g.drawRect((int) - (scale.x * zoom) / 2, (int) - (scale.y * zoom) / 2, (int) (scale.x * zoom), (int) (scale.y * zoom));
-	}
-
-	public void drawRect(Vector2 pos, Vector2 scale) {
-		this.g.drawRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2), (int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 	
 	public void fillRect(Vector2 scale) {

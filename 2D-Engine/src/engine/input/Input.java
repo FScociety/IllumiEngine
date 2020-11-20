@@ -35,27 +35,6 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		GameContainer.window.addMouseWheelListener(this);
 	}
 	
-	public void update() {
-		this.scroll = 0;
-		
-		for (int i = 0; i < NUM_KEYS; ++i) {
-			if (this.keys[i] == 1) { //Taste wurde gedrückt 
-				this.keys[i]+=1;
-			} else if (this.keys[i] == -1) { //Taste wurde released
-				this.keys[i] = 0;
-			}
-		}
-		
-		for (int i = 0; i < NUM_BUTTONS; ++i) {
-			if (this.buttons[i] == 1) { //Taste wurde gedrückt 
-				this.buttons[i]+=1;
-			} else if (this.buttons[i] == -1) { //Taste wurde released
-				this.buttons[i] = 0;
-			}
-		}
-		
-	}
-	
 	public Vector2 getMousePos() {
 		return this.mousePos;
 	}
@@ -66,7 +45,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		newMousePos.scale(Camera.activeCam.gameObject.getTransformWithCaution().position, 1 / Camera.activeCam.zoom); //Apply Camera Zoom to Mouse Pos
 		return newMousePos;
 	}
-
+	
 	public int getScroll() {
 		return this.scroll;
 	}
@@ -78,11 +57,11 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	public boolean isButtonDown(final int button) {
 		return this.buttons[button] > 1;
 	}
-	
+
 	public boolean isButtonUp(final int button) {
 		return this.buttons[button] == -1;
 	}
-
+	
 	public boolean isKey(final int keyCode) {
 		return this.keys[keyCode] > 0;
 	}
@@ -90,11 +69,11 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	public boolean isKeyDown(final int keyCode) {
 		return this.keys[keyCode] > 1;
 	}
-	
+
 	public boolean isKeyUp(final int keyCode) {
 		return this.keys[keyCode] == -1;
 	}
-
+	
 	@Override
 	public void keyPressed(final KeyEvent e) {
 		if (e.getKeyCode() > this.keys.length) {
@@ -162,5 +141,26 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	@Override
 	public void mouseWheelMoved(final MouseWheelEvent e) {
 		this.scroll = e.getWheelRotation();
+	}
+
+	public void update() {
+		this.scroll = 0;
+		
+		for (int i = 0; i < NUM_KEYS; ++i) {
+			if (this.keys[i] == 1) { //Taste wurde gedrückt 
+				this.keys[i]+=1;
+			} else if (this.keys[i] == -1) { //Taste wurde released
+				this.keys[i] = 0;
+			}
+		}
+		
+		for (int i = 0; i < NUM_BUTTONS; ++i) {
+			if (this.buttons[i] == 1) { //Taste wurde gedrückt 
+				this.buttons[i]+=1;
+			} else if (this.buttons[i] == -1) { //Taste wurde released
+				this.buttons[i] = 0;
+			}
+		}
+		
 	}
 }

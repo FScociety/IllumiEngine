@@ -30,14 +30,6 @@ public class Camera extends GameBehaviour  {
 	}
 
 	@Override
-	public void update() {
-	}
-
-	public void view() {
-		Camera.activeCam = this;
-	}
-	
-	@Override
 	public String toString() {
 		for (int i = 0; i < cameras.size(); i++) {
 			if (cameras.get(i) == this) {
@@ -46,5 +38,13 @@ public class Camera extends GameBehaviour  {
 		}
 		
 		return "Bischt du Dumm im Kopf oder was, by the way er konnte die camera nicht in der Camera liste finden was absolut kein Sinn macht also. Ja genau macht halt einfach kein Sinn";
+	}
+
+	@Override
+	public void update() {
+	}
+	
+	public void view() {
+		Camera.activeCam = this;
 	}
 }

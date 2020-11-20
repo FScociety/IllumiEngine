@@ -25,20 +25,38 @@ public abstract class Scene {
 		SceneManager.scenes.add(this);
 	}
 
+	public void addGameObject(final GameObject gobj) {
+		this.gameObjectsToBeAdded.add(gobj);
+	}
+
 	public void addObjectCount() {
 		this.objectCount++;
 	}
 
 	public ArrayList<GameObject> getGameObjectsInScene() {
-		return (ArrayList<GameObject>) this.gameObjectsInScene;
+		return this.gameObjectsInScene;
 	}
 
 	public String getName() {
 		return this.name;
 	}
-
+	
 	public int getObjectCount() {
 		return this.objectCount;
+	}
+
+	private void insertGameObjects() {
+		if (!this.gameObjectsToBeAdded.isEmpty()) {
+			
+			for (GameObject obj : this.gameObjectsToBeAdded) {
+				this.gameObjectsInScene.add(obj);
+				if (!obj.started && this.started) {
+					obj.start(this);
+				}
+			}
+
+			this.gameObjectsToBeAdded.clear();
+		}
 	}
 	
 	public abstract void instanceGameObjects();
@@ -62,28 +80,6 @@ public abstract class Scene {
 		} 
 	}
 	
-	public void addGameObject(final GameObject gobj) {
-		this.gameObjectsToBeAdded.add(gobj);
-	}
-
-	public void removeGameObject(final GameObject gobj) {
-		this.gameObjectsToBeRemoved.add(gobj);
-	}
-	
-	private void insertGameObjects() {
-		if (!this.gameObjectsToBeAdded.isEmpty()) {
-			
-			for (GameObject obj : this.gameObjectsToBeAdded) {
-				this.gameObjectsInScene.add(obj);
-				if (!obj.started && this.started) {
-					obj.start(this);
-				}
-			}
-
-			this.gameObjectsToBeAdded.clear();
-		}
-	}
-	
 	private void outsertGameObjects() {
 		if (!this.gameObjectsToBeRemoved.isEmpty()) {
 			
@@ -95,29 +91,10 @@ public abstract class Scene {
 		}
 	}
 	
-	public void update() {
-		if (this.unload) {
-			this.gameObjectsInScene.clear();
-			System.out.println("Unloaded Scene [" + this.name + "]");
-			this.sceneUnloaded();
-			this.unload = false;
-			/*
-			 * Scene wird nicht komplett aus dem ram gelöscht!!!!!!!!!!!!!!!
-			 * Sollte noch besser werden
-			 */
-			return;
-		}
-		
-		for (final GameObject obj : this.gameObjectsInScene) {
-			if (obj.updatesOutOfView || inView(obj)) {
-				obj.update();
-			}
-		}
-		
-		insertGameObjects();
-		outsertGameObjects();
+	public void removeGameObject(final GameObject gobj) {
+		this.gameObjectsToBeRemoved.add(gobj);
 	}
-
+	
 	public void render() {
 		
 		/*
@@ -137,9 +114,9 @@ public abstract class Scene {
 				}
 			}
 	}
-	
-	public void sceneLoaded() {}
 
+	public void sceneLoaded() {}
+	
 	public void sceneUnloaded() {}
 
 	public void setName(final String name) {
@@ -163,5 +140,28 @@ public abstract class Scene {
 
 	public void unload() {
 		this.unload = true;
+	}
+
+	public void update() {
+		if (this.unload) {
+			this.gameObjectsInScene.clear();
+			System.out.println("Unloaded Scene [" + this.name + "]");
+			this.sceneUnloaded();
+			this.unload = false;
+			/*
+			 * Scene wird nicht komplett aus dem ram gelöscht!!!!!!!!!!!!!!!
+			 * Sollte noch besser werden
+			 */
+			return;
+		}
+		
+		for (final GameObject obj : this.gameObjectsInScene) {
+			if (obj.updatesOutOfView || inView(obj)) {
+				obj.update();
+			}
+		}
+		
+		insertGameObjects();
+		outsertGameObjects();
 	}
 }

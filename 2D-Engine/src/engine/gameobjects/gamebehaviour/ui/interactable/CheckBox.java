@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
-import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
-import engine.gameobjects.gamebehaviour.Text;
 import engine.input.listener.ButtonListener;
 import engine.input.listener.CheckBoxListener;
 import engine.math.Vector2;
