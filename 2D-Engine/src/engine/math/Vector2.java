@@ -1,47 +1,6 @@
 package engine.math;
 
 public class Vector2 {
-	public static Vector2 abs(Vector2 vec) {
-		return new Vector2(Math.abs(vec.x), Math.abs(vec.y));
-	}
-
-	public static Vector2 add(Vector2 vec, float value) {
-		return new Vector2(vec.x + value, vec.y + value);
-	}
-
-	public static Vector2 add(Vector2 vec, Vector2 vec2) {
-		return new Vector2(vec.x + vec2.x, vec.y + vec2.y);
-	}
-
-	public static Vector2 divide(Vector2 vec, float value) {
-		return new Vector2(vec.x / value, vec.y / value);
-	}
-	
-	public static Vector2 divide(Vector2 vec, Vector2 vec2) {
-		return new Vector2(vec.x / vec2.x, vec.y / vec2.y);
-	}
-
-	public static Vector2 multiply(Vector2 vec, float value) {
-		return new Vector2(vec.x * value, vec.y * value);
-	}
-
-	public static Vector2 multiply(Vector2 vec, Vector2 vec2) {
-		return new Vector2(vec.x * vec2.x, vec.y * vec2.y);
-	}
-	
-	public static Vector2 substract(Vector2 vec, float value) {
-		return new Vector2(vec.x + value, vec.y + value);
-	}
-	
-	public static Vector2 substract(Vector2 vec, Vector2 vec2) {
-		return new Vector2(vec.x - vec2.x, vec.y - vec2.y);
-	}
-	
-	public static float toAngle(Vector2 vec, Vector2 vec2) {
-		Vector2 diffVec = Vector2.substract(vec, vec2);
-		return 180 + (float) Math.toDegrees(Math.atan2(diffVec.y, diffVec.x));
-		
-	}
 	
 	public float x, y;
 	
@@ -169,6 +128,52 @@ public class Vector2 {
 
 	public float toAngle() {
 		return 180 + (float) Math.toDegrees(Math.atan2(this.y, this.x));
+	}
+	
+	public static Vector2 abs(Vector2 vec) {
+		return new Vector2(Math.abs(vec.x), Math.abs(vec.y));
+	}
+
+	public static Vector2 add(Vector2 vec, float value) {
+		return new Vector2(vec.x + value, vec.y + value);
+	}
+
+	public static Vector2 add(Vector2 vec, Vector2 vec2) {
+		return new Vector2(vec.x + vec2.x, vec.y + vec2.y);
+	}
+
+	public static Vector2 divide(Vector2 vec, float value) {
+		return new Vector2(vec.x / value, vec.y / value);
+	}
+	
+	public static Vector2 divide(Vector2 vec, Vector2 vec2) {
+		return new Vector2(vec.x / vec2.x, vec.y / vec2.y);
+	}
+
+	public static Vector2 multiply(Vector2 vec, float value) {
+		return new Vector2(vec.x * value, vec.y * value);
+	}
+
+	public static Vector2 multiply(Vector2 vec, Vector2 vec2) {
+		return new Vector2(vec.x * vec2.x, vec.y * vec2.y);
+	}
+	
+	public static Vector2 substract(Vector2 vec, float value) {
+		return new Vector2(vec.x + value, vec.y + value);
+	}
+	
+	public static Vector2 substract(Vector2 vec, Vector2 vec2) {
+		return new Vector2(vec.x - vec2.x, vec.y - vec2.y);
+	}
+	
+	public static Vector2 invert(Vector2 vec) {
+		return new Vector2(-vec.x, -vec.y);
+	}
+	
+	public static float toAngle(Vector2 vec, Vector2 vec2) {
+		Vector2 diffVec = Vector2.substract(vec, vec2);
+		return 180 + (float) Math.toDegrees(Math.atan2(diffVec.y, diffVec.x));
+		
 	}
 	
 	@Override

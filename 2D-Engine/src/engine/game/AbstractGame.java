@@ -4,9 +4,9 @@ public abstract class AbstractGame {
 
 	public Drawing d;
 
-	public abstract void render();
+	public void render() {}
 
-	public abstract void start();
+	public void start() {}
 
-	public abstract void update();
+	public void update() {}
 }

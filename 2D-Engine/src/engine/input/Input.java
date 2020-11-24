@@ -51,7 +51,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 
 	public boolean isButton(final int button) {
-		return this.buttons[button] > 0;
+		return this.buttons[button] == 1;
 	}
 
 	public boolean isButtonDown(final int button) {
@@ -63,7 +63,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 	
 	public boolean isKey(final int keyCode) {
-		return this.keys[keyCode] > 0;
+		return this.keys[keyCode] == 1;
 	}
 
 	public boolean isKeyDown(final int keyCode) {

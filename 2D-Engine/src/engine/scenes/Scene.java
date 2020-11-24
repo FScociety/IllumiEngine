@@ -59,7 +59,7 @@ public abstract class Scene {
 		}
 	}
 	
-	public abstract void instanceGameObjects();
+	public void instanceGameObjects() {}
 
 	private boolean inView(GameObject obj) {
 		if (obj == Camera.activeCam.gameObject || !obj.inWorld) {
@@ -107,12 +107,12 @@ public abstract class Scene {
 		
 		Object[] objects = this.gameObjectsInScene.toArray();
 		
-			for (int i = 0; i < objects.length; i++) {
-				GameObject obj = (GameObject)objects[i];
-				if (inView(obj) && obj.started) {
-					obj.render();
-				}
+		for (int i = 0; i < objects.length; i++) {
+			GameObject obj = (GameObject)objects[i];
+			if (inView(obj) && obj.started) {
+				obj.render();
 			}
+		}
 	}
 
 	public void sceneLoaded() {}
