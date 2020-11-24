@@ -67,6 +67,7 @@ public class GameObject {
 		
 		if (this.started == true) {
 			gb.d = GameContainer.d;
+			gb.start();
 			gb.started = true;
 		}
 	}
@@ -192,13 +193,18 @@ public class GameObject {
 		this.setTransform(new Transform(this.localTransform.position, rotation / this.localTransform.rotation,
 				this.localTransform.scale, this.localTransform, this.localTransform.defaultScale));
 	}*/
-
+	
 	public void setChildren(final ArrayList<GameObject> children) {
 		this.children = children;
 	}
 	
 	public void setParent(final GameObject parent) {
 		(this.parent = parent).addChildren(this);
+	}
+	
+	public void addRotation(float r) {
+		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation + r, this.localTransform.scale, this.localTransform.defaultScale));
+		
 	}
 
 	public void setPosition(final Vector2 position) {

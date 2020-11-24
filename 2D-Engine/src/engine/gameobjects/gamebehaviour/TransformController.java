@@ -30,6 +30,9 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	public TransformController() {
 		listenButton = new Button(new Vector2(100));
+		this.features[0] = true;
+		this.features[1] = true;
+		this.features[2] = true;
 	}
 	
 	public TransformController(boolean position, boolean rotation, boolean scaling) {
@@ -39,8 +42,18 @@ public class TransformController extends GameBehaviour implements ButtonListener
 		this.features[2] = scaling;
 	}
 	
+	public TransformController(Button b, boolean position, boolean rotation, boolean scaling) {
+		listenButton = b;
+		this.features[0] = position;
+		this.features[1] = rotation;
+		this.features[2] = scaling;
+	}
+	
 	public TransformController(Button b) {
 		listenButton = b;
+		this.features[0] = true;
+		this.features[1] = true;
+		this.features[2] = true;
 	}
 	
 	@Override
@@ -120,6 +133,10 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			this.gameObject.setScale(Vector2.multiply(this.oldScale, mouseObjectDistance / oldMouseObjectDistance));
 			tryExit();
 		}
+	}
+	
+	public Button getButton() {
+		return this.listenButton;
 	}
 
 }
