@@ -137,6 +137,10 @@ public class Vector2 {
 	public static Vector2 add(Vector2 vec, float value) {
 		return new Vector2(vec.x + value, vec.y + value);
 	}
+	
+	public static Vector2 add(float value, Vector2 vec) {
+		return new Vector2(value + vec.x, value + vec.y);
+	}
 
 	public static Vector2 add(Vector2 vec, Vector2 vec2) {
 		return new Vector2(vec.x + vec2.x, vec.y + vec2.y);
@@ -144,6 +148,10 @@ public class Vector2 {
 
 	public static Vector2 divide(Vector2 vec, float value) {
 		return new Vector2(vec.x / value, vec.y / value);
+	}
+	
+	public static Vector2 divide(float value, Vector2 vec) {
+		return new Vector2(value / vec.x, value / vec.y);
 	}
 	
 	public static Vector2 divide(Vector2 vec, Vector2 vec2) {
@@ -159,7 +167,11 @@ public class Vector2 {
 	}
 	
 	public static Vector2 substract(Vector2 vec, float value) {
-		return new Vector2(vec.x + value, vec.y + value);
+		return new Vector2(vec.x - value, vec.y - value);
+	}
+	
+	public static Vector2 substract(float value, Vector2 vec) {
+		return new Vector2(value - vec.x, value - vec.y);
 	}
 	
 	public static Vector2 substract(Vector2 vec, Vector2 vec2) {

@@ -17,7 +17,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	private int state = 0; //1:grabed 2:clicked 3:rotate 4:scale
 	
-	Vector2 oldMousePos;
+	Vector2 oldMousePos = new Vector2(0);
 	Vector2 oldObjectPos;
 	
 	float oldRotation;
@@ -25,9 +25,18 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	Vector2 oldScale;
 	float oldMouseObjectDistance;
 	
+	boolean features[] = new boolean[3];
+	
 	
 	public TransformController() {
 		listenButton = new Button(new Vector2(100));
+	}
+	
+	public TransformController(boolean position, boolean rotation, boolean scaling) {
+		listenButton = new Button(new Vector2(100));
+		this.features[0] = position;
+		this.features[1] = rotation;
+		this.features[2] = scaling;
 	}
 	
 	public TransformController(Button b) {
@@ -36,14 +45,14 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	@Override
 	public void ButtonClicked() {
-		if (this.state == 2 || this.state == 3 || this.state == 4) {
+		if (this.state == 2 || this.state == 3 || this.state == 4) { //no "if" if its acitivaded cause this would ask ethen more
 			this.state = 0;
 			this.listenButton.setWire(false);
 			this.listenButton.setBaseColor(this.oldButtonC);
 		} else {
 			Vector2 newMousePos = GameContainer.input.getMousePosToWorld();
 			state = 0;
-			if (Math.abs(Vector2.substract(newMousePos, this.oldMousePos).length()) <= 2) { //Not moving mouseMuch
+			if (!this.features[0] || ((this.features[1] || this.features[2]) && Math.abs(Vector2.substract(newMousePos, this.oldMousePos).length()) <= 2)) { //Not moving mouseMuch
 				this.listenButton.setBaseColor(new Color(255, 100, 100));
 				this.state = 2;
 				this.listenButton.setWire(true);
@@ -58,11 +67,11 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	@Override
 	public void ButtonPress() {
-		if (this.state == 2) { //If the button is clicked you dont want to move it
+		if (this.state == 2 || !this.features[0]) { //If the button is clicked you dont want to move it || position feature is deactivaded
 			return;
 		}
-		this.state = 1;
 		this.oldMousePos = GameContainer.input.getMousePosToWorld();
+		this.state = 1;
 		this.oldObjectPos = this.gameObject.getTransformWithCaution().position;
 	}
 	
@@ -89,10 +98,10 @@ public class TransformController extends GameBehaviour implements ButtonListener
 		if (this.state == 1) {
 			this.gameObject.setPosition(Vector2.substract(mousePos, Vector2.substract(this.oldMousePos, this.oldObjectPos)));
 		} else if (this.state == 2) { //if the Controller is selected it can be rotated / scaled
-			if (GameContainer.input.isKeyDown(KeyEvent.VK_R)) {
+			if (this.features[1] && GameContainer.input.isKeyDown(KeyEvent.VK_R)) {
 				this.state = 3;
 				this.oldRotation = objectTrans.rotation - Vector2.toAngle(objectTrans.position, mousePos);
-			} else if (GameContainer.input.isKeyDown(KeyEvent.VK_S)) {
+			} else if (this.features[2] && GameContainer.input.isKeyDown(KeyEvent.VK_S)) {
 				this.state = 4;
 				this.oldScale = this.gameObject.getTransformWithCaution().scale;
 				this.oldMouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
