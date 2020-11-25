@@ -20,7 +20,7 @@ public class GameContainer {
 	public static Window window;
 	public static Input input;
 	public static Drawing d;
-	public static Vector2 windowSize = new Vector2(100);
+	public static Vector2 windowSize;
 	public static float fps = 0;
 
 	public static float ups = 0;
