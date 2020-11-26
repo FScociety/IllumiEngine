@@ -1,15 +1,27 @@
-package engine.gameobjects.gamebehaviour;
+package engine.gameobjects.gamebehaviour.ui.addObjects;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import engine.game.GameContainer;
+import engine.gameobjects.GameObject;
+import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.math.Vector2;
 
 public class addObjects extends GameBehaviour {
 	
 	private boolean opened = false;
+	
+	private addObjectType[] objects;
+	
+	public addObjects(GameObject[] objectsToAdd) {
+		
+	}
+	
+	public void close() {
+		this.opened = false;
+	}
 	
 	public void update() {
 		if (GameContainer.input.isKeyDown(KeyEvent.VK_SHIFT)) {
