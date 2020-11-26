@@ -11,8 +11,12 @@ public class addObjectType extends GameBehaviour implements ButtonListener {
 	Button b;
 	GameObject objectToInstance;
 	
-	public void addObjectType(Vector2 size) {
+	public addObjectType(GameObject objectToInstance, Vector2 size) {
 		b = new Button(size);
+		this.objectToInstance =  objectToInstance;
+	}
+	
+	public void start() {
 		this.gameObject.addComponent(b);
 	}
 

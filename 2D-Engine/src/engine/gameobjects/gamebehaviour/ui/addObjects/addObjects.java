@@ -16,7 +16,16 @@ public class addObjects extends GameBehaviour {
 	private addObjectType[] objects;
 	
 	public addObjects(GameObject[] objectsToAdd) {
-		
+		objects = new addObjectType[objectsToAdd.length];
+		for (int i = 0; i < objectsToAdd.length; i++) {
+			objects[i] = new addObjectType(objectsToAdd[i], new Vector2(100, 10));
+		}
+	}
+	
+	public void start() {
+		for (int i = 0; i < objects.length; i++) {
+			this.gameObject.addComponent(objects[i]);
+		}
 	}
 	
 	public void close() {
@@ -28,9 +37,15 @@ public class addObjects extends GameBehaviour {
 			if (GameContainer.input.isKey(KeyEvent.VK_A)) {
 				this.gameObject.setPosition(GameContainer.input.getMousePosToWorld());
 				opened = true;
+				for (int i = 0; i < objects.length; i++) {
+					this.objects[i]. //Compoent deactivieren????ß
+				}
 			}
 		} else if (opened == true && GameContainer.input.isButton(MouseEvent.BUTTON1)) {
 			opened = false;
+			for (int i = 0; i < objects.length; i++) {
+				this.gameObject.addComponent(objects[i]);
+			}
 		}
 	}
 	
@@ -39,6 +54,6 @@ public class addObjects extends GameBehaviour {
 			return;
 		}
 		this.d.setColor(Color.GRAY);
-		this.d.fillRect(new Vector2(100));
+		//this.d.fillRect(new Vector2(100));
 	}
 }
