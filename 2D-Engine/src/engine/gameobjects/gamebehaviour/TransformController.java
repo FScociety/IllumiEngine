@@ -15,7 +15,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	Button listenButton;
 	Color oldButtonC;
 	
-	private int state = 0; //1:grabed 2:clicked 3:rotate 4:scale
+	private float state = 0; //1:grabed 2:clicked 3:rotate 4:scale
 	
 	Vector2 oldMousePos = new Vector2(0);
 	Vector2 oldObjectPos;
@@ -24,6 +24,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	Vector2 oldScale;
 	float oldMouseObjectDistance;
+	Vector2 scaleMultiplier;
 	
 	boolean features[] = new boolean[3];
 	
@@ -75,7 +76,6 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	
 	@Override
 	public void ButtonHover() {
-		
 	}
 	
 	@Override
@@ -93,6 +93,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 		listenButton.addButtonListener(this);
 		this.gameObject.addComponent(listenButton);
 		this.oldButtonC = this.listenButton.getBaseColor();
+		this.gameObject.viewRange = 100;
 	}
 
 	private void tryExit() {
@@ -105,6 +106,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 
 	@Override
 	public void update() {
+		
 		Vector2 mousePos = GameContainer.input.getMousePosToWorld();
 		Transform objectTrans = this.gameObject.getTransformWithCaution();
 		
@@ -117,6 +119,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			} else if (this.features[2] && GameContainer.input.isKeyDown(KeyEvent.VK_S)) {
 				this.state = 4;
 				this.oldScale = this.gameObject.getTransformWithCaution().scale;
+				this.scaleMultiplier = new Vector2(1,1);
 				this.oldMouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
 			}
 			
@@ -127,10 +130,25 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			newRotation = -ObjectMouseDif.toAngle();
 			this.gameObject.setRotation(this.oldRotation - newRotation);
 			
-			tryExit();
+			tryExit(); 
 		} else if (this.state == 4) { //Scaling
 			float mouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
-			this.gameObject.setScale(Vector2.multiply(this.oldScale, mouseObjectDistance / oldMouseObjectDistance));
+			
+			if (GameContainer.input.isKey(KeyEvent.VK_X)) { //Just want to adjust the x-Axis
+				this.scaleMultiplier = new Vector2(1,0);
+			} else if (GameContainer.input.isKey(KeyEvent.VK_Y)) { //Just want to adjust the y-Axis
+				this.scaleMultiplier = new Vector2(0,1);
+			} else {
+				Vector2 vec = this.oldScale.getCopy();
+				vec.multiply(mouseObjectDistance / oldMouseObjectDistance);
+				vec.multiply(this.scaleMultiplier);
+				if (this.scaleMultiplier.length() == this.scaleMultiplier.x + this.scaleMultiplier.y) {
+					vec.add(Vector2.multiply(Vector2.flipp(this.scaleMultiplier), this.oldScale)); 
+				} //If you just zoom at one axis
+				
+				this.gameObject.setScale(vec);
+			}
+			
 			tryExit();
 		}
 	}

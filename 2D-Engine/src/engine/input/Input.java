@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.Camera;
+import engine.gameobjects.gamebehaviour.camera.Camera;
 import engine.math.Vector2;
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {

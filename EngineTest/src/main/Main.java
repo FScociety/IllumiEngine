@@ -6,10 +6,11 @@ import java.awt.event.KeyEvent;
 import engine.game.AbstractGame;
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.Camera;
 import engine.gameobjects.gamebehaviour.ColorLabel;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.gameobjects.gamebehaviour.Text;
+import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.camera.CameraController;
 import engine.gameobjects.gamebehaviour.ui.Profile;
 import engine.gameobjects.gamebehaviour.ui.addObjects.addObjects;
 import engine.gameobjects.gamebehaviour.ui.interactable.Button;
@@ -48,6 +49,7 @@ public class Main extends AbstractGame {
 				camera = new GameObject(new Vector2(0));
 				cam = new Camera();
 				camera.addComponent(cam);	
+				camera.addComponent(new CameraController(true, true, true));
 				betterScene.addGameObject(camera);
 			}
 
@@ -64,7 +66,7 @@ public class Main extends AbstractGame {
 	}
 	
 	public void update() {
-		Camera.activeCam.zoom += GameContainer.input.getScroll() / 50f;
+
 	}
 
 	public void render() {	

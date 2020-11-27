@@ -2,6 +2,7 @@ package engine.gameobjects.gamebehaviour.ui.addObjects;
 
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
+import engine.gameobjects.gamebehaviour.TransformController;
 import engine.gameobjects.gamebehaviour.ui.interactable.Button;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
@@ -17,9 +18,8 @@ public class addObjectType extends GameBehaviour implements ButtonListener {
 	
 	@Override
 	public void ButtonClicked() {
-		System.out.println("UIBalala");
-		GameObject test = new GameObject(new Vector2(300));
-		test.addComponent(new Button(new Vector2(50)));
+		GameObject test = new GameObject(this.gameObject.getParent().getTransformWithCaution().position);
+		test.addComponent(new TransformController());
 		SceneManager.activeScene.addGameObject(test);
 		
 		((addObjects)this.gameObject.getParent().getComponent(addObjects.class)).close();

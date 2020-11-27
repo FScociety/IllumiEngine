@@ -28,18 +28,22 @@ public class addObjects extends GameBehaviour {
 	public void start() {
 		float distance = size.y / objectsToAdd.length;
 		for (int i = 0; i < objectsToAdd.length; i++) {
-			this.buttonsList[i] = new GameObject(new Transform(new Vector2(0, distance * i + 5 - size.y/2), 0, new Vector2(1), new Vector2(1)), this.gameObject);
-			Button b = new Button(new Vector2(100,10));
+			this.buttonsList[i] = new GameObject(new Transform(new Vector2(0, distance * i - size.y/2 + distance/2), 0, new Vector2(1), new Vector2(1)), this.gameObject);
+			Button b = new Button(new Vector2(98,distance - 2));
+			b.active = false;
 			addObjectType aot = new addObjectType(this.objectsToAdd[i]);
+			aot.active = false;
 			b.addButtonListener(aot);
 			this.buttonsList[i].addComponent(b);
+			this.buttonsList[i].addComponent(aot);
 		}
 	}
 	
 	public void update() {
 		if (GameContainer.input.isKeyDown(KeyEvent.VK_SHIFT)) {
 			if (GameContainer.input.isKey(KeyEvent.VK_A)) {
-				this.gameObject.setPosition(Vector2.add(GameContainer.input.getMousePosToWorld(), Vector2.multiply(this.size, 0.5f)));
+				Vector2 newPos = Vector2.add(GameContainer.input.getMousePosToWorld(), Vector2.divide(this.size, 2));
+				this.gameObject.setPosition(Vector2.add(newPos, new Vector2(-size.x / 2, -5)));
 				this.active = true;
 				updateChildren(true);
 			}
@@ -60,8 +64,10 @@ public class addObjects extends GameBehaviour {
 	
 	public void render() {
 		if (this.active) {
-			this.d.setColor(Color.GRAY);
-			this.d.fillRect(size);
+			this.d.setColor(Color.DARK_GRAY);
+			this.d.fillRect(new Vector2(0, -10), new Vector2(size.x, size.y+10));
+			this.d.setColor(Color.WHITE);
+			this.d.drawString("addObject", new Vector2(-this.size.x/2 +5, -this.size.y/2));
 		}
 	}
 }

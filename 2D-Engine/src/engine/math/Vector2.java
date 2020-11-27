@@ -63,6 +63,16 @@ public class Vector2 {
 		return this;
 	}
 	
+	public void flipp() {
+		float bufferX = this.x;
+		this.x = this.y;
+		this.y = bufferX;
+	}
+	
+	public static Vector2 flipp(Vector2 vec) {
+		return new Vector2(vec.y, vec.x);
+	}
+	
 	public float length() {
 		return (float) Math.sqrt(x*x + y*y);
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.Camera;
+import engine.gameobjects.gamebehaviour.camera.Camera;
 import engine.math.Vector2;
 
 public abstract class Scene {
@@ -156,7 +156,7 @@ public abstract class Scene {
 		}
 		
 		for (final GameObject obj : this.gameObjectsInScene) {
-			if (obj.updatesOutOfView || inView(obj)) {
+			if ((obj.updatesOutOfView || inView(obj)) && obj.started) {
 				obj.update();
 			}
 		}

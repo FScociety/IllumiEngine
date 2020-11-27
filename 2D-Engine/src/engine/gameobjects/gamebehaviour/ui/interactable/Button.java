@@ -89,6 +89,9 @@ public class Button extends GameBehaviour {
 		} else {
 			d.fillRect(this.sizes[state]);	
 		}
+		
+		d.setColor(this.colors[2]);
+		d.drawRect(this.sizes[0]);
 	}
 
 	public void setBaseColor(final Color c) {
@@ -111,7 +114,7 @@ public class Button extends GameBehaviour {
 	
 	@Override
 	public void start() {
-
+		System.out.println("Started");
 	}
 
 	@Override
@@ -125,13 +128,13 @@ public class Button extends GameBehaviour {
 	
 	@Override
 	public void update() {
-		if (Interactable.objectFocused == null || Interactable.objectFocused == this) {
+		if (Interactable.objectFocused == null || Interactable.objectFocused == this.gameObject) {
 			if (isColliding()) {
 				if (state!=2) { //Just to catch the click/hover event
 					//Hover
 					state = 1;
 					this.buttonHoverForListener();
-					Interactable.objectFocused = this;
+					Interactable.objectFocused = this.gameObject;
 					
 					if (GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
 						//Press
@@ -139,13 +142,14 @@ public class Button extends GameBehaviour {
 						state = 2;
 					}
 				}
-			} else if (Interactable.objectFocused == this && !GameContainer.input.isButton(MouseEvent.BUTTON1)) { //Just after you focused, runs just one time
+			} else if (Interactable.objectFocused == this.gameObject && !GameContainer.input.isButton(MouseEvent.BUTTON1)) { //Just after you focused, runs just one time
 				Interactable.objectFocused = null;
 				state = 0;
 			}
 			if (state == 2 && !GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
 				state = 0;
 				this.buttonClickForListener();
+				Interactable.objectFocused = null;
 			}
 		}
 	}

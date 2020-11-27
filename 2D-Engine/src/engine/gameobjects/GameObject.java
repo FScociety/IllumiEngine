@@ -202,12 +202,8 @@ public class GameObject implements Cloneable {
 		this.started = true;
 		loadingScene.addObjectCount();
 		for (int size = this.components.size(), i = 0; i < size; ++i) {
-			final GameBehaviour gb = this.components.get(i);
-			gb.gameObject = this;
-			gb.d 		  = GameContainer.d;
-			gb.start();
-			gb.started 	  = true;
-		} 
+			startComponent(this.components.get(i));
+		}
 		if (this.children.size() > 0) {
 			for (int i = 0; i < this.children.size(); ++i) {
 				this.children.get(i).start(loadingScene);
@@ -226,6 +222,13 @@ public class GameObject implements Cloneable {
 		for (final GameObject child : this.children) {
 			child.update();
 		}
+	}
+	
+	private void startComponent(GameBehaviour gb) {
+		gb.gameObject = this;
+		gb.d 		  = GameContainer.d;
+		gb.start();
+		gb.started 	  = true;
 	}
 
 	public void updateGlobalTransform(final GameObject parent, Transform diffTransform) {
@@ -253,6 +256,10 @@ public class GameObject implements Cloneable {
 				+ (this.parent != null ? true : false));
 	}
 	
+	public String toStringShort() {
+		return this.globalTransform.position+"";
+	}
+	
 	public GameObject getChild() {
 		return this.children.get(0);
 	}
@@ -269,9 +276,9 @@ public class GameObject implements Cloneable {
 		return children;
 	}
 
-	public GameBehaviour getComponent(Class<?> gb) {
+	public GameBehaviour getComponent(Class<? extends GameBehaviour> e) {
 		for (final GameBehaviour component2 : this.components) {
-			if (component2.getClass() == gb) {
+			if (component2.getClass() == e) {
 				return component2;
 			}
 		}
