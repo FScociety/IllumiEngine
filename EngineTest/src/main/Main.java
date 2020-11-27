@@ -42,7 +42,7 @@ public class Main extends AbstractGame {
 				GameObject[] objects = new GameObject[5];
 				objects[0] = new GameObject(new Vector2(0));
 				objects[0].addComponent(new ColorLabel(Color.WHITE, new Vector2(100)));
- 				test.addComponent(new addObjects(objects));
+ 				test.addComponent(new addObjects(objects, new Vector2(100, 100)));
 				betterScene.addGameObject(test);
 				
 				camera = new GameObject(new Vector2(0));

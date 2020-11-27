@@ -7,7 +7,7 @@ import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 
-public class GameObject {
+public class GameObject implements Cloneable {
 
 	public static int CENTER = 0, LEFT_TOP = 1;
 	private Transform localTransform = new Transform();
@@ -82,55 +82,12 @@ public class GameObject {
 				Vector2.divide(scale, this.localTransform.scale), this.localTransform.defaultScale));
 	}
 
-	public GameObject getChild() {
-		return this.children.get(0);
-	}
-
-	public ArrayList<GameObject> getChildren() {
-		return this.children;
-	}
-
-	public int getChildrenCount() {
-		int children = 0;
-		for (int i = 0; i < this.children.size(); i++) {
-			children += this.children.get(i).getChildrenCount() + 1;
-		}
-		return children;
-	}
-
-	public <GB> GB getComponent(Class<?> gb) {
-		for (final GameBehaviour component2 : this.components) {
-			if (component2.getClass() == gb) {
-				return (GB) component2;
-			}
-		}
-		return null;
-	}
-
-	public int getComponentCount() {
-		return this.components.size();
-	}
-
-	public Transform getLocalTransform() {
-		return this.localTransform.getCopy();
-	}
-	
-	public GameObject getParent() {
-		return this.parent;
-	}
-
-	public Transform getTransform() {
-		return this.globalTransform.getCopy();
-	}
-
-	public Transform getTransformWithCaution() {
-		return this.globalTransform;
-	}
-
 	public void render() {
 		GameContainer.d.applyTransforms(this);
 		for (final GameBehaviour component : this.components) {
-			component.render();
+			if (component.active) {
+				component.render();
+			}
 		}
 		GameContainer.d.resetTransform();
 
@@ -259,15 +216,11 @@ public class GameObject {
 		System.out.println("Loaded GameObject[" + this + "]");
 	}
 
-	@Override
-	public String toString() {
-		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
-				+ (this.parent != null ? true : false));
-	}
-
 	public void update() {
 		for (final GameBehaviour component : this.components) {
-			component.update();
+			if (component.active) {
+				component.update();
+			}
 		}
 
 		for (final GameObject child : this.children) {
@@ -293,5 +246,55 @@ public class GameObject {
 		for (int i = 0; i < this.children.size(); i++) {
 			this.children.get(i).updateGlobalTransform(this, diffTransform);
 		}
+	}
+
+	public String toString() {
+		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
+				+ (this.parent != null ? true : false));
+	}
+	
+	public GameObject getChild() {
+		return this.children.get(0);
+	}
+
+	public ArrayList<GameObject> getChildren() {
+		return this.children;
+	}
+
+	public int getChildrenCount() {
+		int children = 0;
+		for (int i = 0; i < this.children.size(); i++) {
+			children += this.children.get(i).getChildrenCount() + 1;
+		}
+		return children;
+	}
+
+	public GameBehaviour getComponent(Class<?> gb) {
+		for (final GameBehaviour component2 : this.components) {
+			if (component2.getClass() == gb) {
+				return component2;
+			}
+		}
+		return null;
+	}
+
+	public int getComponentCount() {
+		return this.components.size();
+	}
+
+	public Transform getLocalTransform() {
+		return this.localTransform.getCopy();
+	}
+	
+	public GameObject getParent() {
+		return this.parent;
+	}
+
+	public Transform getTransform() {
+		return this.globalTransform.getCopy();
+	}
+
+	public Transform getTransformWithCaution() {
+		return this.globalTransform;
 	}
 }
