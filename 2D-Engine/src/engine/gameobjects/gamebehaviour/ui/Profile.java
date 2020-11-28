@@ -27,11 +27,12 @@ public class Profile extends GameBehaviour implements KeyListener {
 	
 	public Profile() {
 		GameContainer.window.addKeyListener(this);
+		this.prefferedInWorldState = 0;
 	}
 
 	@Override
 	public void start() {
-		this.gameObject.setInWorld(false);
+
 	}
 
 	@Override

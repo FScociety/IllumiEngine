@@ -1,5 +1,6 @@
 package engine.gameobjects;
 
+import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,47 +19,24 @@ public class GameObject implements Serializable {
 	public static int CENTER = 0, LEFT_TOP = 1;
 	private Transform localTransform = new Transform();
 	private Transform globalTransform = new Transform();
-	private ArrayList<GameBehaviour> components;
-	private ArrayList<GameObject> children;
+	private ArrayList<GameBehaviour> components = new ArrayList<GameBehaviour>();
+	private ArrayList<GameObject> children = new ArrayList<GameObject>(); //Vllt doch erst bei runTime intitialisieren?
 	private GameObject parent;
 	public boolean started = false;
 	public boolean updatesOutOfView = false;
 	
-	private boolean inWorld = true;
+	private final boolean inWorld;
 	public int aligment = 0;
 	
 	public int viewRange = 100; //Change if needed
 
-	public GameObject(Transform transform) {
-		this.localTransform = transform;
-		this.globalTransform = transform;
-		this.components = new ArrayList<GameBehaviour>();
-		this.children = new ArrayList<GameObject>();
-		this.setTransform(transform);
-	}
-
-	public GameObject(Transform transform, final GameObject parent) {
-		this.localTransform = transform;
-		this.globalTransform = transform;
-		this.components = new ArrayList<GameBehaviour>();
-		this.children = new ArrayList<GameObject>();
-		this.setParent(parent);
-		this.setTransform(transform);
-	}
-
-	public GameObject(Vector2 pos) {
-		this.localTransform.position = pos;
-		this.globalTransform.position = pos;
-		this.components = new ArrayList<GameBehaviour>();
-		this.children = new ArrayList<GameObject>();
+	public GameObject(Vector2 pos, boolean inWorld) {
 		this.setTransform(new Transform(pos, 0, new Vector2(1), new Vector2(100)));
+		this.inWorld = inWorld;
 	}
 
 	public GameObject(Vector2 pos, final GameObject parent) {
-		this.localTransform.position = pos;
-		this.globalTransform.position = pos;
-		this.components = new ArrayList<GameBehaviour>();
-		this.children = new ArrayList<GameObject>();
+		this.inWorld = parent.getInWorld();
 		this.setParent(parent);
 		this.setTransform(new Transform(pos, 0, new Vector2(1), new Vector2(100)));
 	}
@@ -66,7 +44,10 @@ public class GameObject implements Serializable {
 	public void start(Scene loadingScene) {
 		this.started = true;
 		loadingScene.addObjectCount();
-		for (int size = this.components.size(), i = 0; i < size; ++i) {
+		
+		Object[] bufferGb = this.components.toArray();
+		
+		for (int i = 0; i < bufferGb.length; ++i) {
 			startComponent(this.components.get(i));
 		}
 		if (this.children.size() > 0) {
@@ -92,21 +73,29 @@ public class GameObject implements Serializable {
 		}
 	}
 	
+	public void removeComponent(final GameBehaviour gb) {
+		this.components.remove(gb);
+		//Maybe noch remove Compand in GameBehaviour
+	}
+	
 	public void setChildren(final ArrayList<GameObject> children) {
 		this.children = children;
 	}
 	
 	public void setParent(final GameObject parent) {
-		(this.parent = parent).addChildren(this);
-		this.setInWorld(parent.getInWorld());
+		if (parent.getInWorld() == this.getInWorld()) {
+			(this.parent = parent).addChildren(this);
+		} else {
+			System.err.println("You cant parent an Object with inWorld = " + parent.getInWorld() +" and an Object with InWorld = " + this.getInWorld());
+		}
 	}
 	
-	public void setInWorld(boolean state) {
+	/*public void setInWorld(boolean state) {
 		this.inWorld = state;
 		for (final GameObject obj : this.children) {
 			obj.setInWorld(state);
 		}
-	}
+	}*/
 	
 	public boolean getInWorld() {
 		return this.inWorld;
@@ -179,18 +168,15 @@ public class GameObject implements Serializable {
 		for (final GameObject child : this.children) {
 			child.render();
 		}
-
-		/*GameContainer.d.setColor(Color.GREEN);
-		
-		Vector2 pos = Vector2.add(Vector2.substract(this.getTransform().position, GameContainer.d.cameraOffset), Vector2.divide(GameContainer.windowSize, new Vector2(2)));
-		GameContainer.d.fillRect(pos, new Vector2(4));*/
 	}
 	
 	private void startComponent(GameBehaviour gb) {
 		gb.gameObject = this;
-		gb.d 		  = GameContainer.d;
-		gb.start();
-		gb.started 	  = true;
+		if (gb.testInWorldStateSame()) {
+			gb.d 		  = GameContainer.d;
+			gb.start();
+			gb.started 	  = true;
+		}
 	}
 
 	public void updateGlobalTransform(final GameObject parent, Transform diffTransform) {

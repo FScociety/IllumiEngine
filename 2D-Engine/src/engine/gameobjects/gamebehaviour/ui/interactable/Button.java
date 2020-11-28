@@ -23,7 +23,7 @@ public class Button extends GameBehaviour {
 		this.wire = false;
 		this.listener = new ArrayList<ButtonListener>();
 		this.setBaseColor(Color.WHITE);
-		setSize(size);
+		this.sizes[0] = size;
 		
 	}
 
@@ -84,10 +84,22 @@ public class Button extends GameBehaviour {
 	public void render() {
 		d.setColor(this.colors[state]);
 		
-		if (this.wire) {
-			d.drawRect(this.sizes[state]);	
+		
+		Vector2 size;
+		if (state != 0) {
+			size = new Vector2(this.sizes[state].x, 
+				this.sizes[state].y -
+				(this.sizes[0].y - this.sizes[state].y) *  
+				(this.gameObject.getTransformWithCaution().scale.x / 
+				this.gameObject.getTransformWithCaution().scale.y));
 		} else {
-			d.fillRect(this.sizes[state]);	
+			size = this.sizes[state];
+		}
+		
+		if (this.wire) {
+			d.drawRect(size);	
+		} else {
+			d.fillRect(size);	
 		}
 		
 		d.setColor(this.colors[2]);
@@ -101,11 +113,11 @@ public class Button extends GameBehaviour {
 	
 	public void setSize(Vector2 size) {
 		this.sizes[0] = size;
-		this.sizes[1] = this.sizes[0].getCopy();
-		this.sizes[2] = this.sizes[0].getCopy();
+		this.sizes[1] = size.getCopy();
+		this.sizes[2] = size.getCopy();
 		
-		this.sizes[1].multiply(.95f);
-		this.sizes[2].multiply(.9f);
+		this.sizes[1].multiply(0.99f);
+		this.sizes[2].multiply(0.98f);
 	}
 	
 	public void setWire(final boolean wire) {
@@ -114,7 +126,7 @@ public class Button extends GameBehaviour {
 	
 	@Override
 	public void start() {
-		System.out.println("Started");
+		this.setSize(this.sizes[0]);
 	}
 
 	@Override

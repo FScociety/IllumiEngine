@@ -19,18 +19,18 @@ public class addObjects extends GameBehaviour {
 	private GameObject[] buttonsList;
 	private Vector2 size;
 	
-	public  addObjects(GameObject[] objectsToAdd, Vector2 size) {
+	public addObjects(GameObject[] objectsToAdd, Vector2 size) {
 		this.size = size;
 		this.objectsToAdd = objectsToAdd;
 		this.buttonsList = new GameObject[this.objectsToAdd.length];
+		this.prefferedInWorldState = 0;
 	}
 	
 	public void start() {
-		this.gameObject.setInWorld(false);
 		
 		float distance = size.y / objectsToAdd.length;
 		for (int i = 0; i < objectsToAdd.length; i++) {
-			this.buttonsList[i] = new GameObject(new Transform(new Vector2(0, distance * i - size.y/2 + distance/2), 0, new Vector2(1), new Vector2(1)), this.gameObject);
+			this.buttonsList[i] = new GameObject(new Vector2(0, distance * i - size.y/2 + distance/2), this.gameObject);
 			Button b = new Button(new Vector2(98,distance - 2));
 			b.active = false;
 			addObjectType aot = new addObjectType(this.objectsToAdd[i]);
@@ -50,6 +50,11 @@ public class addObjects extends GameBehaviour {
 				updateChildren(true);
 			}
 		}
+		
+		if (active && GameContainer.input.isKey(KeyEvent.VK_ESCAPE)) {
+			this.active = false;
+			updateChildren(false);
+		}
 	}
 	
 	private void updateChildren(boolean state) {
@@ -67,7 +72,7 @@ public class addObjects extends GameBehaviour {
 	public void render() {
 		if (this.active) {
 			this.d.setColor(Color.DARK_GRAY);
-			this.d.fillRect(new Vector2(0, -10), new Vector2(size.x, size.y+10));
+			this.d.fillRect(new Vector2(0,-10), new Vector2(size.x, size.y+10));
 			this.d.setColor(Color.WHITE);
 			this.d.drawString("addObject", new Vector2(-this.size.x/2 +5, -this.size.y/2));
 		}

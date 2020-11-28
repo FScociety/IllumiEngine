@@ -19,7 +19,7 @@ public class CameraController extends GameBehaviour {
 		this.posChange = posChange;
 		this.zoomChange = zoomChange;
 		this.zoomToObject = zoomToObject;
-		
+		this.prefferedInWorldState = 1;
 	}
 	
 	public void start() {

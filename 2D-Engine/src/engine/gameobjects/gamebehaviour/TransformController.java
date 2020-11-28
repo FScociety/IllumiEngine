@@ -156,5 +156,4 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	public Button getButton() {
 		return this.listenButton;
 	}
-
 }

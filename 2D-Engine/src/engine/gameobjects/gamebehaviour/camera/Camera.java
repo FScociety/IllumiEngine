@@ -12,13 +12,13 @@ public class Camera extends GameBehaviour  {
 	public float zoom = 1;
 	
 	public Camera() {
+		this.prefferedInWorldState = 1;
 		cameras.add(this);
 	}
 	
 	@Override
 	public void delete() {
 		cameras.remove(this);
-		
 	}
 
 	@Override
@@ -28,7 +28,6 @@ public class Camera extends GameBehaviour  {
 	
 	@Override
 	public void start() {
-		this.gameObject.setInWorld(true);
 	}
 
 	@Override
