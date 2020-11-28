@@ -62,7 +62,7 @@ public abstract class Scene {
 	public void instanceGameObjects() {}
 
 	private boolean inView(GameObject obj) {
-		if (obj == Camera.activeCam.gameObject || !obj.inWorld) {
+		if (obj == Camera.activeCam.gameObject || !obj.getInWorld()) {
 			return true;
 		} else {
 			int viewRangeX = (int) (obj.viewRange * obj.getTransformWithCaution().scale.x); //x + y weil das object scaliert werden kann

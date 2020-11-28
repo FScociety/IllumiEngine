@@ -28,7 +28,7 @@ public class Camera extends GameBehaviour  {
 	
 	@Override
 	public void start() {
-		this.gameObject.inWorld = true;
+		this.gameObject.setInWorld(true);
 	}
 
 	@Override

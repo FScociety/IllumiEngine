@@ -64,7 +64,7 @@ public class Button extends GameBehaviour {
 	}
 	
 	public boolean isColliding() {
-		Vector2 mousePos = GameContainer.input.getMousePosToWorld();
+		Vector2 mousePos = GameContainer.input.getMousePos(this.gameObject.getInWorld());
 		
 		if (this.gameObject.getTransformWithCaution().rotation!=0) {
 			mousePos.rotate(-this.gameObject.getTransformWithCaution().rotation, this.gameObject.getTransformWithCaution().position);

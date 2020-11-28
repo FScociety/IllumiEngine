@@ -1,5 +1,6 @@
 package engine.gameobjects.gamebehaviour.ui.addObjects;
 
+import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.gameobjects.gamebehaviour.TransformController;
@@ -18,9 +19,9 @@ public class addObjectType extends GameBehaviour implements ButtonListener {
 	
 	@Override
 	public void ButtonClicked() {
-		GameObject test = new GameObject(this.gameObject.getParent().getTransformWithCaution().position);
-		test.addComponent(new TransformController());
-		SceneManager.activeScene.addGameObject(test);
+		GameObject instance = this.instance.getCopy();
+		instance.setPosition(GameContainer.input.getMousePos(true));
+		SceneManager.activeScene.addGameObject(instance);
 		
 		((addObjects)this.gameObject.getParent().getComponent(addObjects.class)).close();
 	}

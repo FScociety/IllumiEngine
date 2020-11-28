@@ -48,7 +48,7 @@ public class PlayerObject extends GameBehaviour {
 			split();
 		}
 		
-		Vector2 movingVec = new Vector2(GameContainer.input.getMousePosToWorld(), this.gameObject.getTransformWithCaution().position);
+		Vector2 movingVec = new Vector2(GameContainer.input.getMousePos(true), this.gameObject.getTransformWithCaution().position);
 		velocity.add(Vector2.multiply(movingVec, (float)GameContainer.dt / 10));
 		
 		for (PlayerObject po : this.leader.childs) {

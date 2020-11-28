@@ -1,5 +1,11 @@
 package engine.gameobjects;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
@@ -7,7 +13,7 @@ import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 
-public class GameObject implements Cloneable {
+public class GameObject implements Serializable {
 
 	public static int CENTER = 0, LEFT_TOP = 1;
 	private Transform localTransform = new Transform();
@@ -18,10 +24,10 @@ public class GameObject implements Cloneable {
 	public boolean started = false;
 	public boolean updatesOutOfView = false;
 	
-	public boolean inWorld = true;
+	private boolean inWorld = true;
 	public int aligment = 0;
 	
-	public int viewRange = 50; //Change if needed
+	public int viewRange = 100; //Change if needed
 
 	public GameObject(Transform transform) {
 		this.localTransform = transform;
@@ -57,6 +63,20 @@ public class GameObject implements Cloneable {
 		this.setTransform(new Transform(pos, 0, new Vector2(1), new Vector2(100)));
 	}
 	
+	public void start(Scene loadingScene) {
+		this.started = true;
+		loadingScene.addObjectCount();
+		for (int size = this.components.size(), i = 0; i < size; ++i) {
+			startComponent(this.components.get(i));
+		}
+		if (this.children.size() > 0) {
+			for (int i = 0; i < this.children.size(); ++i) {
+				this.children.get(i).start(loadingScene);
+			}
+		}
+		System.out.println("Loaded GameObject[" + this + "]");
+	}
+	
 	public void addChildren(final GameObject child) {
 		this.children.add(child);
 	}
@@ -72,100 +92,37 @@ public class GameObject implements Cloneable {
 		}
 	}
 	
-	public void addPosition(final Vector2 position) {
-		this.setTransform(new Transform(Vector2.add(position, this.localTransform.position),
-				this.localTransform.rotation, this.localTransform.scale, this.localTransform.defaultScale));
-	}
-
-	public void divideScale(final Vector2 scale) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation,
-				Vector2.divide(scale, this.localTransform.scale), this.localTransform.defaultScale));
-	}
-
-	public void render() {
-		GameContainer.d.applyTransforms(this);
-		for (final GameBehaviour component : this.components) {
-			if (component.active) {
-				component.render();
-			}
-		}
-		GameContainer.d.resetTransform();
-
-		for (final GameObject child : this.children) {
-			child.render();
-		}
-
-		/*GameContainer.d.setColor(Color.GREEN);
-		
-		Vector2 pos = Vector2.add(Vector2.substract(this.getTransform().position, GameContainer.d.cameraOffset), Vector2.divide(GameContainer.windowSize, new Vector2(2)));
-		GameContainer.d.fillRect(pos, new Vector2(4));*/
-	}
-
-	/*public void addRotation(final float rotation) {
-		this.setTransform(new Transform(this.localTransform.position, rotation + this.localTransform.rotation,
-				this.localTransform.scale));
-	}
-
-	public void addScale(final Vector2 scale) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation,
-				Vector2.add(scale, this.localTransform.scale)));
-	}
-	
-	public void subtractPosition(final Vector2 position) {
-		this.setTransform(new Transform(Vector2.substract(position, this.localTransform.position),
-				this.localTransform.rotation, this.localTransform.scale));
-	}
-
-	public void subtractRotation(final int rotation) {
-		this.setTransform(new Transform(this.localTransform.position, rotation - this.localTransform.rotation,
-				this.localTransform.scale));
-	}
-
-	public void subtractScale(final Vector2 scale) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation,
-				Vector2.substract(scale, this.localTransform.scale)));
-	}
-	
-	public void multiplyPosition(final Vector2 position) {
-		this.setTransform(new Transform(Vector2.multiply(position, this.localTransform.position),
-				this.localTransform.rotation, this.localTransform.scale));
-	}
-
-	public void multiplyRotation(final int rotation) {
-		this.setTransform(new Transform(this.localTransform.position, rotation * this.localTransform.rotation,
-				this.localTransform.scale));
-	}
-
-	public void multiplyScale(final Vector2 scale) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation,
-				Vector2.multiply(scale, this.localTransform.scale)));
-	}
-
-	public void dividePosition(final Vector2 position) {
-		this.setTransform(new Transform(Vector2.divide(position, this.localTransform.position),
-				this.localTransform.rotation, this.localTransform.scale), this.localTransform.defaultScale);
-	}
-
-	public void divideRotation(final int rotation) {
-		this.setTransform(new Transform(this.localTransform.position, rotation / this.localTransform.rotation,
-				this.localTransform.scale, this.localTransform, this.localTransform.defaultScale));
-	}*/
-	
 	public void setChildren(final ArrayList<GameObject> children) {
 		this.children = children;
 	}
 	
 	public void setParent(final GameObject parent) {
 		(this.parent = parent).addChildren(this);
+		this.setInWorld(parent.getInWorld());
 	}
 	
-	public void addRotation(float r) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation + r, this.localTransform.scale, this.localTransform.defaultScale));
-		
+	public void setInWorld(boolean state) {
+		this.inWorld = state;
+		for (final GameObject obj : this.children) {
+			obj.setInWorld(state);
+		}
+	}
+	
+	public boolean getInWorld() {
+		return this.inWorld;
+	}
+	
+	public void addPosition(final Vector2 position) {
+		this.setTransform(new Transform(Vector2.add(position, this.localTransform.position),
+				this.localTransform.rotation, this.localTransform.scale, this.localTransform.defaultScale));
 	}
 
 	public void setPosition(final Vector2 position) {
 		this.setTransform(new Transform(position, this.localTransform.rotation, this.localTransform.scale, this.localTransform.defaultScale));
+	}
+	
+	public void addRotation(float r) {
+		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation + r, this.localTransform.scale, this.localTransform.defaultScale));
 	}
 
 	public void setRotation(final float rotation) {
@@ -198,20 +155,6 @@ public class GameObject implements Cloneable {
 		}
 	}
 
-	public void start(Scene loadingScene) {
-		this.started = true;
-		loadingScene.addObjectCount();
-		for (int size = this.components.size(), i = 0; i < size; ++i) {
-			startComponent(this.components.get(i));
-		}
-		if (this.children.size() > 0) {
-			for (int i = 0; i < this.children.size(); ++i) {
-				this.children.get(i).start(loadingScene);
-			}
-		}
-		System.out.println("Loaded GameObject[" + this + "]");
-	}
-
 	public void update() {
 		for (final GameBehaviour component : this.components) {
 			if (component.active) {
@@ -222,6 +165,25 @@ public class GameObject implements Cloneable {
 		for (final GameObject child : this.children) {
 			child.update();
 		}
+	}
+	
+	public void render() {
+		GameContainer.d.applyTransforms(this);
+		for (final GameBehaviour component : this.components) {
+			if (component.active) {
+				component.render();
+			}
+		}
+		GameContainer.d.resetTransform();
+
+		for (final GameObject child : this.children) {
+			child.render();
+		}
+
+		/*GameContainer.d.setColor(Color.GREEN);
+		
+		Vector2 pos = Vector2.add(Vector2.substract(this.getTransform().position, GameContainer.d.cameraOffset), Vector2.divide(GameContainer.windowSize, new Vector2(2)));
+		GameContainer.d.fillRect(pos, new Vector2(4));*/
 	}
 	
 	private void startComponent(GameBehaviour gb) {
@@ -249,15 +211,6 @@ public class GameObject implements Cloneable {
 		for (int i = 0; i < this.children.size(); i++) {
 			this.children.get(i).updateGlobalTransform(this, diffTransform);
 		}
-	}
-
-	public String toString() {
-		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
-				+ (this.parent != null ? true : false));
-	}
-	
-	public String toStringShort() {
-		return this.globalTransform.position+"";
 	}
 	
 	public GameObject getChild() {
@@ -303,5 +256,45 @@ public class GameObject implements Cloneable {
 
 	public Transform getTransformWithCaution() {
 		return this.globalTransform;
+	}
+	
+	public String toString() {
+		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
+				+ (this.parent != null ? true : false));
+	}
+	
+	public String toStringShort() {
+		return this.globalTransform.position+"";
+	}
+	
+	public GameObject getCopy() {
+		//MAGIC FUNKTION FROM STACK OVERFLOW FOR COPIING OBJECTS AND I HAVE NO IDEA
+		//HOW IT WORKS BUT IT WORKKKKKKKKKKKKKKSSSSSSSS!!!!!!!!!!
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(this);
+			oos.flush();
+			oos.close();
+			bos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] byteData = bos.toByteArray();
+		
+		ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+		GameObject object = null;
+		try {
+			object = (GameObject) new ObjectInputStream(bais).readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return object;
 	}
 }

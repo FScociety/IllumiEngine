@@ -64,7 +64,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 			this.listenButton.setWire(false);
 			this.listenButton.setBaseColor(this.oldButtonC);
 		} else {
-			Vector2 newMousePos = GameContainer.input.getMousePosToWorld();
+			Vector2 newMousePos = GameContainer.input.getMousePos(true);
 			state = 0;
 			if (!this.features[0] || ((this.features[1] || this.features[2]) && Math.abs(Vector2.substract(newMousePos, this.oldMousePos).length()) <= 2)) { //Not moving mouseMuch
 				this.listenButton.setBaseColor(new Color(255, 100, 100));
@@ -83,7 +83,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 		if (this.state == 2 || !this.features[0]) { //If the button is clicked you dont want to move it || position feature is deactivaded
 			return;
 		}
-		this.oldMousePos = GameContainer.input.getMousePosToWorld();
+		this.oldMousePos = GameContainer.input.getMousePos(true);
 		this.state = 1;
 		this.oldObjectPos = this.gameObject.getTransformWithCaution().position;
 	}
@@ -107,7 +107,7 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	@Override
 	public void update() {
 		
-		Vector2 mousePos = GameContainer.input.getMousePosToWorld();
+		Vector2 mousePos = GameContainer.input.getMousePos(this.gameObject.getInWorld());
 		Transform objectTrans = this.gameObject.getTransformWithCaution();
 		
 		if (this.state == 1) {
@@ -120,19 +120,19 @@ public class TransformController extends GameBehaviour implements ButtonListener
 				this.state = 4;
 				this.oldScale = this.gameObject.getTransformWithCaution().scale;
 				this.scaleMultiplier = new Vector2(1,1);
-				this.oldMouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
+				this.oldMouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, mousePos).length();
 			}
 			
 			tryExit();
 		} else if (this.state == 3) { //Rotating
 			float newRotation;
-			Vector2 ObjectMouseDif = Vector2.substract(objectTrans.position, mousePos);
+			Vector2 ObjectMouseDif = new Vector2 (objectTrans.position, mousePos);
 			newRotation = -ObjectMouseDif.toAngle();
 			this.gameObject.setRotation(this.oldRotation - newRotation);
 			
 			tryExit(); 
 		} else if (this.state == 4) { //Scaling
-			float mouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld()).length();
+			float mouseObjectDistance = Vector2.substract(this.gameObject.getTransformWithCaution().position, mousePos).length();
 			
 			if (GameContainer.input.isKey(KeyEvent.VK_X)) { //Just want to adjust the x-Axis
 				this.scaleMultiplier = new Vector2(1,0);

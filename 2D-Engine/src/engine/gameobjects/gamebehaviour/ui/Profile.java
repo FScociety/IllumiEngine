@@ -30,6 +30,16 @@ public class Profile extends GameBehaviour implements KeyListener {
 	}
 
 	@Override
+	public void start() {
+		this.gameObject.setInWorld(false);
+	}
+
+	@Override
+	public void update() {
+		
+	}
+	
+	@Override
 	public void render() {
 		d.setColor(Color.DARK_GRAY);
 		d.setColor(Color.WHITE);
@@ -53,15 +63,6 @@ public class Profile extends GameBehaviour implements KeyListener {
 			d.drawString(KeyEvent.getKeyText(pressedKeys.get(i)) + " (" + pressedKeys.get(i) + ")", new Vector2(0, i*15+100));
 		}
 		
-	}
-
-	@Override
-	public void start() {
-
-	}
-
-	@Override
-	public void update() {
 	}
 
 	@Override

@@ -9,6 +9,7 @@ import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.ColorLabel;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.gameobjects.gamebehaviour.Text;
+import engine.gameobjects.gamebehaviour.TransformController;
 import engine.gameobjects.gamebehaviour.camera.Camera;
 import engine.gameobjects.gamebehaviour.camera.CameraController;
 import engine.gameobjects.gamebehaviour.ui.Profile;
@@ -35,14 +36,16 @@ public class Main extends AbstractGame {
 
 			public void instanceGameObjects() {
 				GameObject profileObject = new GameObject(new Vector2(0));
-				profileObject.inWorld = false;
 				profileObject.addComponent(new Profile());
 				betterScene.addGameObject(profileObject);
 				
 				GameObject test = new GameObject(new Vector2(0));
 				GameObject[] objects = new GameObject[5];
 				objects[0] = new GameObject(new Vector2(0));
-				objects[0].addComponent(new ColorLabel(Color.WHITE, new Vector2(100)));
+				objects[0].addComponent(new Button(new Vector2(100)));
+				
+				objects[1] = new GameObject(new Vector2(0));
+				objects[1].addComponent(new TransformController());
  				test.addComponent(new addObjects(objects, new Vector2(100, 100)));
 				betterScene.addGameObject(test);
 				

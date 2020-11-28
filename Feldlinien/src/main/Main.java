@@ -67,7 +67,7 @@ public class Main extends AbstractGame {
 					
 					public void update() { //Moving Camera with Mouse
 						if (GameContainer.input.isButton(MouseEvent.BUTTON2)) {
-							oldMouse = GameContainer.input.getMousePos().getCopy();
+							oldMouse = GameContainer.input.getMousePos(false).getCopy();
 							oldObject = this.gameObject.getTransformWithCaution().position;
 							moving = true;
 						} else if (GameContainer.input.isButtonUp(MouseEvent.BUTTON2)) {
@@ -75,7 +75,7 @@ public class Main extends AbstractGame {
 						}
 						
 						if (moving) {
-							this.gameObject.setPosition(Vector2.add(oldObject, Vector2.divide(Vector2.substract(oldMouse, GameContainer.input.getMousePos()), Camera.activeCam.zoom)));
+							this.gameObject.setPosition(Vector2.add(oldObject, Vector2.divide(Vector2.substract(oldMouse, GameContainer.input.getMousePos(false)), Camera.activeCam.zoom)));
 						}
 					}
 				});

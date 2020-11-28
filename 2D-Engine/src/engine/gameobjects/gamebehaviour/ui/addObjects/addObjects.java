@@ -26,6 +26,8 @@ public class addObjects extends GameBehaviour {
 	}
 	
 	public void start() {
+		this.gameObject.setInWorld(false);
+		
 		float distance = size.y / objectsToAdd.length;
 		for (int i = 0; i < objectsToAdd.length; i++) {
 			this.buttonsList[i] = new GameObject(new Transform(new Vector2(0, distance * i - size.y/2 + distance/2), 0, new Vector2(1), new Vector2(1)), this.gameObject);
@@ -42,7 +44,7 @@ public class addObjects extends GameBehaviour {
 	public void update() {
 		if (GameContainer.input.isKeyDown(KeyEvent.VK_SHIFT)) {
 			if (GameContainer.input.isKey(KeyEvent.VK_A)) {
-				Vector2 newPos = Vector2.add(GameContainer.input.getMousePosToWorld(), Vector2.divide(this.size, 2));
+				Vector2 newPos = Vector2.add(GameContainer.input.getMousePos(false), Vector2.divide(this.size, 2));
 				this.gameObject.setPosition(Vector2.add(newPos, new Vector2(-size.x / 2, -5)));
 				this.active = true;
 				updateChildren(true);

@@ -1,8 +1,10 @@
 package engine.gameobjects;
 
+import java.io.Serializable;
+
 import engine.math.Vector2;
 
-public class Transform {
+public class Transform implements Serializable {
 	
 	public Vector2 position = new Vector2();
 

@@ -33,7 +33,7 @@ public class Player extends Organism {
 		moving.multiply(.97f);
 		
 		if (GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
-			Vector2 subVec = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePosToWorld());
+			Vector2 subVec = Vector2.substract(this.gameObject.getTransformWithCaution().position, GameContainer.input.getMousePos(true));
 			subVec.normalize();
 			
 			GameObject bObj = new GameObject(this.gameObject.getTransformWithCaution().position);

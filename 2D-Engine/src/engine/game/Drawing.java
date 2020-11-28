@@ -32,7 +32,7 @@ public class Drawing {
 	public void applyTransforms(GameObject obj) {
 		Vector2 diffPos;
 		
-		if (obj.inWorld) { 
+		if (obj.getInWorld()) { 
 			zoom = Camera.activeCam.zoom;
 			this.cameraOffset = Camera.activeCam.gameObject.getTransformWithCaution().position;
 			diffPos = Vector2.substract(obj.getTransformWithCaution().position, this.cameraOffset);
