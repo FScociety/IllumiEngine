@@ -8,7 +8,7 @@ import engine.math.Vector2;
 import engine.scenes.SceneManager;
 
 public class GameContainer {
-	
+
 	public static GameContainer gc;
 
 	private static boolean running = false;
@@ -35,11 +35,11 @@ public class GameContainer {
 	public Vector2 getSize() {
 		return GameContainer.windowSize;
 	}
-	
+
 	public void setSize(Vector2 size) {
 		GameContainer.windowSize = size;
 	}
-	
+
 	public void start() {
 		System.out.println("Starting...");
 		GameContainer.running = true;
@@ -51,8 +51,7 @@ public class GameContainer {
 		GameContainer.d = new Drawing((Graphics2D) window.g);
 
 		startUpdateThread();
-		
-		
+
 	}
 
 	private void startRenderThread() {
@@ -70,18 +69,17 @@ public class GameContainer {
 				System.out.println("RenderThread is running!");
 
 				while (running) {
-					
 
 					window.g.setColor(Color.BLACK);
 					window.g.fillRect(0, 0, (int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
-					
+
 					if (SceneManager.activeScene != null) {
-					game.render();
-					SceneManager.activeScene.render();
+						game.render();
+						SceneManager.activeScene.render();
 					}
-					
+
 					try {
-					window.bs.show(); // Flipp the Buffer
+						window.bs.show(); // Flipp the Buffer
 					} catch (IllegalStateException e) {
 					}
 
@@ -97,11 +95,12 @@ public class GameContainer {
 					}
 
 					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
-					/*try {
-						 Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
-					} catch (InterruptedException e) {
-					System.out.println("What the... Thread couldn't be set to sleep");
-					e.printStackTrace(); }*/
+					/*
+					 * try { Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
+					 * } catch (InterruptedException e) {
+					 * System.out.println("What the... Thread couldn't be set to sleep");
+					 * e.printStackTrace(); }
+					 */
 				}
 			}
 		});
@@ -115,7 +114,7 @@ public class GameContainer {
 			@Override
 			public void run() {
 				game.start();
-				
+
 				int cycl = 0;
 				double startTime = System.nanoTime() / nd;
 				double endTime = 0;
@@ -123,18 +122,18 @@ public class GameContainer {
 				dt = 1; // So it isnt Stuck in the Beginning
 
 				System.out.println("UpdateThread is running!");
-				
+
 				startRenderThread();
 
 				while (running) {
 					// Update
-					
+
 					if (SceneManager.activeScene != null) {
 						SceneManager.activeScene.update();
 						game.update();
 						input.update();
-						
-						if (SceneManager.oldScene != null) { //For Unloading the oldScene
+
+						if (SceneManager.oldScene != null) { // For Unloading the oldScene
 							SceneManager.oldScene.update();
 						}
 					}

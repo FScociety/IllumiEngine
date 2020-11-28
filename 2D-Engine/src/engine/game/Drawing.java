@@ -25,7 +25,7 @@ public class Drawing {
 	private float zoom;
 
 	private GameObject obj;
-	
+
 	private boolean debug = false;
 
 	public Drawing(Graphics2D g) {
@@ -55,8 +55,25 @@ public class Drawing {
 		this.g.rotate(Math.toRadians(transform.rotation));
 		transform.position.rotate(-transform.rotation);
 		// this.g.scale(transform.scale.x, transform.scale.y);
-		
+
 		this.g.translate(transform.position.x, transform.position.y); // Apply Object Position
+	}
+
+	public void drawCircle(Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+
+		this.g.drawOval((int) -(scale.x * zoom) / 2, (int) -(scale.y * zoom) / 2, (int) (scale.x * zoom),
+				(int) (scale.y * zoom));
+	}
+
+	public void drawCircle(Vector2 pos, Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+		pos.multiply(obj.getTransformWithCaution().scale);
+
+		this.g.drawOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
 	public void drawImage(BufferedImage img) {
@@ -73,6 +90,23 @@ public class Drawing {
 	public void drawLine(Vector2 vec1, Vector2 vec2) {
 		vec2.scale(vec1, zoom);
 		this.g.drawLine((int) vec1.x, (int) vec1.y, (int) vec2.x, (int) vec2.y);
+	}
+
+	public void drawRect(Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+
+		this.g.drawRect((int) -(scale.x * zoom) / 2, (int) -(scale.y * zoom) / 2, (int) (scale.x * zoom),
+				(int) (scale.y * zoom));
+	}
+
+	public void drawRect(Vector2 pos, Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+		pos.multiply(obj.getTransformWithCaution().scale);
+
+		this.g.drawRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
 	public void drawString(String text) {
@@ -92,34 +126,8 @@ public class Drawing {
 	public void fillCircle(Vector2 scale2) {
 		Vector2 scale = scale2.getCopy();
 		scale.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.fillOval(
-				(int) -(scale.x * zoom) / 2, 
-				(int) -(scale.y * zoom) / 2,
-				(int) (scale.x * zoom),
-				(int) (scale.y * zoom));
-	}
-	
-	public void drawCircle(Vector2 scale2) {
-		Vector2 scale = scale2.getCopy();
-		scale.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.drawOval(
-				(int) -(scale.x * zoom) / 2, 
-				(int) -(scale.y * zoom) / 2, 
-				(int) (scale.x * zoom),
-				(int) (scale.y * zoom));
-	}
 
-	public void drawCircle(Vector2 pos, Vector2 scale2) {
-		Vector2 scale = scale2.getCopy();
-		scale.multiply(obj.getTransformWithCaution().scale);
-		pos.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.drawOval(
-				(int) ((pos.x - scale.x) * zoom / 2), 
-				(int) ((pos.y - scale.y) * zoom / 2),
-				(int) (scale.x * zoom), 
+		this.g.fillOval((int) -(scale.x * zoom) / 2, (int) -(scale.y * zoom) / 2, (int) (scale.x * zoom),
 				(int) (scale.y * zoom));
 	}
 
@@ -127,45 +135,16 @@ public class Drawing {
 		Vector2 scale = scale2.getCopy();
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.fillOval(
-				(int) ((pos.x - scale.x) * zoom / 2),
-				(int) ((pos.y - scale.y) * zoom / 2),
-				(int) (scale.x * zoom), 
-				(int) (scale.y * zoom));
-	}
-	
-	public void drawRect(Vector2 scale2) {
-		Vector2 scale = scale2.getCopy();
-		scale.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.drawRect(
-				(int) -(scale.x * zoom) / 2, 
-				(int) -(scale.y * zoom) / 2,
-				(int) (scale.x * zoom),
-				(int) (scale.y * zoom));
-	}
 
-	public void drawRect(Vector2 pos, Vector2 scale2) {
-		Vector2 scale = scale2.getCopy();
-		scale.multiply(obj.getTransformWithCaution().scale);
-		pos.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.drawRect(
-				(int) ((pos.x - scale.x) * zoom / 2),
-				(int) ((pos.y - scale.y) * zoom / 2),
-				(int) (scale.x * zoom),
-				(int) (scale.y * zoom));
+		this.g.fillOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
 	public void fillRect(Vector2 scale2) {
 		Vector2 scale = scale2.getCopy();
 		scale.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.fillRect(
-				(int) -(scale.x * zoom) / 2, 
-				(int) -(scale.y * zoom) / 2, 
-				(int) (scale.x * zoom),
+
+		this.g.fillRect((int) -(scale.x * zoom) / 2, (int) -(scale.y * zoom) / 2, (int) (scale.x * zoom),
 				(int) (scale.y * zoom));
 	}
 
@@ -173,12 +152,9 @@ public class Drawing {
 		Vector2 scale = scale2.getCopy();
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
-		
-		this.g.fillRect(
-				(int) ((pos.x - scale.x) * zoom / 2),
-				(int) ((pos.y - scale.y) * zoom / 2),
-				(int) (scale.x * zoom),
-				(int) (scale.y * zoom));
+
+		this.g.fillRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
 	public Color getColor() {
@@ -191,10 +167,11 @@ public class Drawing {
 
 	public void resetTransform() {
 		this.g.setTransform(af);
-		
+
 		if (debug == true) {
 			this.g.setColor(Color.GREEN);
-			this.g.fillRect((int)obj.getTransformWithCaution().position.x -2, (int)obj.getTransformWithCaution().position.y -2,4,4);
+			this.g.fillRect((int) obj.getTransformWithCaution().position.x - 2,
+					(int) obj.getTransformWithCaution().position.y - 2, 4, 4);
 		}
 	}
 

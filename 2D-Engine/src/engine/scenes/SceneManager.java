@@ -14,13 +14,14 @@ public class SceneManager {
 
 	public synchronized static void flipp() {
 		SceneManager.activeScene = bufferScene;
-		
+
 		if (SceneManager.activeScene == null) {
-			System.err.println("No Idea why, but when loading scenes with big objectCounts the SceneManager.activeScene is 'null'");
+			System.err.println(
+					"No Idea why, but when loading scenes with big objectCounts the SceneManager.activeScene is 'null'");
 			System.err.println("This was called from SceneManager.flipp()");
 		}
 	}
-	
+
 	public static Scene getActiveScene() {
 		return SceneManager.activeScene;
 	}
@@ -38,7 +39,7 @@ public class SceneManager {
 						bufferScene.instanceGameObjects();
 						bufferScene.start();
 						if (SceneManager.oldScene != null) {
-						SceneManager.oldScene.unload();
+							SceneManager.oldScene.unload();
 						}
 						System.out.println("Scene[" + newScene.getName() + "] loaded!");
 						System.out.println();
@@ -50,7 +51,7 @@ public class SceneManager {
 					System.out.println("Scene[" + bufferScene.getName() + "] doesn't exist");
 				}
 			}
-		}); 
+		});
 		sceneLoader.start();
 	}
 }

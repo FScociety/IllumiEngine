@@ -4,9 +4,12 @@ public abstract class AbstractGame {
 
 	public Drawing d;
 
-	public void render() {}
+	public void render() {
+	}
 
-	public void start() {}
+	public void start() {
+	}
 
-	public void update() {}
+	public void update() {
+	}
 }

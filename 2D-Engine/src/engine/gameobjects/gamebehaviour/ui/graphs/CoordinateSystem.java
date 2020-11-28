@@ -88,8 +88,8 @@ public class CoordinateSystem extends GameBehaviour {
 		this.d.setColor(Color.GREEN);
 		this.d.fillRect(new Vector2(-5), new Vector2(10));
 		this.d.drawLine(0, 0, this.maxX * this.pixelPerUnit, 0);
-		this.d.drawLine(0, 0,
-				(int) (this.gameObject.getPosX() - this.minX * this.pixelPerUnit), (int) this.gameObject.getPosY());
+		this.d.drawLine(0, 0, (int) (this.gameObject.getPosX() - this.minX * this.pixelPerUnit),
+				(int) this.gameObject.getPosY());
 		this.d.drawLine((int) this.gameObject.getPosX(), (int) this.gameObject.getPosY(),
 				(int) this.gameObject.getPosX(), (int) (this.gameObject.getPosY() - this.maxX * this.pixelPerUnit));
 		this.d.drawLine((int) this.gameObject.getPosX(), (int) this.gameObject.getPosY(),

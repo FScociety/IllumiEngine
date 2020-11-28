@@ -5,5 +5,5 @@ import engine.gameobjects.GameObject;
 public class Interactable {
 
 	public static GameObject objectFocused = null;
-	
+
 }

@@ -25,14 +25,15 @@ public class Window extends Canvas {
 	public static Font standartFont;
 	public static String currentDir;
 	public BufferStrategy bs;
-	
+
 	public Graphics g;
 
 	public Window(final GameContainer gc) {
 
 		System.out.println(getClass().getResourceAsStream(""));
 		try {
-			Window.standartFont = Font.createFont(0, getClass().getResourceAsStream("/DefaultFont.ttf")).deriveFont(0, 10.0f);
+			Window.standartFont = Font.createFont(0, getClass().getResourceAsStream("/DefaultFont.ttf")).deriveFont(0,
+					10.0f);
 		} catch (FontFormatException | IOException ex2) {
 			ex2.printStackTrace();
 		}
@@ -42,8 +43,7 @@ public class Window extends Canvas {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		
+
 		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
 		setSize(s);
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
@@ -70,7 +70,7 @@ public class Window extends Canvas {
 		});
 		Window.frame.pack();
 		Window.frame.setResizable(true);
-		
+
 		Window.frame.setVisible(true);
 		createBufferStrategy(2);
 		bs = getBufferStrategy();
