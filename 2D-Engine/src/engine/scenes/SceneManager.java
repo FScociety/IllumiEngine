@@ -1,16 +1,44 @@
 package engine.scenes;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
+import engine.game.Window;
+import engine.gameobjects.GameObject;
+import engine.gameobjects.gamebehaviour.ColorLabel;
+import engine.gameobjects.gamebehaviour.Text;
+import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.camera.CameraController;
+import engine.gameobjects.gamebehaviour.ui.Profile;
+import engine.math.Vector2;
+
 public class SceneManager {
-	public static ArrayList<Scene> scenes;
+	public static ArrayList<Scene> scenes = new ArrayList<Scene>();
 	public static Scene activeScene;
 	public static Scene oldScene;
 	private static Scene bufferScene;
-
-	static {
-		SceneManager.scenes = new ArrayList<Scene>();
-	}
+	
+	public static Scene noScene = new Scene("start") {
+		
+		Camera cam;
+		
+		public void instanceGameObjects() {
+			GameObject test = new GameObject(new Vector2(0,0), true);
+			test.addComponent(new Text("No Scene loaded", 10, Window.standartFont, Color.WHITE));
+			noScene.addGameObject(test);
+			
+			GameObject camera = new GameObject(new Vector2(0), true);
+			cam = new Camera();
+			camera.addComponent(cam);	
+			camera.addComponent(new CameraController(true, true, true));
+			noScene.addGameObject(camera);
+		}
+		
+		public void sceneLoaded() {
+			cam.view();
+		}
+		
+	};
 
 	public synchronized static void flipp() {
 		SceneManager.activeScene = bufferScene;

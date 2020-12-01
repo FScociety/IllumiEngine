@@ -45,6 +45,7 @@ public class GameContainer {
 		GameContainer.running = true;
 		System.out.println("Creating Window...");
 		GameContainer.window = new Window(gc);
+		SceneManager.loadScene(SceneManager.noScene);
 		System.out.println("Start Listening Input...");
 		GameContainer.input = new Input(gc);
 		System.out.println("LoadingGame...");

@@ -39,6 +39,11 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				betterScene.addGameObject(profileObject);
 				
+				for (int i = 0; i < 1; i++) {
+					GameObject test = new GameObject(new Vector2(0), true);
+					betterScene.addGameObject(test);
+				}
+				
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
 				camera.addComponent(cam);	
