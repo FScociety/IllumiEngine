@@ -9,6 +9,7 @@ import engine.math.Vector2;
 
 public abstract class Scene {
 	private ArrayList<GameObject> gameObjectsInScene = new ArrayList<GameObject>();
+	private ArrayList<GameObject> gameObjectsInUI = new ArrayList<GameObject>();
 	private int objectCount = 0;
 
 	private ArrayList<GameObject> gameObjectsToBeAdded = new ArrayList<GameObject>();
@@ -48,7 +49,12 @@ public abstract class Scene {
 		if (!this.gameObjectsToBeAdded.isEmpty()) {
 
 			for (GameObject obj : this.gameObjectsToBeAdded) {
-				this.gameObjectsInScene.add(obj);
+				if (obj.getInWorld()) {
+					this.gameObjectsInScene.add(obj);
+				} else {
+					this.gameObjectsInUI.add(obj);
+				}
+				
 				if (!obj.started && this.started) {
 					obj.start(this);
 				}
@@ -62,7 +68,7 @@ public abstract class Scene {
 	}
 
 	private boolean inView(GameObject obj) {
-		if (obj == Camera.activeCam.gameObject || !obj.getInWorld()) {
+		if (obj == Camera.activeCam.gameObject) {
 			return true;
 		} else {
 			int viewRangeX = (int) (obj.viewRange * obj.getTransformWithCaution().scale.x); // x + y weil das object
@@ -92,6 +98,7 @@ public abstract class Scene {
 		if (!this.gameObjectsToBeRemoved.isEmpty()) {
 
 			this.gameObjectsInScene.removeAll(this.gameObjectsToBeRemoved);
+			this.gameObjectsInUI.removeAll(this.gameObjectsToBeRemoved);
 			this.objectCount -= this.gameObjectsToBeRemoved.size();
 			this.gameObjectsToBeRemoved.clear();
 
@@ -121,6 +128,15 @@ public abstract class Scene {
 				obj.render();
 			}
 		}
+		
+		objects = this.gameObjectsInUI.toArray();
+		
+		for (int i = 0; i < objects.length; i++) {
+			GameObject obj = (GameObject) objects[i];
+			if (obj.started) {
+				obj.render();
+			}
+		}
 	}
 
 	public void sceneLoaded() {
@@ -138,9 +154,12 @@ public abstract class Scene {
 
 		insertGameObjects();
 		System.out.println();
-		System.out.println("Scene[" + this.name + "] with sizeOf[" + this.gameObjectsInScene.size() + "] loading");
+		System.out.println("Scene[" + this.name + "] with sizeOf[" + this.gameObjectsInScene.size() + this.gameObjectsInUI.size() + "] loading");
 		for (int i = 0; i < this.gameObjectsInScene.size(); ++i) {
 			this.gameObjectsInScene.get(i).start(this);
+		}
+		for (int i = 0; i < this.gameObjectsInUI.size(); ++i) {
+			this.gameObjectsInUI.get(i).start(this);
 		}
 
 		SceneManager.flipp();
@@ -167,6 +186,12 @@ public abstract class Scene {
 
 		for (final GameObject obj : this.gameObjectsInScene) {
 			if ((obj.updatesOutOfView || inView(obj)) && obj.started) {
+				obj.update();
+			}
+		}
+		
+		for (final GameObject obj : this.gameObjectsInUI) {
+			if (obj.started) {
 				obj.update();
 			}
 		}

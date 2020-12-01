@@ -39,18 +39,6 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				betterScene.addGameObject(profileObject);
 				
-				GameObject test = new GameObject(new Vector2(0), false);
-				GameObject[] objects = new GameObject[5];
-				
-				objects[0] = new GameObject(new Vector2(0), true);
-				objects[0].addComponent(new Button(new Vector2(100)));
-				
-				objects[1] = new GameObject(new Vector2(0), true);
-				objects[1].addComponent(new TransformController());
-				
- 				test.addComponent(new addObjects(objects, new Vector2(100, 100)));
-				betterScene.addGameObject(test);
-				
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
 				camera.addComponent(cam);	

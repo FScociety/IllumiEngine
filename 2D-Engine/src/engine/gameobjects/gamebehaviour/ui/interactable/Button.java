@@ -11,19 +11,20 @@ import engine.math.Vector2;
 
 public class Button extends GameBehaviour {
 	private Vector2 size;
-	private Color[] colors;
+	private Color[] colors = new Color[3];
 	private boolean wire;
 	private int state = 0; // 0 = normal; 1 = hover; 2 = clicked
 
-	private ArrayList<ButtonListener> listener;
+	private ArrayList<ButtonListener> listener = new ArrayList<ButtonListener>();
 
 	public Button(Vector2 size) {
 		this.size = size;
-		this.colors = new Color[3];
-		this.wire = false;
-		this.listener = new ArrayList<ButtonListener>();
 		this.setBaseColor(Color.WHITE);
-
+	}
+	
+	public Button(Color c, Vector2 size) {
+		this.setBaseColor(c);
+		this.size = size;
 	}
 
 	public void addButtonListener(final ButtonListener bl) {
