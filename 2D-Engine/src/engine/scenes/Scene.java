@@ -10,10 +10,11 @@ import engine.math.Vector2;
 public abstract class Scene {
 	private ArrayList<GameObject> gameObjectsInScene = new ArrayList<GameObject>();
 	private ArrayList<GameObject> gameObjectsInUI = new ArrayList<GameObject>();
-	private int objectCount = 0;
 
 	private ArrayList<GameObject> gameObjectsToBeAdded = new ArrayList<GameObject>();
 	private ArrayList<GameObject> gameObjectsToBeRemoved = new ArrayList<GameObject>();
+	
+	private int objectCount = 0;
 
 	private String name;
 	private boolean unload;
@@ -178,7 +179,7 @@ public abstract class Scene {
 			this.sceneUnloaded();
 			this.unload = false;
 			/*
-			 * Scene wird nicht komplett aus dem ram gelöscht!!!!!!!!!!!!!!! Sollte noch
+			 * Scene wird nicht komplett aus dem ram gelï¿½scht!!!!!!!!!!!!!!! Sollte noch
 			 * besser werden
 			 */
 			return;

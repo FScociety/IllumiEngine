@@ -38,7 +38,11 @@ public class Camera extends GameBehaviour {
 			}
 		}
 
-		return "Bischt du Dumm im Kopf oder was, by the way er konnte die camera nicht in der Camera liste finden was absolut kein Sinn macht also. Ja genau macht halt einfach kein Sinn";
+		//Truely notwendig!!!!
+		return "Bischt du Dumm im Kopf oder was, "
+				+ "by the way er konnte die camera nicht in der Camera liste finden "
+				+ "was absolut kein Sinn macht also. "
+				+ "Ja genau macht halt einfach kein Sinn";
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package engine.gameobjects;
 
+import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -157,6 +158,10 @@ public class GameObject implements Serializable {
 
 	public void render() {
 		GameContainer.d.applyTransforms(this);
+		
+		GameContainer.d.setColor(Color.GREEN);
+		GameContainer.d.fillRect(new Vector2(5));//Pivot Point Marker
+		
 		for (final GameBehaviour component : this.components) {
 			if (component.active) {
 				component.render();

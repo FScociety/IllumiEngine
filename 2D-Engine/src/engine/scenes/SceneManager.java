@@ -17,28 +17,6 @@ public class SceneManager {
 	public static Scene activeScene;
 	public static Scene oldScene;
 	private static Scene bufferScene;
-	
-	public static Scene noScene = new Scene("start") {
-		
-		Camera cam;
-		
-		public void instanceGameObjects() {
-			GameObject test = new GameObject(new Vector2(0,0), true);
-			test.addComponent(new Text("No Scene loaded", 10, Window.standartFont, Color.WHITE));
-			noScene.addGameObject(test);
-			
-			GameObject camera = new GameObject(new Vector2(0), true);
-			cam = new Camera();
-			camera.addComponent(cam);	
-			camera.addComponent(new CameraController(true, true, true));
-			noScene.addGameObject(camera);
-		}
-		
-		public void sceneLoaded() {
-			cam.view();
-		}
-		
-	};
 
 	public synchronized static void flipp() {
 		SceneManager.activeScene = bufferScene;

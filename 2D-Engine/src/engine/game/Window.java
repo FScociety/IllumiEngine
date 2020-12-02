@@ -29,19 +29,17 @@ public class Window extends Canvas {
 	public Graphics g;
 
 	public Window(final GameContainer gc) {
-
-		System.out.println(getClass().getResourceAsStream(""));
-		try {
-			Window.standartFont = Font.createFont(0, getClass().getResourceAsStream("/DefaultFont.ttf")).deriveFont(0,
-					10.0f);
+		try { //Load the Default Font
+			Window.standartFont = Font.createFont(0, getClass().getResourceAsStream("/DefaultFont.ttf"));
 		} catch (FontFormatException | IOException ex2) {
-			ex2.printStackTrace();
+			System.err.println("Could not LOAD the Default Font!");
 		}
-		BufferedImage engineLogo = null;
+		
+		BufferedImage engineLogo = null; //Load the EngineLogo
 		try {
 			engineLogo = ImageIO.read(getClass().getResourceAsStream("/EngineLogo.png"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println("Could not LOAD the EngineLogo");
 		}
 
 		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
@@ -50,7 +48,7 @@ public class Window extends Canvas {
 		Window.frame.setLayout(new GridLayout());
 		Window.frame.setIconImage(engineLogo);
 		JPanel panel = new JPanel(new GridLayout());
-		panel.setBackground(Color.BLACK);
+		panel.setBackground(Color.GREEN);
 		panel.add(this);
 		Window.frame.add(panel);
 

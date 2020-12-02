@@ -12,8 +12,6 @@ public class Text extends GameBehaviour {
 	private int size;
 	private Color color;
 
-	private Vector2 offset = new Vector2();
-
 	public Text() {
 		this.text = "Text Missing";
 		this.setSize(5);
@@ -27,6 +25,13 @@ public class Text extends GameBehaviour {
 		this.setColor(color);
 		this.setFont(font.deriveFont((float) size));
 	}
+	
+	@Override
+	public void render() {
+		d.setFont(this.font);
+		d.setColor(this.color);
+		d.drawString(this.text);
+	}
 
 	public Color getColor() {
 		return this.color;
@@ -38,13 +43,6 @@ public class Text extends GameBehaviour {
 
 	public int getSize() {
 		return this.size;
-	}
-
-	@Override
-	public void render() {
-		d.setFont(this.font);
-		d.setColor(this.color);
-		d.drawString(this.text);
 	}
 
 	public void setColor(final Color color) {

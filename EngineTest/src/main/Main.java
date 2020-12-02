@@ -41,6 +41,7 @@ public class Main extends AbstractGame {
 				
 				for (int i = 0; i < 1; i++) {
 					GameObject test = new GameObject(new Vector2(0), true);
+					test.addComponent(new Button("Hi", new Vector2(100)));
 					betterScene.addGameObject(test);
 				}
 				
@@ -71,3 +72,13 @@ public class Main extends AbstractGame {
 		
 	}
 }
+	
+	/*
+	 * Wo zum fick wird nach "RenderThread.. => ", "null" ausgegen.
+	 * Wer macht das?!
+	 * Warum?!
+	 * Es wird sehr sicher in UpdateThread ausgeführt
+	 * Vllt in der Szene oder so
+	 * Aber das weiß man halt
+	 * Was schreib ich schon wieder für einen scheiß 
+	 */

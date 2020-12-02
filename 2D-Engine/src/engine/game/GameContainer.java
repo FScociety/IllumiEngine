@@ -41,22 +41,84 @@ public class GameContainer {
 	}
 
 	public void start() {
-		System.out.println("Starting...");
+		System.out.print("Starting...   => ");
 		GameContainer.running = true;
-		System.out.println("Creating Window...");
+		System.out.println("Started");
+		
+		System.out.print("Creating Window...   => ");
 		GameContainer.window = new Window(gc);
-		SceneManager.loadScene(SceneManager.noScene);
-		System.out.println("Start Listening Input...");
+		System.out.println("Created");
+		
+		System.out.print("Start Listening Input...   => ");
 		GameContainer.input = new Input(gc);
-		System.out.println("LoadingGame...");
+		System.out.println("Started");
+		
+		System.out.print("Creating Drawer...   => ");
 		GameContainer.d = new Drawing((Graphics2D) window.g);
+		System.out.println("Created");
 
 		startUpdateThread();
 
 	}
 
+	private void startUpdateThread() {
+		System.out.print("UpdateThread...   => ");
+		updateThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				game.start();
+
+				int cycl = 0;
+				double startTime = System.nanoTime() / nd;
+				double endTime = 0;
+				double frameTime = 0;
+				dt = 1; // So it isnt Stuck in the Beginning
+
+	 			System.out.println("Running");
+
+				startRenderThread();
+
+				while (running) {
+					// Update
+					
+					if (SceneManager.activeScene != null) {
+						SceneManager.activeScene.update();
+						game.update();
+						input.update();
+
+						if (SceneManager.oldScene != null) { // For Unloading the oldScene
+							SceneManager.oldScene.update();
+						}
+					}
+
+					// Update
+
+					endTime = startTime;
+					startTime = System.nanoTime() / nd;
+					dt = (startTime - endTime);
+
+					frameTime += startTime - endTime;
+					
+					if (frameTime >= 1) {
+						ups = cycl;
+						cycl = 0; frameTime = 0;
+					} else {
+						cycl++;
+					}
+					try {
+						Thread.sleep((long) (1f));
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		updateThread.setName("Update-Thread");
+		updateThread.start();
+	}
+	
 	private void startRenderThread() {
-		System.out.println("RenderThread...");
+		System.out.print("RenderThread...   => ");
 		renderThread = new Thread(new Runnable() {
 
 			@Override
@@ -67,7 +129,7 @@ public class GameContainer {
 				double lastTime = 0;
 				double frameTime = 0;
 
-				System.out.println("RenderThread is running!");
+				System.out.println("Running");
 
 				while (running) {
 
@@ -107,61 +169,5 @@ public class GameContainer {
 		});
 		renderThread.setName("Render-Thread");
 		renderThread.start();
-	}
-
-	private void startUpdateThread() {
-		System.out.println("UpdateThread...");
-		updateThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				game.start();
-
-				int cycl = 0;
-				double startTime = System.nanoTime() / nd;
-				double endTime = 0;
-				double frameTime = 0;
-				dt = 1; // So it isnt Stuck in the Beginning
-
-				System.out.println("UpdateThread is running!");
-
-				startRenderThread();
-
-				while (running) {
-					// Update
-
-					if (SceneManager.activeScene != null) {
-						SceneManager.activeScene.update();
-						game.update();
-						input.update();
-
-						if (SceneManager.oldScene != null) { // For Unloading the oldScene
-							SceneManager.oldScene.update();
-						}
-					}
-
-					// Update
-
-					endTime = startTime;
-					startTime = System.nanoTime() / nd;
-					dt = (startTime - endTime);
-
-					frameTime += startTime - endTime;
-					if (frameTime >= 1) {
-						ups = cycl;
-						cycl = 0;
-						frameTime = 0;
-					} else {
-						cycl++;
-					}
-					try {
-						Thread.sleep((long) (1f));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		updateThread.setName("Update-Thread");
-		updateThread.start();
 	}
 }

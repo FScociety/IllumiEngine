@@ -118,7 +118,7 @@ public class Drawing {
 
 	public void drawString(String text, Vector2 vec2) {
 		Font f = this.g.getFont();
-		this.g.setFont(this.g.getFont().deriveFont(zoom * 10));
+		this.setFontSize(zoom * 10);
 		this.g.drawString(text, vec2.x * zoom, vec2.y * zoom);
 		this.g.setFont(f);
 	}
@@ -182,5 +182,9 @@ public class Drawing {
 
 	public void setFont(Font font) {
 		this.g.setFont(font);
+	}
+	
+	public void setFontSize(float size) {
+		this.g.setFont(this.g.getFont().deriveFont(size));
 	}
 }
