@@ -39,11 +39,36 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				betterScene.addGameObject(profileObject);
 				
-				for (int i = 0; i < 1; i++) {
-					GameObject test = new GameObject(new Vector2(0), true);
-					test.addComponent(new Button("Hi", new Vector2(100)));
-					betterScene.addGameObject(test);
-				}
+				//List
+				
+				GameObject list[] = new GameObject[1];
+				
+				GameObject text = new GameObject(new Vector2(0), true);
+				text.addComponent(new TransformController());
+				text.addComponent(new Text());
+				
+				/*Fehler weil beim überschreiben von "GameBehaviour" anscheinend
+				"Seriazable" nicht mehr implements wird, was ich aber zum dupen brauch"
+				=================>
+				 
+				GameBehaviour gb = new GameBehaviour() {
+					public void render() {
+						this.d.setColor(Color.BLUE);
+						this.d.fillCircle(new Vector2(200, 0), new Vector2(50));
+					}
+				};
+				text.addComponent(gb);
+				
+				<=================
+				*/
+				
+				list[0] = text;
+				
+				//List end
+				
+				GameObject addGameObjects = new GameObject(new Vector2(0), false);
+				addGameObjects.addComponent(new addObjects(list, new Vector2(100)));
+				betterScene.addGameObject(addGameObjects);
 				
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();

@@ -40,7 +40,6 @@ public class SceneManager {
 				if (SceneManager.scenes.contains(newScene)) {
 					if (SceneManager.activeScene != newScene) {
 						SceneManager.oldScene = SceneManager.activeScene;
-						System.out.println(SceneManager.activeScene);
 						bufferScene = newScene;
 						bufferScene.instanceGameObjects();
 						bufferScene.start();

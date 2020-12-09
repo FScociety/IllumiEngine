@@ -31,14 +31,14 @@ public class GameObject implements Serializable {
 	public int viewRange = 100; // Change if needed
 
 	public GameObject(Vector2 pos, boolean inWorld) {
-		this.setTransform(new Transform(pos, 0, new Vector2(1), new Vector2(100)));
+		this.setTransform(new Transform(pos, 0, new Vector2(1)));
 		this.inWorld = inWorld;
 	}
 
 	public GameObject(Vector2 pos, final GameObject parent) {
 		this.inWorld = parent.getInWorld();
 		this.setParent(parent);
-		this.setTransform(new Transform(pos, 0, new Vector2(1), new Vector2(100)));
+		this.setTransform(new Transform(pos, 0, new Vector2(1)));
 	}
 
 	public void addChildren(final GameObject child) {
@@ -58,12 +58,12 @@ public class GameObject implements Serializable {
 
 	public void addPosition(final Vector2 position) {
 		this.setTransform(new Transform(Vector2.add(position, this.localTransform.position),
-				this.localTransform.rotation, this.localTransform.scale, this.localTransform.defaultScale));
+				this.localTransform.rotation, this.localTransform.scale));
 	}
 
 	public void addRotation(float r) {
 		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation + r,
-				this.localTransform.scale, this.localTransform.defaultScale));
+				this.localTransform.scale));
 	}
 
 	public GameObject getChild() {
@@ -159,14 +159,12 @@ public class GameObject implements Serializable {
 	public void render() {
 		GameContainer.d.applyTransforms(this);
 		
-		GameContainer.d.setColor(Color.GREEN);
-		GameContainer.d.fillRect(new Vector2(5));//Pivot Point Marker
-		
 		for (final GameBehaviour component : this.components) {
 			if (component.active) {
 				component.render();
 			}
 		}
+		
 		GameContainer.d.resetTransform();
 
 		for (final GameObject child : this.children) {
@@ -188,18 +186,15 @@ public class GameObject implements Serializable {
 	}
 
 	public void setPosition(final Vector2 position) {
-		this.setTransform(new Transform(position, this.localTransform.rotation, this.localTransform.scale,
-				this.localTransform.defaultScale));
+		this.setTransform(new Transform(position, this.localTransform.rotation, this.localTransform.scale));
 	}
 
 	public void setRotation(final float rotation) {
-		this.setTransform(new Transform(this.localTransform.position, rotation, this.localTransform.scale,
-				this.localTransform.defaultScale));
+		this.setTransform(new Transform(this.localTransform.position, rotation, this.localTransform.scale));
 	}
 
 	public void setScale(final Vector2 scale) {
-		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation, scale,
-				this.localTransform.defaultScale));
+		this.setTransform(new Transform(this.localTransform.position, this.localTransform.rotation, scale));
 	}
 
 	public void setTransform(final Transform transform) {
@@ -207,7 +202,7 @@ public class GameObject implements Serializable {
 		// machen ist besser mit varibale
 		Transform diffTransform = new Transform(Vector2.substract(transform.position, this.getTransform().position),
 				transform.rotation - this.getTransform().rotation,
-				Vector2.substract(transform.scale, this.getTransform().scale), new Vector2(0));
+				Vector2.substract(transform.scale, this.getTransform().scale));
 		this.localTransform = transform;
 		if (this.parent != null) {
 			this.globalTransform = new Transform(
@@ -215,8 +210,7 @@ public class GameObject implements Serializable {
 																									// the rotationg mit
 																									// ein
 					this.parent.getTransform().rotation + this.localTransform.rotation,
-					Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale),
-					this.localTransform.defaultScale);
+					Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale));
 		} else {
 			this.globalTransform = this.localTransform;
 		}
@@ -280,8 +274,7 @@ public class GameObject implements Serializable {
 		this.globalTransform = new Transform(
 				Vector2.add(this.parent.getTransform().position, this.localTransform.position),
 				this.parent.getTransform().rotation + this.localTransform.rotation,
-				Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale),
-				this.localTransform.defaultScale);
+				Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale));
 
 		if (this.children.size() > 0) {
 			this.updateTransform(diffTransform);

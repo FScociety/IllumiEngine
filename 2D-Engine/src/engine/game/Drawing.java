@@ -50,11 +50,11 @@ public class Drawing {
 		}
 
 		Transform transform = new Transform(diffPos, obj.getTransformWithCaution().rotation,
-				obj.getTransformWithCaution().scale, obj.getTransformWithCaution().defaultScale);
+				obj.getTransformWithCaution().scale);
 
 		this.g.rotate(Math.toRadians(transform.rotation));
 		transform.position.rotate(-transform.rotation);
-		// this.g.scale(transform.scale.x, transform.scale.y);
+		//this.g.scale(transform.scale.x, transform.scale.y);
 
 		this.g.translate(transform.position.x, transform.position.y); // Apply Object Position
 	}
@@ -111,14 +111,16 @@ public class Drawing {
 
 	public void drawString(String text) {
 		Font f = this.g.getFont();
-		this.g.setFont(this.g.getFont().deriveFont(zoom * 10));
+		//Y Scale wird nicht einberechnet was kake ist
+		this.g.setFont(this.g.getFont().deriveFont(zoom * 10 * obj.getTransformWithCaution().scale.x));
 		this.g.drawString(text, -this.g.getFontMetrics().stringWidth(text) / 2, zoom * 5);
 		this.g.setFont(f);
 	}
 
 	public void drawString(String text, Vector2 vec2) {
 		Font f = this.g.getFont();
-		this.setFontSize(zoom * 10);
+		//Y Scale wird nicht einberechnet was kake ist
+		this.setFontSize(zoom * 10 * obj.getTransformWithCaution().scale.x);
 		this.g.drawString(text, vec2.x * zoom, vec2.y * zoom);
 		this.g.setFont(f);
 	}

@@ -63,6 +63,7 @@ public class GameContainer {
 
 	private void startUpdateThread() {
 		System.out.print("UpdateThread...   => ");
+		
 		updateThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -119,6 +120,7 @@ public class GameContainer {
 	
 	private void startRenderThread() {
 		System.out.print("RenderThread...   => ");
+		
 		renderThread = new Thread(new Runnable() {
 
 			@Override

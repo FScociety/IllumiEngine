@@ -84,7 +84,7 @@ public class Button extends GameBehaviour {
 			d.fillRect(size);
 		}
 		
-		if (text.length() > 0) {
+		if (text != null) {
 			d.setFontSize(100);
 			d.setColor(new Color(255 - this.colors[0].getRed(), 255 - this.colors[0].getGreen(), 255 - this.colors[0].getBlue()));
 			d.drawString(text);
