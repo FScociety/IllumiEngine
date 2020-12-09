@@ -15,10 +15,10 @@ public class Influencer extends GameBehaviour {
 	
 	public Influencer(int charge) {
 		this.charge = charge;
-		influencers.add(this);
 	}
 	
 	public void start() {
+		influencers.add(this);
 		TransformController tc = new TransformController(true, false, true);
 		tc.getButton().setBaseColor(charge == 1 ? Color.RED : Color.BLUE);
 		this.gameObject.addComponent(tc);

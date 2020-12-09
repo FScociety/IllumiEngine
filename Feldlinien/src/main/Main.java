@@ -11,6 +11,7 @@ import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.GameBehaviour;
 import engine.gameobjects.gamebehaviour.TransformController;
 import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.ui.addObjects.addObjects;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 import engine.scenes.SceneManager;
@@ -37,26 +38,24 @@ public class Main extends AbstractGame {
 				
 				for (int i = 0; i < size; i++) {
 					for (int i2 = 0; i2 < size; i2++) {
-						GameObject feldObject = new GameObject(new Vector2(i*distance, i2*distance));
+						GameObject feldObject = new GameObject(new Vector2(i*distance, i2*distance), true);
 						feldObject.addComponent(new Feldlinie());
 						testScene.addGameObject(feldObject);
 					}
 				}
 				
-				GameObject influence1 = new GameObject(new Vector2(1));
-				influence1.addComponent(new Influencer(1));
-				testScene.addGameObject(influence1);
+				GameObject[] objectsToAdd = new GameObject[2];
+				objectsToAdd[0] = new GameObject(new Vector2(0), true);
+				objectsToAdd[0].addComponent(new Influencer(1));
+				objectsToAdd[1] = new GameObject(new Vector2(0), true);
+				objectsToAdd[1].addComponent(new Influencer(-1));
 				
-				GameObject influence2 = new GameObject(new Vector2(100));
-				influence2.addComponent(new Influencer(-1));
-				testScene.addGameObject(influence2);
-				
-				GameObject influence3 = new GameObject(new Vector2(100));
-				influence3.addComponent(new Influencer(-1));
-				testScene.addGameObject(influence3);
+				GameObject objectAdder = new GameObject(new Vector2(0), false);
+				objectAdder.addComponent(new addObjects(objectsToAdd, new Vector2(100)));
+				testScene.addGameObject(objectAdder);
 				
 				
-				GameObject camera = new GameObject(new Vector2(100));
+				GameObject camera = new GameObject(new Vector2(100), true);
 				cam =  new Camera();
 				camera.addComponent(cam);
 				camera.addComponent(new GameBehaviour() {
