@@ -41,8 +41,14 @@ public class SceneManager {
 					if (SceneManager.activeScene != newScene) {
 						SceneManager.oldScene = SceneManager.activeScene;
 						bufferScene = newScene;
+						System.out.println();
+						System.out.println("Scene[" + newScene.getName() + "] loading...");
+						System.out.print("Creating Objects... ");
 						bufferScene.instanceGameObjects();
+						System.out.println("Created!");
+						System.out.println("Starting Objects... ");
 						bufferScene.start();
+						System.out.println("Objects Started!");
 						if (SceneManager.oldScene != null) {
 							SceneManager.oldScene.unload();
 						}

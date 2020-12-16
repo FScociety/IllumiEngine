@@ -12,6 +12,7 @@ public class GameContainer {
 	public static GameContainer gc;
 
 	private static boolean running = false;
+	private boolean abstractGameStarted = false;
 	private static double nd = 1.0E9;
 
 	private static double targetFPS = 80;
@@ -67,7 +68,6 @@ public class GameContainer {
 		updateThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-				game.start();
 
 				int cycl = 0;
 				double startTime = System.nanoTime() / nd;
@@ -80,6 +80,11 @@ public class GameContainer {
 				startRenderThread();
 
 				while (running) {
+					if (renderThread.isAlive() && !abstractGameStarted)  {
+						abstractGameStarted = true;
+						game.start();
+					}
+					
 					// Update
 					
 					if (SceneManager.activeScene != null) {

@@ -234,7 +234,7 @@ public class GameObject implements Serializable {
 				this.children.get(i).start(loadingScene);
 			}
 		}
-		System.out.println("Loaded GameObject[" + this + "]");
+		System.out.println("Started GameObject[" + this + "]");
 	}
 
 	private void startComponent(GameBehaviour gb) {

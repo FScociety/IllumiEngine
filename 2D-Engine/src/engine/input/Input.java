@@ -18,7 +18,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	private int[] keys;
 	private int[] buttons;
 
-	private Vector2 mousePos;
+	private Vector2 mousePos = new Vector2();
+	private Vector2 oldMousePos = new Vector2();
+	public Vector2 mouseVelocity = new Vector2();
 	private int scroll;
 
 	public Input(final GameContainer gc) {
@@ -26,7 +28,6 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 		this.buttons = new int[NUM_BUTTONS];
 
-		this.mousePos = new Vector2();
 		this.scroll = 0;
 
 		GameContainer.window.addKeyListener(this);
@@ -38,9 +39,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	public Vector2 getMousePos(boolean inWorldState) {
 		if (inWorldState) {
 			Vector2 newMousePos = Vector2.add(mousePos, Camera.activeCam.gameObject.getTransformWithCaution().position); // MousePos
-																															// relative
-																															// to
-																															// Camera
+																											// Camera
 			newMousePos.substract(Vector2.divide(GameContainer.windowSize, 2)); // Center the MousePos to Screen
 			newMousePos.scale(Camera.activeCam.gameObject.getTransformWithCaution().position,
 					1 / Camera.activeCam.zoom); // Apply Camera Zoom to Mouse Pos
@@ -106,8 +105,21 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseDragged(final MouseEvent e) {
+		this.updateMousePos(e);
+	}
+
+	@Override
+	public void mouseMoved(final MouseEvent e) {
+		this.updateMousePos(e);
+	}
+	
+	private void updateMousePos(final MouseEvent e) {
 		this.mousePos.x = e.getX();
 		this.mousePos.y = e.getY();
+		
+		this.mouseVelocity = Vector2.substract(this.mousePos, this.oldMousePos);
+		
+		this.oldMousePos = this.mousePos.getCopy();
 	}
 
 	@Override
@@ -116,12 +128,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseExited(final MouseEvent e) {
-	}
-
-	@Override
-	public void mouseMoved(final MouseEvent e) {
-		this.mousePos.x = e.getX();
-		this.mousePos.y = e.getY();
+		this.mouseVelocity = new Vector2(0);
 	}
 
 	@Override
@@ -165,6 +172,5 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 				this.buttons[i] = 0;
 			}
 		}
-
 	}
 }

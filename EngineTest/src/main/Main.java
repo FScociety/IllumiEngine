@@ -21,7 +21,7 @@ import engine.scenes.SceneManager;
 
 public class Main extends AbstractGame {
 	
-	Scene betterScene;
+	Scene scene1, scene2;
 	
 	public static void main(String[] args) {
 		GameContainer gc = new GameContainer(new Main());	
@@ -30,51 +30,20 @@ public class Main extends AbstractGame {
 	}
 	
 	public Main() {
-		betterScene = new Scene("betterScene") {
+		scene1 = new Scene("1") {
 			Camera cam;
 			GameObject camera;
 
 			public void instanceGameObjects() {
 				GameObject profileObject = new GameObject(new Vector2(0), false);
 				profileObject.addComponent(new Profile());
-				betterScene.addGameObject(profileObject);
-				
-				//List
-				
-				GameObject list[] = new GameObject[1];
-				
-				GameObject text = new GameObject(new Vector2(0), true);
-				text.addComponent(new TransformController());
-				text.addComponent(new Text());
-				
-				/*Fehler weil beim �berschreiben von "GameBehaviour" anscheinend
-				"Seriazable" nicht mehr implements wird, was ich aber zum dupen brauch"
-				=================>
-				 
-				GameBehaviour gb = new GameBehaviour() {
-					public void render() {
-						this.d.setColor(Color.BLUE);
-						this.d.fillCircle(new Vector2(200, 0), new Vector2(50));
-					}
-				};
-				text.addComponent(gb);
-				
-				<=================
-				*/
-				
-				list[0] = text;
-				
-				//List end
-				
-				GameObject addGameObjects = new GameObject(new Vector2(0), false);
-				addGameObjects.addComponent(new addObjects(list, new Vector2(100)));
-				betterScene.addGameObject(addGameObjects);
-				
+				scene1.addGameObject(profileObject);
+
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
 				camera.addComponent(cam);	
 				camera.addComponent(new CameraController(true, true, true));
-				betterScene.addGameObject(camera);
+				scene1.addGameObject(camera);
 			}
 
 			public void sceneLoaded() {
@@ -82,28 +51,18 @@ public class Main extends AbstractGame {
 			}
 			
 		};
+		
 	}
 	
 	public void start() {
-		SceneManager.loadScene(betterScene);
+		SceneManager.loadScene(scene1);
 		
 	}
 	
 	public void update() {
-
 	}
 
 	public void render() {	
 		
 	}
 }
-	
-	/*
-	 * Wo zum fick wird nach "RenderThread.. => ", "null" ausgegen.
-	 * Wer macht das?!
-	 * Warum?!
-	 * Es wird sehr sicher in UpdateThread ausgeführt
-	 * Vllt in der Szene oder so
-	 * Aber das weiß man halt
-	 * Was schreib ich schon wieder für einen scheiß 
-	 */

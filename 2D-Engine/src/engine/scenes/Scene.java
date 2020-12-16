@@ -151,11 +151,8 @@ public abstract class Scene {
 	}
 
 	public void start() {
-		this.sceneLoaded();
 
 		insertGameObjects();
-		System.out.println();
-		System.out.println("Scene[" + this.name + "] with sizeOf[" + this.gameObjectsInScene.size() + this.gameObjectsInUI.size() + "] loading");
 		for (int i = 0; i < this.gameObjectsInScene.size(); ++i) {
 			this.gameObjectsInScene.get(i).start(this);
 		}
@@ -165,7 +162,7 @@ public abstract class Scene {
 
 		SceneManager.flipp();
 		started = true;
-
+		this.sceneLoaded();
 	}
 
 	public void unload() {

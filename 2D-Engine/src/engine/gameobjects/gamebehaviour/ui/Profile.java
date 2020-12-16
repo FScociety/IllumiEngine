@@ -68,12 +68,14 @@ public class Profile extends GameBehaviour implements KeyListener {
 		}
 
 		d.drawString("Zoom:" + Camera.activeCam.zoom, new Vector2(0, 70));
+		
+		d.drawString("Camera: " + Camera.activeCam, new Vector2(0,85));
 
-		d.drawString("Keys:", new Vector2(0, 85));
+		d.drawString("Keys:", new Vector2(0, 100));
 
 		for (int i = 0; i < pressedKeys.size(); i++) {
 			d.drawString(KeyEvent.getKeyText(pressedKeys.get(i)) + " (" + pressedKeys.get(i) + ")",
-					new Vector2(0, i * 15 + 100));
+					new Vector2(0, i * 15 + 115));
 		}
 
 	}

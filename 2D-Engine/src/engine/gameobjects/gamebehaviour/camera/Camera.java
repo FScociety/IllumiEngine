@@ -34,7 +34,7 @@ public class Camera extends GameBehaviour {
 	public String toString() {
 		for (int i = 0; i < cameras.size(); i++) {
 			if (cameras.get(i) == this) {
-				return "Your Camera is: " + i;
+				return i + "";
 			}
 		}
 
