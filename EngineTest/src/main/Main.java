@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import engine.game.AbstractGame;
 import engine.game.GameContainer;
@@ -42,18 +43,26 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				scene1.addGameObject(profileObject);
 				
-				for (int i = 0; i < 5; i++) {
-					GameObject circleObj = new GameObject(new Vector2((float)Math.random()*500, (float)Math.random()*500), true);
+				for (int i = 1; i < 5; i++) {
+					GameObject circleObj = new GameObject(new Vector2(0, i * 110), true);
 					circleObj.addComponent(new CircleCollider(100));
 					circleObj.addComponent(new Rigidbody2D());
 					scene1.addGameObject(circleObj);
 				}
 				
-				GameObject circleMouse = new GameObject(new Vector2(200), true);
+				GameObject circleMouse = new GameObject(new Vector2(0), true);
 				circleMouse.addComponent(new CircleCollider(100));
+				Rigidbody2D rgb = new Rigidbody2D();
+				rgb.velocity.add(new Vector2(0, 3));
+				circleMouse.addComponent(rgb);
 				circleMouse.addComponent(new GameBehaviour() {
 					public void update() {
-						this.gameObject.setPosition(GameContainer.input.getMousePos(true));
+						if (GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
+							Vector2 subVec = new Vector2(GameContainer.input.getMousePos(true), this.gameObject.getTransformWithCaution().position);
+							subVec.normalize();
+							subVec.multiply((float)GameContainer.dt * 10);
+							rgb.velocity.add(subVec);
+						}
 					}
 				});
 				scene1.addGameObject(circleMouse);

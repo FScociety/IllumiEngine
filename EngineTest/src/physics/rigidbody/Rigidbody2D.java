@@ -16,7 +16,9 @@ public class Rigidbody2D extends GameBehaviour {
 	
 	public void update() {
 		if (c.cp != null) {
-			this.velocity.substract(Vector2.multiply(c.cp.velocity, (float)GameContainer.dt));
+			Vector2 pushVec = c.cp.velocity;
+			pushVec.multiply((float)GameContainer.dt);
+			this.velocity.substract(pushVec);
 		}
 		this.gameObject.addPosition(Vector2.multiply(velocity, (float)GameContainer.dt * 100));
 		this.velocity.substract(Vector2.multiply(Vector2.substract(this.velocity, 0.01f), (float)GameContainer.dt));

@@ -5,6 +5,7 @@ import java.awt.Color;
 import engine.gameobjects.GameObject;
 import engine.math.Vector2;
 import physics.PhysicsWorld;
+import physics.rigidbody.Rigidbody2D;
 
 public class CircleCollider extends Collider {
 	
@@ -34,8 +35,12 @@ public class CircleCollider extends Collider {
 		float distance = distanceVec.length();
 		
 		if (distance <= minDistance) {
-			Vector2 direction = distanceVec.getCopy();
 			distanceVec.normalize();
+			Vector2 direction = distanceVec.getCopy();
+			Rigidbody2D otherRGB = (Rigidbody2D) obj.getComponent(Rigidbody2D.class);
+			Rigidbody2D thisRGB = (Rigidbody2D) obj.getComponent(Rigidbody2D.class);
+			direction.add(Vector2.multiply(otherRGB.velocity, thisRGB.velocity).length() * 10);
+			
 			distanceVec.multiply(this.r/2);
 			return new CollisionPoint(distanceVec, direction);
 		} else {
