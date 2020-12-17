@@ -24,7 +24,7 @@ public class Drawing {
 
 	private float zoom;
 
-	private GameObject obj;
+	public GameObject obj;
 
 	private boolean debug = false;
 

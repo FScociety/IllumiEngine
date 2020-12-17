@@ -89,7 +89,7 @@ public class GameObject implements Serializable {
 
 	public GameBehaviour getComponent(Class<? extends GameBehaviour> e) {
 		for (final GameBehaviour component2 : this.components) {
-			if (component2.getClass() == e) {
+			if (component2.getClass() == e || e.isInstance(component2)) {
 				return component2;
 			}
 		}

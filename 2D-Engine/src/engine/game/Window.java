@@ -1,5 +1,6 @@
 package engine.game;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -45,10 +46,10 @@ public class Window extends Canvas {
 		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
 		setSize(s);
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
-		Window.frame.setLayout(new GridLayout());
+		//Window.frame.setLayout(new BorderLayout());
 		Window.frame.setIconImage(engineLogo);
-		JPanel panel = new JPanel(new GridLayout());
-		panel.setBackground(Color.GREEN);
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBackground(Color.BLACK);
 		panel.add(this);
 		Window.frame.add(panel);
 

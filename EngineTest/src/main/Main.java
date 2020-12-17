@@ -18,6 +18,9 @@ import engine.gameobjects.gamebehaviour.ui.interactable.Button;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 import engine.scenes.SceneManager;
+import physics.PhysicsWorld;
+import physics.collider.CircleCollider;
+import physics.rigidbody.Rigidbody2D;
 
 public class Main extends AbstractGame {
 	
@@ -38,6 +41,22 @@ public class Main extends AbstractGame {
 				GameObject profileObject = new GameObject(new Vector2(0), false);
 				profileObject.addComponent(new Profile());
 				scene1.addGameObject(profileObject);
+				
+				for (int i = 0; i < 5; i++) {
+					GameObject circleObj = new GameObject(new Vector2((float)Math.random()*500, (float)Math.random()*500), true);
+					circleObj.addComponent(new CircleCollider(100));
+					circleObj.addComponent(new Rigidbody2D());
+					scene1.addGameObject(circleObj);
+				}
+				
+				GameObject circleMouse = new GameObject(new Vector2(200), true);
+				circleMouse.addComponent(new CircleCollider(100));
+				circleMouse.addComponent(new GameBehaviour() {
+					public void update() {
+						this.gameObject.setPosition(GameContainer.input.getMousePos(true));
+					}
+				});
+				scene1.addGameObject(circleMouse);
 
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
@@ -60,6 +79,7 @@ public class Main extends AbstractGame {
 	}
 	
 	public void update() {
+		PhysicsWorld.update();
 	}
 
 	public void render() {	
