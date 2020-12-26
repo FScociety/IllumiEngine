@@ -11,11 +11,11 @@ import engine.math.Vector2;
 
 public class Button extends GameBehaviour {
 	private Vector2 size;
-	private Color[] colors = new Color[3];
+	private Color[] colors = new Color[3]; //Colors for different "state"
 	private boolean wire;
 	private int state = 0; // 0 = normal; 1 = hover; 2 = clicked
 	
-	public String text;
+	private String text;
 
 	private ArrayList<ButtonListener> listener = new ArrayList<ButtonListener>();
 

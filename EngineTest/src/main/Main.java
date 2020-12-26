@@ -16,12 +16,14 @@ import engine.gameobjects.gamebehaviour.camera.CameraController;
 import engine.gameobjects.gamebehaviour.ui.Profile;
 import engine.gameobjects.gamebehaviour.ui.addObjects.addObjects;
 import engine.gameobjects.gamebehaviour.ui.interactable.Button;
+import engine.gameobjects.gamebehaviour.ui.interactable.CheckBox;
+import engine.gameobjects.gamebehaviour.ui.interactable.InputField;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 import engine.scenes.SceneManager;
+import physics.PhysicsObject;
 import physics.PhysicsWorld;
-import physics.collider.CircleCollider;
-import physics.rigidbody.Rigidbody2D;
+import physics.collision.collider.CircleCollider;
 
 public class Main extends AbstractGame {
 	
@@ -43,30 +45,10 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				scene1.addGameObject(profileObject);
 				
-				for (int i = 1; i < 5; i++) {
-					GameObject circleObj = new GameObject(new Vector2(0, i * 110), true);
-					circleObj.addComponent(new CircleCollider(100));
-					circleObj.addComponent(new Rigidbody2D());
-					scene1.addGameObject(circleObj);
-				}
+				GameObject buttonObj = new GameObject(new Vector2(0), true);
+				buttonObj.addComponent(new InputField(new Vector2(100, 25)));
+				scene1.addGameObject(buttonObj);
 				
-				GameObject circleMouse = new GameObject(new Vector2(0), true);
-				circleMouse.addComponent(new CircleCollider(100));
-				Rigidbody2D rgb = new Rigidbody2D();
-				rgb.velocity.add(new Vector2(0, 3));
-				circleMouse.addComponent(rgb);
-				circleMouse.addComponent(new GameBehaviour() {
-					public void update() {
-						if (GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
-							Vector2 subVec = new Vector2(GameContainer.input.getMousePos(true), this.gameObject.getTransformWithCaution().position);
-							subVec.normalize();
-							subVec.multiply((float)GameContainer.dt * 10);
-							rgb.velocity.add(subVec);
-						}
-					}
-				});
-				scene1.addGameObject(circleMouse);
-
 				camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
 				camera.addComponent(cam);	
@@ -84,11 +66,10 @@ public class Main extends AbstractGame {
 	
 	public void start() {
 		SceneManager.loadScene(scene1);
-		
 	}
 	
 	public void update() {
-		PhysicsWorld.update();
+
 	}
 
 	public void render() {	
