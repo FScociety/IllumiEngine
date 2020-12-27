@@ -12,20 +12,20 @@ public class GameContainer {
 	public static GameContainer gc;
 
 	private static boolean running = false;
-	private boolean abstractGameStarted = false;
 	private static double nd = 1.0E9;
-
 	private static double targetFPS = 80;
-	public static AbstractGame game;
 
+	public static AbstractGame game;
 	public static Window window;
+
 	public static Input input;
 	public static Drawing d;
 	public static Vector2 windowSize;
 	public static float fps = 0;
-
 	public static float ups = 0;
+
 	public static double dt;
+	private boolean abstractGameStarted = false;
 	private Thread updateThread, renderThread;
 
 	public GameContainer(final AbstractGame game) {
@@ -62,6 +62,61 @@ public class GameContainer {
 
 	}
 
+	private void startRenderThread() {
+		System.out.print("RenderThread...   => ");
+		
+		renderThread = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+
+				int frame = 0;
+				double startTime = System.nanoTime() / nd;
+				double lastTime = 0;
+				double frameTime = 0;
+
+				System.out.println("Running");
+
+				while (running) {
+
+					window.g.setColor(Color.BLACK);
+					window.g.fillRect(0, 0, (int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
+
+					if (SceneManager.activeScene != null) {
+						game.render();
+						SceneManager.activeScene.render();
+					}
+
+					try {
+						window.bs.show(); // Flipp the Buffer
+					} catch (IllegalStateException e) {
+					}
+
+					lastTime = startTime;
+					startTime = System.nanoTime() / nd;
+					frameTime += startTime - lastTime;
+					if (frameTime >= 1) {
+						fps = frame;
+						frame = 0;
+						frameTime = 0;
+					} else {
+						frame++;
+					}
+
+					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
+					/*
+					 * try { Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
+					 * } catch (InterruptedException e) {
+					 * System.out.println("What the... Thread couldn't be set to sleep");
+					 * e.printStackTrace(); }
+					 */
+				}
+			}
+		});
+		renderThread.setName("Render-Thread");
+		renderThread.start();
+	}
+	
 	private void startUpdateThread() {
 		System.out.print("UpdateThread...   => ");
 		
@@ -121,60 +176,5 @@ public class GameContainer {
 		});
 		updateThread.setName("Update-Thread");
 		updateThread.start();
-	}
-	
-	private void startRenderThread() {
-		System.out.print("RenderThread...   => ");
-		
-		renderThread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-
-				int frame = 0;
-				double startTime = System.nanoTime() / nd;
-				double lastTime = 0;
-				double frameTime = 0;
-
-				System.out.println("Running");
-
-				while (running) {
-
-					window.g.setColor(Color.BLACK);
-					window.g.fillRect(0, 0, (int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
-
-					if (SceneManager.activeScene != null) {
-						game.render();
-						SceneManager.activeScene.render();
-					}
-
-					try {
-						window.bs.show(); // Flipp the Buffer
-					} catch (IllegalStateException e) {
-					}
-
-					lastTime = startTime;
-					startTime = System.nanoTime() / nd;
-					frameTime += startTime - lastTime;
-					if (frameTime >= 1) {
-						fps = frame;
-						frame = 0;
-						frameTime = 0;
-					} else {
-						frame++;
-					}
-
-					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
-					/*
-					 * try { Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
-					 * } catch (InterruptedException e) {
-					 * System.out.println("What the... Thread couldn't be set to sleep");
-					 * e.printStackTrace(); }
-					 */
-				}
-			}
-		});
-		renderThread.setName("Render-Thread");
-		renderThread.start();
 	}
 }

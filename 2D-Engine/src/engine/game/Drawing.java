@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 
 import engine.gameobjects.GameObject;
 import engine.gameobjects.Transform;
-import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
 import engine.math.Vector2;
 
 public class Drawing {

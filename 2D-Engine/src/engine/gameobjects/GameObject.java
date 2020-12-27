@@ -1,6 +1,5 @@
 package engine.gameobjects;
 
-import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -10,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 
@@ -99,6 +98,10 @@ public class GameObject implements Serializable {
 	public int getComponentCount() {
 		return this.components.size();
 	}
+	
+	public ArrayList<GameBehaviour> getComponents() { //Think: Maybe wäre Array besser aber ich glaub nicht weil er dann umwandeln müsste
+		return this.components;
+	}
 
 	public GameObject getCopy() {
 		// MAGIC FUNKTION FROM STACK OVERFLOW FOR COPIING OBJECTS AND I HAVE NO IDEA
@@ -111,7 +114,6 @@ public class GameObject implements Serializable {
 			oos.close();
 			bos.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		byte[] byteData = bos.toByteArray();
@@ -121,10 +123,8 @@ public class GameObject implements Serializable {
 		try {
 			object = (GameObject) new ObjectInputStream(bais).readObject();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -237,15 +237,6 @@ public class GameObject implements Serializable {
 		System.out.println("Started GameObject[" + this + "]");
 	}
 
-	private void startComponent(GameBehaviour gb) {
-		gb.gameObject = this;
-		if (gb.testInWorldStateSame()) {
-			gb.d = GameContainer.d;
-			gb.start();
-			gb.started = true;
-		}
-	}
-
 	@Override
 	public String toString() {
 		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
@@ -284,6 +275,15 @@ public class GameObject implements Serializable {
 	public void updateTransform(Transform diffTransform) {
 		for (int i = 0; i < this.children.size(); i++) {
 			this.children.get(i).updateGlobalTransform(this, diffTransform);
+		}
+	}
+
+	private void startComponent(GameBehaviour gb) {
+		gb.gameObject = this;
+		if (gb.testInWorldStateSame()) {
+			gb.d = GameContainer.d;
+			gb.start();
+			gb.started = true;
 		}
 	}
 }

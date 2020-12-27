@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
 import engine.math.Vector2;
 
 public abstract class Scene {
@@ -46,65 +46,7 @@ public abstract class Scene {
 		return this.objectCount;
 	}
 
-	private void insertGameObjects() {
-		if (!this.gameObjectsToBeAdded.isEmpty()) {
-
-			for (GameObject obj : this.gameObjectsToBeAdded) {
-				if (obj.getInWorld()) {
-					this.gameObjectsInScene.add(obj);
-				} else {
-					this.gameObjectsInUI.add(obj);
-				}
-				
-				if (!obj.started && this.started) {
-					obj.start(this);
-				}
-			}
-
-			this.gameObjectsToBeAdded.clear();
-		}
-	}
-
 	public void instanceGameObjects() {
-	}
-
-	private boolean inView(GameObject obj) {
-		if (obj == Camera.activeCam.gameObject) {
-			return true;
-		} else {
-			int viewRangeX = (int) (obj.viewRange * obj.getTransformWithCaution().scale.x); // x + y weil das object
-																							// scaliert werden kann
-			int viewRangeY = (int) (obj.viewRange * obj.getTransformWithCaution().scale.y);
-			Vector2 windowBounds = new Vector2(GameContainer.windowSize.x / 2, GameContainer.windowSize.y / 2);
-			windowBounds.divide(new Vector2(Camera.activeCam.zoom));
-			if (!(obj.getTransformWithCaution().position.x
-					+ viewRangeX <= Camera.activeCam.gameObject.getTransformWithCaution().position.x - windowBounds.x
-					|| obj.getTransformWithCaution().position.x
-							- viewRangeX >= Camera.activeCam.gameObject.getTransformWithCaution().position.x
-									+ windowBounds.x
-					|| obj.getTransformWithCaution().position.y
-							+ viewRangeY <= Camera.activeCam.gameObject.getTransformWithCaution().position.y
-									- windowBounds.y
-					|| obj.getTransformWithCaution().position.y
-							- viewRangeY >= Camera.activeCam.gameObject.getTransformWithCaution().position.y
-									+ windowBounds.y)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
-	private void outsertGameObjects() {
-		if (!this.gameObjectsToBeRemoved.isEmpty()) {
-
-			this.gameObjectsInScene.removeAll(this.gameObjectsToBeRemoved);
-			this.gameObjectsInUI.removeAll(this.gameObjectsToBeRemoved);
-			this.objectCount -= this.gameObjectsToBeRemoved.size();
-			this.gameObjectsToBeRemoved.clear();
-
-			this.gameObjectsToBeAdded.clear();
-		}
 	}
 
 	public void removeGameObject(final GameObject gobj) {
@@ -196,5 +138,63 @@ public abstract class Scene {
 
 		insertGameObjects();
 		outsertGameObjects();
+	}
+
+	private void insertGameObjects() {
+		if (!this.gameObjectsToBeAdded.isEmpty()) {
+
+			for (GameObject obj : this.gameObjectsToBeAdded) {
+				if (obj.getInWorld()) {
+					this.gameObjectsInScene.add(obj);
+				} else {
+					this.gameObjectsInUI.add(obj);
+				}
+				
+				if (!obj.started && this.started) {
+					obj.start(this);
+				}
+			}
+
+			this.gameObjectsToBeAdded.clear();
+		}
+	}
+
+	private boolean inView(GameObject obj) {
+		if (obj == Camera.activeCam.gameObject) {
+			return true;
+		} else {
+			int viewRangeX = (int) (obj.viewRange * obj.getTransformWithCaution().scale.x); // x + y weil das object
+																							// scaliert werden kann
+			int viewRangeY = (int) (obj.viewRange * obj.getTransformWithCaution().scale.y);
+			Vector2 windowBounds = new Vector2(GameContainer.windowSize.x / 2, GameContainer.windowSize.y / 2);
+			windowBounds.divide(new Vector2(Camera.activeCam.zoom));
+			if (!(obj.getTransformWithCaution().position.x
+					+ viewRangeX <= Camera.activeCam.gameObject.getTransformWithCaution().position.x - windowBounds.x
+					|| obj.getTransformWithCaution().position.x
+							- viewRangeX >= Camera.activeCam.gameObject.getTransformWithCaution().position.x
+									+ windowBounds.x
+					|| obj.getTransformWithCaution().position.y
+							+ viewRangeY <= Camera.activeCam.gameObject.getTransformWithCaution().position.y
+									- windowBounds.y
+					|| obj.getTransformWithCaution().position.y
+							- viewRangeY >= Camera.activeCam.gameObject.getTransformWithCaution().position.y
+									+ windowBounds.y)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	private void outsertGameObjects() {
+		if (!this.gameObjectsToBeRemoved.isEmpty()) {
+
+			this.gameObjectsInScene.removeAll(this.gameObjectsToBeRemoved);
+			this.gameObjectsInUI.removeAll(this.gameObjectsToBeRemoved);
+			this.objectCount -= this.gameObjectsToBeRemoved.size();
+			this.gameObjectsToBeRemoved.clear();
+
+			this.gameObjectsToBeAdded.clear();
+		}
 	}
 }

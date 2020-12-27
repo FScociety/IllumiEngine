@@ -1,16 +1,6 @@
 package engine.scenes;
 
-import java.awt.Color;
 import java.util.ArrayList;
-
-import engine.game.Window;
-import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.ColorLabel;
-import engine.gameobjects.gamebehaviour.Text;
-import engine.gameobjects.gamebehaviour.camera.Camera;
-import engine.gameobjects.gamebehaviour.camera.CameraController;
-import engine.gameobjects.gamebehaviour.ui.Profile;
-import engine.math.Vector2;
 
 public class SceneManager {
 	public static ArrayList<Scene> scenes = new ArrayList<Scene>();

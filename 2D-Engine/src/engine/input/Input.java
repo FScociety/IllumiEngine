@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
 import engine.math.Vector2;
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
@@ -109,26 +109,17 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 
 	@Override
-	public void mouseMoved(final MouseEvent e) {
-		this.updateMousePos(e);
-	}
-	
-	private void updateMousePos(final MouseEvent e) {
-		this.mousePos.x = e.getX();
-		this.mousePos.y = e.getY();
-		
-		this.mouseVelocity = Vector2.substract(this.mousePos, this.oldMousePos);
-		
-		this.oldMousePos = this.mousePos.getCopy();
-	}
-
-	@Override
 	public void mouseEntered(final MouseEvent e) {
 	}
-
+	
 	@Override
 	public void mouseExited(final MouseEvent e) {
 		this.mouseVelocity = new Vector2(0);
+	}
+
+	@Override
+	public void mouseMoved(final MouseEvent e) {
+		this.updateMousePos(e);
 	}
 
 	@Override
@@ -158,7 +149,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		this.scroll = 0;
 
 		for (int i = 0; i < NUM_KEYS; ++i) {
-			if (this.keys[i] == 1) { // Taste wurde gedrückt
+			if (this.keys[i] == 1) { // Taste wurde gedrï¿½ckt
 				this.keys[i] += 1;
 			} else if (this.keys[i] == -1) { // Taste wurde released
 				this.keys[i] = 0;
@@ -166,11 +157,20 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		}
 
 		for (int i = 0; i < NUM_BUTTONS; ++i) {
-			if (this.buttons[i] == 1) { // Taste wurde gedrückt
+			if (this.buttons[i] == 1) { // Taste wurde gedrï¿½ckt
 				this.buttons[i] += 1;
 			} else if (this.buttons[i] == -1) { // Taste wurde released
 				this.buttons[i] = 0;
 			}
 		}
+	}
+
+	private void updateMousePos(final MouseEvent e) {
+		this.mousePos.x = e.getX();
+		this.mousePos.y = e.getY();
+		
+		this.mouseVelocity = Vector2.substract(this.mousePos, this.oldMousePos);
+		
+		this.oldMousePos = this.mousePos.getCopy();
 	}
 }
