@@ -1,6 +1,6 @@
 package physics;
 
-import engine.gameobjects.gamebehaviour.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import physics.collision.Collider;
 import physics.effector.Effector;
 

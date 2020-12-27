@@ -1,11 +1,11 @@
-package engine.gameobjects.gamebehaviour.camera;
+package engine.gameobjects.gamebehaviour.builtin.camera;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.GameBehaviour;
-import engine.gameobjects.gamebehaviour.ui.interactable.Interactable;
+import engine.gameobjects.gamebehaviour.builtin.ui.interactable.Interactable;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.math.Vector2;
 
 public class CameraController extends GameBehaviour {

@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.game.Window;
-import engine.gameobjects.gamebehaviour.GameBehaviour;
-import engine.gameobjects.gamebehaviour.Text;
-import engine.gameobjects.gamebehaviour.TransformController;
+import engine.gameobjects.gamebehaviour.builtin.debug.TransformController;
+import engine.gameobjects.gamebehaviour.builtin.ui.Text;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 
 public class Influencer extends GameBehaviour {
 	

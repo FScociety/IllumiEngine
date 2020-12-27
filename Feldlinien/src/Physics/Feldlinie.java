@@ -1,7 +1,8 @@
 package Physics;
 
 import java.awt.Color;
-import engine.gameobjects.gamebehaviour.GameBehaviour;
+
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.math.Vector2;
 
 public class Feldlinie extends GameBehaviour {
@@ -13,10 +14,8 @@ public class Feldlinie extends GameBehaviour {
 	}
 	
 	public void update() {
-		float angle = 0;
 		force = new Vector2(1,0);
 		for (Influencer inf : Influencer.influencers) {
-			Vector2 oldForce = force.getCopy();
 			Vector2 diffVec = new Vector2(inf.gameObject.getTransformWithCaution().position, this.gameObject.getTransformWithCaution().position);
 			diffVec.divide(Vector2.multiply(inf.gameObject.getTransformWithCaution().scale, inf.gameObject.getTransformWithCaution().scale));
 			float length = 1 / (diffVec.length()/300);

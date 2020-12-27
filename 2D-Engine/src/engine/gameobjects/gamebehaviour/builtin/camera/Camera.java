@@ -1,8 +1,8 @@
-package engine.gameobjects.gamebehaviour.camera;
+package engine.gameobjects.gamebehaviour.builtin.camera;
 
 import java.util.ArrayList;
 
-import engine.gameobjects.gamebehaviour.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 
 public class Camera extends GameBehaviour {
 

@@ -5,8 +5,8 @@ import java.awt.event.KeyEvent;
 import engine.game.AbstractGame;
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.GameBehaviour;
-import engine.gameobjects.gamebehaviour.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 import engine.scenes.SceneManager;
@@ -60,7 +60,6 @@ public class Main extends AbstractGame {
 
 	@Override
 	public void render() {
-		// TODO Auto-generated method stub
 		
 	}
 
