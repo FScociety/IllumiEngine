@@ -1,14 +1,12 @@
 package engine.gameobjects.gamebehaviour.type;
 
-import engine.gameobjects.gamebehaviour.UIGBBounds;
+import engine.gameobjects.gamebehaviour.Bounds;
 
 public abstract class UIGameBehaviour extends GameBehaviour {
 	
-	public UIGBBounds bounds; //IMPORTANT => Has to be initialized later!
+	public Bounds bounds; //Vllt protected
 	
 	public void uiUpdate() {}
-	
-	//void start();
 	
 	//void update();
 	

@@ -5,47 +5,45 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
+import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
 
 public class Button extends UIGameBehaviour {
-	private Vector2 size;
+
 	private Color[] colors = new Color[3]; //Colors for different "state"
 	private boolean wire;
-	private int state = 0; // 0 = normal; 1 = hover; 2 = clicked
+	protected int state = 0; // 0 = normal; 1 = hover; 2 = press
 	
-	private String text;
+	private String text; //TODO To be replaced with Text Behaviour and Bounds Object
 
 	private ArrayList<ButtonListener> listener = new ArrayList<ButtonListener>();
 
-	public Button(Color c, Vector2 size) {
+	public Button(Color c, Bounds b) {
 		this.setBaseColor(c);
-		this.size = size;
+		this.bounds = b;
+	
 	}
 	
-	public Button(String t, Color c, Vector2 size) {
+	public Button(String t, Bounds b) {
+		this.setBaseColor(Color.WHITE);
 		this.text = t;
-		this.setBaseColor(c);
-		this.size = size;
+		this.bounds = b;
 	}
 	
-	public Button(String t, Color c, Vector2 size, boolean wire) {
+	public Button(String t, Color c, Bounds b) {
 		this.text = t;
 		this.setBaseColor(c);
-		this.size = size;
+		this.bounds = b;
+	}
+	
+	public Button(String t, Color c, boolean wire, Bounds b) {
+		this.text = t;
+		this.setBaseColor(c);
 		this.wire = wire;
-	}
-	
-	public Button(String t, Vector2 size) {
-		this.size = size;
-		this.setBaseColor(Color.WHITE);
-		this.text = t;
-	}
-	
-	public Button(Vector2 size) {
-		this.size = size;
-		this.setBaseColor(Color.WHITE);
+		this.bounds = b;
 	}
 
 	public void addButtonListener(final ButtonListener bl) {
@@ -56,10 +54,6 @@ public class Button extends UIGameBehaviour {
 		return this.colors[0];
 	}
 
-	public Vector2 getSize() {
-		return this.size;
-	}
-
 	public boolean isColliding() {
 		Vector2 mousePos = GameContainer.input.getMousePos(this.gameObject.getInWorld());
 
@@ -68,14 +62,10 @@ public class Button extends UIGameBehaviour {
 					this.gameObject.getTransformWithCaution().position);
 		} // Normalize the MousePos rotation relative to button
 
-		return this.gameObject.getTransformWithCaution().position.x
-				- this.size.x / 2 * this.gameObject.getTransformWithCaution().scale.x <= mousePos.x
-				&& this.gameObject.getTransformWithCaution().position.x
-						+ this.size.x / 2 * this.gameObject.getTransformWithCaution().scale.x >= mousePos.x
-				&& this.gameObject.getTransformWithCaution().position.y
-						- this.size.y / 2 * this.gameObject.getTransformWithCaution().scale.y <= mousePos.y
-				&& this.gameObject.getTransformWithCaution().position.y
-						+ this.size.y / 2 * this.gameObject.getTransformWithCaution().scale.y >= mousePos.y;
+		Vector2 boundsP1 = Vector2.add(this.gameObject.getTransformWithCaution().position, this.bounds.getPoint1());
+		Vector2 boundsP2 = Vector2.add(this.gameObject.getTransformWithCaution().position, this.bounds.getPoint2());
+		
+		return boundsP1.x <= mousePos.x && boundsP2.x >= mousePos.x && boundsP1.y <= mousePos.y && boundsP2.y >= mousePos.y;
 	}
 
 	public boolean isWire() {
@@ -87,15 +77,9 @@ public class Button extends UIGameBehaviour {
 		d.setColor(this.colors[state]);
 
 		if (this.wire) {
-			d.drawRect(size);
+			d.drawRect(this.bounds);
 		} else {
-			d.fillRect(size);
-		}
-		
-		if (text != null) {
-			d.setFontSize(100);
-			d.setColor(new Color(255 - this.colors[0].getRed(), 255 - this.colors[0].getGreen(), 255 - this.colors[0].getBlue()));
-			d.drawString(text);
+			d.fillRect(this.bounds);
 		}
 
 		d.setColor(this.colors[2]);
@@ -118,9 +102,11 @@ public class Button extends UIGameBehaviour {
 	
 	@Override
 	public void update() {
+		boolean collision = isColliding();
+		
 		if (Interactable.objectFocused == null || Interactable.objectFocused == this.gameObject) {
-			if (isColliding()) {
-				if (state != 2) { // Just to catch the click/hover event
+			if (collision) {
+				if (state != 2) { //Colliding and Not Pressing => Hovering
 					// Hover
 					state = 1;
 					this.buttonHoverForListener();
@@ -128,20 +114,20 @@ public class Button extends UIGameBehaviour {
 
 					if (GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
 						// Press
-						this.buttonPressForListener();
 						state = 2;
+						this.buttonPressForListener();
 					}
 				}
-			} else if (Interactable.objectFocused == this.gameObject
-					&& !GameContainer.input.isButton(MouseEvent.BUTTON1)) { // Just after you focused, runs just one
-																			// time
+			} else if ((Interactable.objectFocused == this.gameObject && !GameContainer.input.isButton(MouseEvent.BUTTON1))) {
+				//Mouse Leaving the Button => Defocus
 				Interactable.objectFocused = null;
 				state = 0;
 			}
 			if (state == 2 && !GameContainer.input.isButtonDown(MouseEvent.BUTTON1)) {
+				//Click
 				state = 0;
-				this.buttonClickForListener();
 				Interactable.objectFocused = null;
+				this.buttonClickForListener();
 			}
 		}
 	}

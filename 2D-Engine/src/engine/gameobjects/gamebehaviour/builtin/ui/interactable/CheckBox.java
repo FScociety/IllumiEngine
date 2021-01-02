@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
+import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.input.listener.CheckBoxListener;
 import engine.math.Vector2;
 
-public class CheckBox extends GameBehaviour implements ButtonListener {
+public class CheckBox extends UIGameBehaviour implements ButtonListener {
 	private int size;
 	private Button b;
 	public boolean clicked;
@@ -38,13 +40,9 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 	public void ButtonClicked() {
 		this.clicked = !this.clicked;
 		if (this.clicked) {
-			for (int i = 0; i < this.listener.size(); ++i) {
-				this.listener.get(i).CheckBoxON();
-			}
+			on();
 		} else {
-			for (int i = 0; i < this.listener.size(); ++i) {
-				this.listener.get(i).CheckBoxOFF();
-			}
+			off();
 		}
 	}
 
@@ -54,6 +52,18 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 
 	@Override
 	public void ButtonPress() {
+	}
+	
+	private void on() {
+		for (int i = 0; i < this.listener.size(); ++i) {
+			this.listener.get(i).CheckBoxON();
+		}
+	}
+	
+	private void off() {
+		for (int i = 0; i < this.listener.size(); ++i) {
+			this.listener.get(i).CheckBoxOFF();
+		}
 	}
 
 	public void Clicked() {
@@ -80,7 +90,7 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 	public void render() {
 		if (this.isClicked()) {
 			this.d.setColor(this.getFillC());
-			this.d.fillRect(this.b.getSize());
+			this.d.fillRect(this.b.bounds.getSize());
 		}
 	}
 
@@ -102,7 +112,8 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 
 	@Override
 	public void start() {
-		this.b = new Button(new Vector2(this.size));
+		Bounds b = new Bounds(new Vector2(this.size));
+		this.b = new Button(this.standaloneC, b);
 		this.b.setBaseColor(this.getStandaloneC());
 		this.b.addButtonListener(this);
 		this.b.setWire(true);
@@ -111,8 +122,9 @@ public class CheckBox extends GameBehaviour implements ButtonListener {
 
 	@Override
 	public void update() {
-		if (GameContainer.input.isKey(48)) {
-			this.gameObject.setPosition(new Vector2(0));
+		if (GameContainer.input.isButton(1) && this.b.state == 0) {
+			this.clicked = false;
+			off();
 		}
 	}
 }

@@ -15,17 +15,17 @@ import engine.scenes.Scene;
 
 public class GameObject implements Serializable {
 
-	public static int CENTER = 0, LEFT_TOP = 1;
 	private Transform localTransform = new Transform();
 	private Transform globalTransform = new Transform();
-	private ArrayList<GameBehaviour> components = new ArrayList<GameBehaviour>();
-	private ArrayList<GameObject> children = new ArrayList<GameObject>(); // Vllt doch erst bei runTime intitialisieren?
+	private ArrayList<GameBehaviour> components = new ArrayList<>();
+	private ArrayList<GameObject> children = new ArrayList<>(); // Vllt doch erst bei runTime intitialisieren?
 	private GameObject parent;
 	public boolean started = false;
 	public boolean updatesOutOfView = false;
 
 	private final boolean inWorld;
-	public int aligment = 0;
+	private boolean active = true;
+	private Scene loadingScene;
 
 	public int viewRange = 100; // Change if needed
 
@@ -150,6 +150,10 @@ public class GameObject implements Serializable {
 	public Transform getTransformWithCaution() {
 		return this.globalTransform;
 	}
+	
+	public boolean getActive() {
+		return this.active;
+	}
 
 	public void removeComponent(final GameBehaviour gb) {
 		this.components.remove(gb);
@@ -157,6 +161,8 @@ public class GameObject implements Serializable {
 	}
 
 	public void render() {
+		if (!active) { return; }
+		
 		GameContainer.d.applyTransforms(this);
 		
 		for (final GameBehaviour component : this.components) {
@@ -219,8 +225,28 @@ public class GameObject implements Serializable {
 			this.updateTransform(diffTransform);
 		}
 	}
+	
+	public void activade() {
+		this.active = true;
+		
+		if (!started) {
+			this.startSub(this.loadingScene);
+		}
+	}
+	
+	public void deactivade() {
+		this.active = false;
+	}
 
 	public void start(Scene loadingScene) {
+		if (active) {
+			startSub(loadingScene);
+		} else {
+			this.loadingScene = loadingScene;
+		}
+	}
+	
+	private void startSub(Scene loadingScene) {
 		this.started = true;
 		loadingScene.addObjectCount();
 
@@ -248,6 +274,8 @@ public class GameObject implements Serializable {
 	}
 
 	public void update() {
+		if (!active) { return; }
+		
 		for (final GameBehaviour component : this.components) {
 			if (component.active) {
 				component.update();

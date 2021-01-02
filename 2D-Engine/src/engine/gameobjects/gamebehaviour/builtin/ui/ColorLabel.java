@@ -2,22 +2,24 @@ package engine.gameobjects.gamebehaviour.builtin.ui;
 
 import java.awt.Color;
 
+import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.math.Vector2;
 
-public class ColorLabel extends GameBehaviour {
-	private Vector2 size;
+public class ColorLabel extends UIGameBehaviour {
+	
 	private Color c;
 
-	public ColorLabel(final Color c, Vector2 size) {
+	public ColorLabel(final Color c, Bounds b) {
 		this.c = c;
-		this.size = size;
+		this.bounds = b;
 	}
 
 	@Override
 	public void render() {
-		d.setColor(this.c);
-		d.fillRect(size);
+		this.d.setColor(this.c);
+		this.d.fillRect(this.bounds);
 	}
 
 	@Override

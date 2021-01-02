@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 
 import engine.gameobjects.GameObject;
 import engine.gameobjects.Transform;
+import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
 import engine.math.Vector2;
 
@@ -25,11 +26,12 @@ public class Drawing {
 	private float zoom;
 
 	public GameObject obj;
-
-	private boolean debug = false;
+	
+	public Graphics2D copyG;
 
 	public Drawing(Graphics2D g) {
 		this.g = g;
+		this.copyG = (Graphics2D) Window.frame.getGraphics();
 		af = g.getTransform();
 	}
 
@@ -58,6 +60,12 @@ public class Drawing {
 
 		this.g.translate(transform.position.x, transform.position.y); // Apply Object Position
 	}
+	
+	public void drawCircle(Bounds b) {
+		Vector2 p1 = b.getPoint1();
+		Vector2 p2 = b.getPoint2();
+		this.drawRect(p1, Vector2.add(Vector2.invert(p1), p2));
+	}
 
 	public void drawCircle(Vector2 scale2) {
 		Vector2 scale = scale2.getCopy();
@@ -72,7 +80,7 @@ public class Drawing {
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
 
-		this.g.drawOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+		this.g.drawOval((int) (pos.x * zoom), (int) (pos.y * zoom),
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
@@ -88,8 +96,13 @@ public class Drawing {
 	}
 
 	public void drawLine(Vector2 vec1, Vector2 vec2) {
-		vec2.scale(vec1, zoom);
-		this.g.drawLine((int) vec1.x, (int) vec1.y, (int) vec2.x, (int) vec2.y);
+		this.g.drawLine((int) (vec1.x * zoom), (int) (vec1.y * zoom), (int) (vec2.x * zoom), (int) (vec2.y * zoom));
+	}
+	
+	public void drawRect(Bounds b) {
+		Vector2 p1 = b.getPoint1(); //-100
+		Vector2 p2 = b.getPoint2(); //100
+		this.drawRect(p1, Vector2.add(Vector2.invert(p1), p2)); //-100 ; 200
 	}
 
 	public void drawRect(Vector2 scale2) {
@@ -105,15 +118,30 @@ public class Drawing {
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
 
-		this.g.drawRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+		this.g.drawRect((int) (pos.x * zoom), (int) (pos.y * zoom),
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
+	
+	public void drawString(String text, float size, Vector2 offset) {
+		AffineTransform af = this.g.getTransform(); //Create Copy of Transfrom
+		
+		float scaling = size;
+		Vector2 realOffset = offset.getCopy();
+		realOffset.multiply(zoom);
+		
+		this.g.scale(scaling * zoom, scaling * zoom);
+		this.g.drawString(text, realOffset.x / scaling / zoom, realOffset.y / scaling / zoom);
+		
+		this.g.setTransform(af); //Reset Transform
+	}
 
-	public void drawString(String text) {
+	/*public void drawString(String text) {
 		Font f = this.g.getFont();
 		//Y Scale wird nicht einberechnet was kake ist
-		this.g.setFont(this.g.getFont().deriveFont(zoom * 10 * obj.getTransformWithCaution().scale.x));
-		this.g.drawString(text, -this.g.getFontMetrics().stringWidth(text) / 2, zoom * 5);
+		this.setFontSize(zoom * 10 * obj.getTransformWithCaution().scale.x);
+		//-this.g.getFontMetrics().stringWidth(text) / 2
+		//zoom * 5
+		this.g.drawString(text, 0, 0);
 		this.g.setFont(f);
 	}
 
@@ -123,6 +151,22 @@ public class Drawing {
 		this.setFontSize(zoom * 10 * obj.getTransformWithCaution().scale.x);
 		this.g.drawString(text, vec2.x * zoom, vec2.y * zoom);
 		this.g.setFont(f);
+	}
+	
+	public void drawString(String text, Vector2 vec2, float size) {
+		this.g.scale(size, size);
+		
+		Font f = this.g.getFont();
+		//Y Scale wird nicht einberechnet was kake ist
+		this.setFontSize(zoom * size * obj.getTransformWithCaution().scale.x);
+		this.g.drawString(text, vec2.x * zoom, vec2.y * zoom);
+		this.g.setFont(f);
+	}*/
+	
+	public void fillCircle(Bounds b) {
+		Vector2 p1 = b.getPoint1();
+		Vector2 p2 = b.getPoint2();
+		this.drawCircle(p1, Vector2.add(Vector2.invert(p1), p2));
 	}
 
 	public void fillCircle(Vector2 scale2) {
@@ -138,8 +182,14 @@ public class Drawing {
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
 
-		this.g.fillOval((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+		this.g.fillOval((int) (pos.x * zoom), (int) (pos.y * zoom),
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
+	}
+	
+	public void fillRect(Bounds b) {
+		Vector2 p1 = b.getPoint1();
+		Vector2 p2 = b.getPoint2();
+		this.fillRect(p1, Vector2.add(Vector2.invert(p1), p2));
 	}
 
 	public void fillRect(Vector2 scale2) {
@@ -155,7 +205,7 @@ public class Drawing {
 		scale.multiply(obj.getTransformWithCaution().scale);
 		pos.multiply(obj.getTransformWithCaution().scale);
 
-		this.g.fillRect((int) ((pos.x - scale.x) * zoom / 2), (int) ((pos.y - scale.y) * zoom / 2),
+		this.g.fillRect((int) (pos.x * zoom), (int) (pos.y * zoom),
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 
@@ -164,13 +214,13 @@ public class Drawing {
 	}
 
 	public FontMetrics getFontSize(Font font) {
-		return this.g.getFontMetrics(font);
+		return this.copyG.getFontMetrics(font);
 	}
 
 	public void resetTransform() {
 		this.g.setTransform(af);
 
-		if (debug == true) {
+		if (GameContainer.debug == true) {
 			this.g.setColor(Color.GREEN);
 			this.g.fillRect((int) obj.getTransformWithCaution().position.x - 2,
 					(int) obj.getTransformWithCaution().position.y - 2, 4, 4);
@@ -186,7 +236,7 @@ public class Drawing {
 		this.g.setFont(font);
 	}
 	
-	public void setFontSize(float size) {
+	/*public void setFontSize(float size) {
 		this.g.setFont(this.g.getFont().deriveFont(size));
-	}
+	}*/
 }

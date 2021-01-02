@@ -57,23 +57,23 @@ public class Profile extends GameBehaviour implements KeyListener {
 		d.setColor(Color.DARK_GRAY);
 		d.setColor(Color.WHITE);
 		d.setFont(Window.standartFont);
-		d.drawString("FramesPerSecond: " + GameContainer.fps, new Vector2(0, 10));
-		d.drawString("UpdatesPerSecond: " + GameContainer.ups, new Vector2(0, 25));
-		d.drawString("Objects: " + SceneManager.activeScene.getObjectCount(), new Vector2(0, 40));
+		d.drawString("FramesPerSecond: " + GameContainer.fps, 10, new Vector2(0, 10));
+		d.drawString("UpdatesPerSecond: " + GameContainer.ups, 10, new Vector2(0, 25));
+		d.drawString("Objects: " + SceneManager.activeScene.getObjectCount(), 10, new Vector2(0, 40));
 		if (Interactable.objectFocused != null) {
-			d.drawString("Selected:" + Interactable.objectFocused.toStringShort(), new Vector2(0, 55));
+			d.drawString("Selected:" + Interactable.objectFocused.toStringShort(), 10, new Vector2(0, 55));
 		} else {
-			d.drawString("Selected:" + Interactable.objectFocused, new Vector2(0, 55));
+			d.drawString("Selected:" + Interactable.objectFocused, 10, new Vector2(0, 55));
 		}
 
-		d.drawString("Zoom:" + Camera.activeCam.zoom, new Vector2(0, 70));
+		d.drawString("Zoom:" + Camera.activeCam.zoom, 10, new Vector2(0, 70));
 		
-		d.drawString("Camera: " + Camera.activeCam, new Vector2(0,85));
+		d.drawString("Camera: " + Camera.activeCam, 10, new Vector2(0,85));
 
-		d.drawString("Keys:", new Vector2(0, 100));
+		d.drawString("Keys:", 10, new Vector2(0, 100));
 
 		for (int i = 0; i < pressedKeys.size(); i++) {
-			d.drawString(KeyEvent.getKeyText(pressedKeys.get(i)) + " (" + pressedKeys.get(i) + ")",
+			d.drawString(KeyEvent.getKeyText(pressedKeys.get(i)) + " (" + pressedKeys.get(i) + ")", 10,
 					new Vector2(0, i * 15 + 115));
 		}
 

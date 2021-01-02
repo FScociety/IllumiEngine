@@ -8,9 +8,12 @@ import engine.math.Vector2;
 import engine.scenes.SceneManager;
 
 public class GameContainer {
+	
+	//DEBUG MODE
+	public static final boolean debug = false;
 
 	public static GameContainer gc;
-
+	
 	private static boolean running = false;
 	private static double nd = 1.0E9;
 	private static double targetFPS = 80;
@@ -56,10 +59,13 @@ public class GameContainer {
 		
 		System.out.print("Creating Drawer...   => ");
 		GameContainer.d = new Drawing((Graphics2D) window.g);
+		GameContainer.game.d = GameContainer.d;
 		System.out.println("Created");
 
 		startUpdateThread();
-
+		
+		//TODO Nur komische Lösung!
+		Window.frame.setSize(Window.frame.getSize());
 	}
 
 	private void startRenderThread() {
@@ -81,7 +87,7 @@ public class GameContainer {
 
 					window.g.setColor(Color.BLACK);
 					window.g.fillRect(0, 0, (int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
-
+					
 					if (SceneManager.activeScene != null) {
 						game.render();
 						SceneManager.activeScene.render();
@@ -104,12 +110,12 @@ public class GameContainer {
 					}
 
 					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
-					/*
-					 * try { Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
-					 * } catch (InterruptedException e) {
-					 * System.out.println("What the... Thread couldn't be set to sleep");
-					 * e.printStackTrace(); }
-					 */
+					
+					 try { Thread.sleep((long) (1 / GameContainer.targetFPS * 1000)); //Sleep for
+					 } catch (InterruptedException e) {
+					 System.out.println("What the... Thread couldn't be set to sleep");
+					 e.printStackTrace(); }
+					 
 				}
 			}
 		});
@@ -167,7 +173,7 @@ public class GameContainer {
 						cycl++;
 					}
 					try {
-						Thread.sleep((long) (1f));
+						Thread.sleep((long) (10f));
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

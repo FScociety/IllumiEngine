@@ -5,244 +5,299 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import engine.game.GameContainer;
+import engine.gameobjects.GameObject;
+import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.ColorLabel;
+import engine.gameobjects.gamebehaviour.builtin.ui.Text;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
 
-public class InputField extends GameBehaviour implements KeyListener, ButtonListener {
+public class InputField extends UIGameBehaviour implements KeyListener, ButtonListener {
 	
-	private Vector2 size;
+	private Bounds bounds;
+	
 	private boolean clicked;
 	private Color[] colors = {Color.GRAY, Color.BLUE};
 	private Button b;
-	private String text;
-	private int posInText;
+	private Text text;
+	private GameObject pointer;
+	private ColorLabel selectArea;
 	
-	public InputField(Vector2 size) {
-		//Reading the user input
+	private int pointerPos = 0;
+	private double time;
+	
+	private int selectionPos = 0;
+	private boolean selecting = false;
+
+	private boolean key_shift = false;
+	private boolean key_command = false;
+	
+	private UIGameBehaviour pointerColorLabel;
+	
+	public InputField(Bounds b) {
+		this.prefferedInWorldState = 0; //Not in World
+		
+		//Adding this Object as an KeyListener
 		GameContainer.window.addKeyListener(this); 
 		
-		this.size = size;
+		//Applying Bounds
+		this.bounds = b;
 	}
 	
 	@Override
 	public void ButtonClicked() {
-		this.clicked = !this.clicked; //Flip the click state
+		//Flip the click state
+		this.clicked = !this.clicked;
+		
+		//POINTER
+		this.updatePointerPosInText();
+		
+		//SELECTION
+		this.selecting = false;
+		this.selectionPos = this.pointerPos;
+		this.updateSelectedArea();
 	}
 	
 	@Override
-	public void ButtonHover() {
-
-		
-	}
+	public void ButtonHover() {}
 	
 	@Override
-	public void ButtonPress() {
-
-		
-	}
+	public void ButtonPress() {}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		if (!this.clicked) { return; }
+			
+		//get key's text
+		char input = e.getKeyChar();
+		//get key's code
+		int code = e.getExtendedKeyCode();
+		//get existing text
+		String text = this.text.getText();
 		
+		//find prefixes from commands
+		if (code == KeyEvent.VK_SHIFT) {
+			this.key_shift = true;
+		} else if (code == 157) {
+			this.key_command = true;
+		}
+		
+		//test for "command" prefix
+		if (this.key_command) { // => Command pressed
+			if (code == KeyEvent.VK_A) {
+				this.pointerPos = text.length();
+				this.selectionPos = 0;
+				this.selecting = true;
+				this.updateSelectedArea();
+			}
+		
+		//test for "shift" prefix
+		} else if (this.key_shift) { // => Shift pressed
+			if (code > 40 && code != 157) { 
+				// => not writing characters
+				this.addTextIntoText(text, input);
+			} else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+				this.selecting = true;
+				
+				if (code == KeyEvent.VK_LEFT) {
+					this.pointerPos = this.moveInText(this.pointerPos, -1);
+				} else if (code == KeyEvent.VK_RIGHT) {
+					this.pointerPos = this.moveInText(this.pointerPos, 1);
+				}
+				
+				this.updateSelectedArea();
+				this.updatePointerPosInText();
+			}
+			
+		//test if arrow keys used to move the pointer
+		} else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+			if (code == KeyEvent.VK_LEFT) {
+				this.pointerPos = this.moveInText(this.pointerPos, -1); //Move Left
+			} else if (code == KeyEvent.VK_RIGHT) {
+				this.pointerPos = this.moveInText(this.pointerPos, 1); //Move Right
+			}
+			this.selecting = false;
+			this.updateSelectedArea();
+			this.updatePointerPosInText();
+			
+		//just write text without any addition
+		} else {
+			if (code > 31 && code != 38 && code != 40 && code != 157) { //>31 => no tab,shift,alt... | !=38 => TOP_Arrow | !=40 => DOWN_Arrow | !=158 => no command
+				this.addTextIntoText(text, input);
+			} else if (code == 8) { //Wanna delete Text?
+				//Remove Text where pointer is placed
+				
+				int left = this.selectionPos < this.pointerPos ? this.selectionPos : this.pointerPos;
+				int right = this.selectionPos < this.pointerPos ? this.pointerPos : this.selectionPos;
+				
+				text = text.substring(0, left > 0 && this.selecting == false ? left-1 : left) + "" + text.substring(right, text.length());
+				if (this.selecting == false) { //CAUSE IDK
+					this.pointerPos = this.moveInText(this.pointerPos, -1);
+				} else {
+					this.selectionPos = left;
+					this.pointerPos = left;
+				}
+				
+				this.selecting = false;
+				this.updatePointerPosInText();
+				this.updateSelectedArea();
+				
+				//Apply new Text
+				this.text.setText(text);
+			}
+		}
+	}
+	
+	private void addTextIntoText(String text, char input) {
+		//Add new Text to End
+		if (this.text.getText().length() > 0) {
+			text = text.substring(0, this.pointerPos) + input + text.substring(this.pointerPos, text.length());
+		} else { //If nothing in there 'text.substring(..)' not really working
+			text = input + "";
+		}	
+		
+		this.pointerPos++; //Erlaubt ja sowieso eins hinzugefügt wird
+		
+		//Apply new Text
+		this.text.setText(text);
+		
+		this.updatePointerPosInText();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		int code = e.getExtendedKeyCode();
 		
+		if (code == KeyEvent.VK_SHIFT) {
+			this.key_shift = false;
+		} else if (code == 157) {
+			this.key_command = false;
+		}
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
+	public void keyTyped(KeyEvent e) {}
+	
+	@Override
+	public void start() {
 		
+		//Creating Button so its clickable
+		GameObject buttonObj = new GameObject(new Vector2(0), this.gameObject);
+		Bounds buttonBounds = new Bounds(Vector2.add(this.bounds.getPoint1(), 3), Vector2.substract(this.bounds.getPoint2(), 3));
+		buttonObj.addComponent(buttonBounds);
+		this.b = new Button(Color.WHITE, buttonBounds);
+		buttonObj.addComponent(b);
+		this.b.addButtonListener(this);
+		
+		//Creating Text for Displaying the text;
+		this.text = new Text(buttonBounds);
+		buttonObj.addComponent(this.text);
+		this.text.setSize(10);
+		this.text.setColor(Color.BLACK);
+		this.text.setAlignment(Text.LEFT_CENTER);
+		
+		//Creating Pointer for "posInText"
+		pointer = new GameObject(new Vector2(0), this.gameObject);
+		Bounds pointerBounds = new Bounds(new Vector2(5,20));
+		this.pointerColorLabel = new ColorLabel(Color.BLACK, pointerBounds);
+		pointer.addComponent(this.pointerColorLabel);
+		
+		//Creating SelectArea for text
+		GameObject selectObject = new GameObject(new Vector2(0), this.gameObject);
+		Bounds selectBounds = new Bounds(new Vector2(5,20));
+		selectArea = new ColorLabel(new Color(100, 100, 100, 50), selectBounds);
+		selectObject.addComponent(selectArea);
+		
+		//POINTER
+		this.updatePointerPosInText();
+		
+		//SELECTION AREA
+		this.updateSelectedArea();
 	}
-
+	
+	private int moveInText(int pos, int direction) {
+		if (pos > 0 && direction == -1) {
+			return pos - 1;
+		} else if (pos < this.text.getText().length() && direction == 1) {
+			return pos + 1;
+		}
+		
+		return pos; //Doesnt move
+	
+	}
+	@Override
+	public void update() {
+		if (this.clicked) {
+			//Deactivade InputField selection when mouse is clicked outside the InputField
+			if (GameContainer.input.isButton(1) && this.b.state == 0) {
+				this.clicked = false;
+				this.updatePointerPosInText();
+				this.updateSelectedArea();
+			}
+			
+			//Blinking start
+			time += GameContainer.dt;
+			
+			if (time >= 0.3f) {
+				if (this.pointer.getActive()) {
+					this.pointer.deactivade();
+				} else {
+					this.pointer.activade();
+				}
+				time = 0;
+			}
+			//Blinking end
+			
+		}
+	}
+	
+	private void updatePointerPosInText() {
+		if (this.clicked) {
+			this.pointer.activade();
+			
+			//get and apply where the pointer is in the text
+			float posInText = this.d.getFontSize(this.text.getFont()).stringWidth(this.text.getText().substring(0, this.pointerPos)) * this.text.getSize();
+			this.pointerColorLabel.gameObject.setPosition(new Vector2(posInText + this.text.getOffset().x, this.text.getOffset().y - this.text.getSize()/2));
+			this.pointerColorLabel.bounds.setBounds(new Vector2(2, this.text.getSize()));
+			
+			//Update Selection to Pointer
+			if (!this.selecting) {
+			this.selectionPos = this.pointerPos;
+			}
+		} else {
+			this.pointer.deactivade();
+		}
+	}
+	
+	private void updateSelectedArea() {
+		if (this.clicked && this.selecting) {
+			this.selectArea.gameObject.activade();
+			
+			//Calculate Offset of the Selection relative to the text
+			float selectAreaStart   = this.d.getFontSize(this.text.getFont()).stringWidth(this.text.getText().substring(0, this.selectionPos)) * this.text.getSize();
+			float selectAreaEnd = this.d.getFontSize(this.text.getFont()).stringWidth(this.text.getText().substring(0, this.pointerPos)) * this.text.getSize();
+			
+			//Flipp if selection is from right => left
+			float flippBuffer = selectAreaEnd; 
+			if (selectAreaEnd < selectAreaStart) {
+				selectAreaEnd = selectAreaStart;
+				selectAreaStart = flippBuffer;
+			}
+			
+			//Applying Offset of the Selection, where text is
+			this.selectArea.gameObject.setPosition(new Vector2(selectAreaStart + this.text.getOffset().x, this.text.getOffset().y - this.text.getSize()));
+			this.selectArea.bounds.setBounds(new Vector2(0, 0), new Vector2(selectAreaEnd - selectAreaStart, this.text.getSize()));	
+		} else {
+			this.selectArea.gameObject.deactivade();
+		}
+	}
+	
 	@Override
 	public void render() {
 		//RENDER: Background (Select State)
 		this.d.setColor(colors[clicked ? 1 : 0]);
-		this.d.fillRect(this.size);
-		
-		//RENDER: Typer
-		
-	}
-
-	@Override
-	public void start() {
-		//Create Button, so its clickable
-		b = new Button(Vector2.substract(size, 5)); 
-		b.addButtonListener(this);
-		this.gameObject.addComponent(b);
-	}
-
-	@Override
-	public void update() {
-		
-	}
-	
-	
+		this.d.fillRect(this.bounds);
+	}	
 }
-/*	public static InputField inputFieldSelected;
-	public static int MODE_EDIT = 0;
-	public static int MODE_REPLACE = 1;
-	private Button button;
-	private boolean captureText;
-	private Vector2 size;
-	private int maxLength;
-	private int valueInText;
-	private int cursorX;
-	private float blinking;
-	private Color c;
-	public int type;
-
-	private ArrayList<InputFieldListener> listener;
-
-	public InputField(final Color c, final Vector2 size, final int maxLength) {
-		this.captureText = false;
-		this.valueInText = 0;
-		this.cursorX = 0;
-		this.blinking = 0.0f;
-		this.listener = new ArrayList<InputFieldListener>();
-		this.size = size;
-		this.setMaxLength(maxLength);
-		this.c = c;
-	}
-
-	public void addInputFieldListener(final InputFieldListener ifl) {
-		this.listener.add(ifl);
-	}
-
-	public int getMaxLength() {
-		return this.maxLength;
-	}
-
-	public String getText() {
-		return this.button.text;
-	}
-
-	@Override
-	public void keyPressed(final KeyEvent e) {
-	}
-
-	@Override
-	public void keyReleased(final KeyEvent e) {
-	}
-
-	@Override
-	public void keyTyped(final KeyEvent e) {
-		if (this.captureText && e != null) {
-			if (e.getKeyChar() == '\b' && this.button.text.length() >= 1) {
-				this.button.text = ((this.valueInText != 0)
-						? (String.valueOf(this.button.text.substring(0, this.valueInText - 1))
-								+ this.button.text.substring(this.valueInText, this.button.text.length()))
-						: this.button.text);
-				this.button.updateTextSize();
-				this.valueInText -= ((this.valueInText > 0) ? 1 : 0);
-				this.updateCursorX();
-			} else if (e.getKeyChar() == '\n') {
-				this.setCapture(false);
-			} else if (e.getKeyChar() != '\b'
-					&& this.button.text.length() < ((this.maxLength == 0) ? Integer.MAX_VALUE : this.maxLength)) {
-				if (this.valueInText == this.button.text.length()) {
-					this.button.text = String.valueOf(this.button.text) + e.getKeyChar();
-				} else {
-					this.button.text = String.valueOf(this.button.text.substring(0, this.valueInText))
-							+ e.getKeyChar()
-							+ this.button.text.substring(this.valueInText, this.button.text.length());
-				}
-				++this.valueInText;
-				this.button.updateTextSize();
-				this.updateCursorX();
-			}
-		}
-	}
-
-	@Override
-	public void render() {
-		if (this.blinking >= 2.0f) {
-			this.d.setColor(Color.WHITE);
-			this.d.fillRect(new Vector2(this.cursorX, (int) this.gameObject.getTransformWithCaution().position.y), new Vector2(3, this.size.y));
-		}
-	}
-
-	private void setCapture(final boolean Capture) {
-		if (Capture && InputField.inputFieldSelected == null) {
-			InputField.inputFieldSelected = this;
-			if (this.type == InputField.MODE_REPLACE) {
-				this.button.text = "";
-			}
-		} else if (!Capture) {
-			InputField.inputFieldSelected = null;
-			this.blinking = 0.0f;
-			for (int i = 0; i < this.listener.size(); ++i) {
-				this.listener.get(i).TextEdited(this.getText());
-			}
-		} else if (InputField.inputFieldSelected != null) {
-			return;
-		}
-		this.captureText = Capture;
-	}
-
-	public void setMaxLength(final int maxLength) {
-		this.maxLength = maxLength;
-	}
-
-	public void setText(final String text) {
-		this.button.text = text;
-		this.button.updateTextSize();
-	}
-
-	@Override
-	public void start() {
-		GameContainer.window.addKeyListener(this);
-		final GameObject buttonObj = new GameObject(new Vector2(0), this.gameObject);
-		(this.button = new Button(this.size)).setBaseColor(this.c);
-		this.button.setWire(true);
-		buttonObj.addComponent(this.button);
-		this.button.addButtonListener(new ButtonListener() {
-			@Override
-			public void ButtonClicked() {
-				InputField.this.setCapture(true);
-				InputField.this.updateCursorX();
-			}
-
-			@Override
-			public void ButtonHover() {
-			}
-
-			@Override
-			public void ButtonPress() {
-			}
-		});
-	}
-
-	@Override
-	public void update() {
-		if (GameContainer.input.isButtonDown(1) && (this.gc.getInput().getMouseX() < this.gameObject.getPosX()
-				|| GameContainer.input.getMouseX() > this.gameObject.getPosX() + this.width
-				|| GameContainer.input.getMouseY() < this.gameObject.getPosY()
-				|| GameContainer.input.getInput().getMouseY() > this.gameObject.getPosY() + this.height)) {
-			this.setCapture(false);
-		} else if (this.gc.getInput().isKeyDown(37)) {
-			this.valueInText -= ((this.valueInText > 0) ? 1 : 0);
-			this.updateCursorX();
-		} else if (this.gc.getInput().isKeyDown(39)) {
-			this.valueInText += ((this.valueInText < this.button.text.text.length()) ? 1 : 0);
-			this.updateCursorX();
-		} else if (this.captureText) {
-			this.blinking += 0.1f;
-			if (this.blinking >= 5.0f) {
-				this.blinking = 0.0f;
-			}
-		}
-	}
-
-	private void updateCursorX() {
-		// System.out.println(this.g.getFontMetrics(this.button.text.getFont()).stringWidth(this.button.text.text.substring(0,
-		// this.valueInText)));
-		this.cursorX = (int) (this.button.text.getGameObject().getPosX()
-				- this.g.getFontMetrics(this.button.text.getFont()).stringWidth(this.button.text.text) / 2
-				+ this.g.getFontMetrics(this.button.text.getFont())
-						.stringWidth(this.button.text.text.substring(0, this.valueInText)));
-	}
-}*/

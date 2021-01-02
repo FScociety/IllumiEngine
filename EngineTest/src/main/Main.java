@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 import engine.game.AbstractGame;
 import engine.game.GameContainer;
@@ -15,6 +16,7 @@ import engine.gameobjects.gamebehaviour.builtin.ui.Text;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.Button;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.CheckBox;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.InputField;
+import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
 import engine.gameobjects.gamebehaviour.builtin.camera.CameraController;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
@@ -46,8 +48,10 @@ public class Main extends AbstractGame {
 				profileObject.addComponent(new Profile());
 				scene1.addGameObject(profileObject);
 				
-				GameObject buttonObj = new GameObject(new Vector2(0), true);
-				buttonObj.addComponent(new InputField(new Vector2(100, 25)));
+				GameObject buttonObj = new GameObject(new Vector2(300, 100), false);
+				Bounds b = new Bounds(new Vector2(-200, -50), new Vector2(100, 0)); //TODO POinter nicht an der richtigen Stelle und Bounds affecten Button nicht so richtig
+				buttonObj.addComponent(b);
+				buttonObj.addComponent(new InputField(b));
 				scene1.addGameObject(buttonObj);
 				
 				camera = new GameObject(new Vector2(0), true);
@@ -74,6 +78,6 @@ public class Main extends AbstractGame {
 	}
 
 	public void render() {	
-		
+
 	}
 }
