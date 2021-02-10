@@ -1,15 +1,21 @@
 package engine.gameobjects.gamebehaviour.builtin.ui.interactable;
 
 import java.awt.Color;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.builtin.ui.ColorLabel;
 import engine.gameobjects.gamebehaviour.builtin.ui.Text;
-import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
@@ -34,6 +40,8 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 	private boolean key_shift = false;
 	private boolean key_command = false;
 	
+	private Clipboard clipboard;
+	
 	private UIGameBehaviour pointerColorLabel;
 	
 	public InputField(Bounds b) {
@@ -44,6 +52,9 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		
 		//Applying Bounds
 		this.bounds = b;
+		
+		//Getting InputField
+		clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 	}
 	
 	@Override
@@ -80,7 +91,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		//find prefixes from commands
 		if (code == KeyEvent.VK_SHIFT) {
 			this.key_shift = true;
-		} else if (code == 157) {
+		} else if (code == KeyEvent.VK_CONTROL) {
 			this.key_command = true;
 		}
 		
@@ -91,13 +102,32 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 				this.selectionPos = 0;
 				this.selecting = true;
 				this.updateSelectedArea();
+			} else if (code == KeyEvent.VK_C) { // => Copy
+				int left = this.selectionPos < this.pointerPos ? this.selectionPos : this.pointerPos;
+				int right = this.selectionPos < this.pointerPos ? this.pointerPos : this.selectionPos;
+				
+				String copyText = text.substring(left, right);
+				
+				Transferable transferable = new StringSelection(copyText);
+				this.clipboard.setContents(transferable, null);
+			} else if (code == KeyEvent.VK_V) { // => Paste
+				try {
+					this.addTextIntoText(text, (String) this.clipboard.getData(DataFlavor.stringFlavor));
+					this.selecting = false;
+					this.selectionPos = this.pointerPos;
+					this.updateSelectedArea();
+				} catch (UnsupportedFlavorException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		
 		//test for "shift" prefix
 		} else if (this.key_shift) { // => Shift pressed
 			if (code > 40 && code != 157) { 
 				// => not writing characters
-				this.addTextIntoText(text, input);
+				this.addCharIntoText(text, input);
 			} else if (code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
 				this.selecting = true;
 				
@@ -125,7 +155,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		//just write text without any addition
 		} else {
 			if (code > 31 && code != 38 && code != 40 && code != 157) { //>31 => no tab,shift,alt... | !=38 => TOP_Arrow | !=40 => DOWN_Arrow | !=158 => no command
-				this.addTextIntoText(text, input);
+				this.addCharIntoText(text, input);
 			} else if (code == 8) { //Wanna delete Text?
 				//Remove Text where pointer is placed
 				
@@ -150,7 +180,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		}
 	}
 	
-	private void addTextIntoText(String text, char input) {
+	private void addCharIntoText(String text, char input) {
 		//Add new Text to End
 		if (this.text.getText().length() > 0) {
 			text = text.substring(0, this.pointerPos) + input + text.substring(this.pointerPos, text.length());
@@ -165,6 +195,22 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		
 		this.updatePointerPosInText();
 	}
+	
+	private void addTextIntoText(String text, String input) {
+		//Add new Text to End
+		if (this.text.getText().length() > 0) {
+			text = text.substring(0, this.pointerPos) + input + text.substring(this.pointerPos, text.length());
+		} else { //If nothing in there 'text.substring(..)' not really working
+			text = input + "";
+		}	
+		
+		this.pointerPos += input.length(); //Erlaubt ja sowieso eins hinzugefügt wird
+		
+		//Apply new Text
+		this.text.setText(text);
+		
+		this.updatePointerPosInText();
+	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -172,7 +218,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		
 		if (code == KeyEvent.VK_SHIFT) {
 			this.key_shift = false;
-		} else if (code == 157) {
+		} else if (code == KeyEvent.VK_CONTROL) {
 			this.key_command = false;
 		}
 	}
