@@ -36,4 +36,8 @@ public abstract class GameBehaviour implements Serializable {
 
 	public void update() {
 	}
+	
+	public String getType() {
+		return "default";
+	}
 }

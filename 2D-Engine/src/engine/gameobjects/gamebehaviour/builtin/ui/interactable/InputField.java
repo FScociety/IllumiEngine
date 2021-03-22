@@ -233,7 +233,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		GameObject buttonObj = new GameObject(new Vector2(0), this.gameObject);
 		Bounds buttonBounds = new Bounds(Vector2.add(this.bounds.getPoint1(), 3), Vector2.substract(this.bounds.getPoint2(), 3));
 		buttonObj.addComponent(buttonBounds);
-		this.b = new Button(Color.WHITE, buttonBounds);
+		this.b = new Button(Color.WHITE);
 		buttonObj.addComponent(b);
 		this.b.addButtonListener(this);
 		

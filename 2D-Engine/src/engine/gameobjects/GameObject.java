@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
+import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 
@@ -28,6 +30,8 @@ public class GameObject implements Serializable {
 	private Scene loadingScene;
 
 	public int viewRange = 100; // Change if needed
+	
+	private Bounds b;
 
 	public GameObject(Vector2 pos, boolean inWorld) {
 		this.setTransform(new Transform(pos, 0, new Vector2(1)));
@@ -48,6 +52,16 @@ public class GameObject implements Serializable {
 		gb.gameObject = this;
 		this.components.add(gb);
 
+		if (gb.getType().equals("ui")) {
+			if (this.b == null) {
+				System.err.println("First add a Bounds component");
+			}
+			UIGameBehaviour uigb = (UIGameBehaviour)gb;
+			uigb.bounds = this.b;
+		} else if (gb.getClass() == Bounds.class) {
+			this.b = (Bounds)gb;
+		}
+		
 		if (this.started == true) {
 			gb.d = GameContainer.d;
 			gb.start();

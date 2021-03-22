@@ -8,10 +8,11 @@ import engine.game.GameContainer;
 import engine.gameobjects.Transform;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.Button;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
+import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
 
-public class TransformController extends GameBehaviour implements ButtonListener {
+public class TransformController extends UIGameBehaviour implements ButtonListener {
 
 	Button listenButton;
 	Color oldButtonC;
@@ -30,14 +31,14 @@ public class TransformController extends GameBehaviour implements ButtonListener
 	boolean features[] = new boolean[3];
 
 	public TransformController() {
-		listenButton = new Button(new Vector2(100));
+		listenButton = new Button(Color.WHITE);
 		this.features[0] = true;
 		this.features[1] = true;
 		this.features[2] = true;
 	}
 
 	public TransformController(boolean position, boolean rotation, boolean scaling) {
-		listenButton = new Button(new Vector2(100));
+		listenButton = new Button(Color.WHITE);
 		this.features[0] = position;
 		this.features[1] = rotation;
 		this.features[2] = scaling;

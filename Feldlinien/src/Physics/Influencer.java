@@ -22,7 +22,7 @@ public class Influencer extends GameBehaviour {
 		TransformController tc = new TransformController(true, false, true);
 		tc.getButton().setBaseColor(charge == 1 ? Color.RED : Color.BLUE);
 		this.gameObject.addComponent(tc);
-		Text t = new Text(charge+"", 20, Window.standartFont, Color.WHITE);
+		Text t = new Text(charge+"", 20, Color.WHITE, this);
 		this.gameObject.addComponent(t);
 		System.out.println(this.gameObject.getComponent(TransformController.class)+"");
 	}

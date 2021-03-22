@@ -29,11 +29,11 @@ public class Main extends AbstractGame {
 
 			@Override
 			public void instanceGameObjects() {
-				GameObject player = new GameObject(new Vector2(0));
+				GameObject player = new GameObject(new Vector2(0), true);
 				player.addComponent(new PlayerObject(100, null));
 				inGame.addGameObject(player);
 				
-				GameObject camera = new GameObject(new Vector2(0));
+				GameObject camera = new GameObject(new Vector2(0), true);
 				cam = new Camera();
 				camera.addComponent(cam);	
 				camera.addComponent(new GameBehaviour() {

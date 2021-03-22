@@ -51,7 +51,8 @@ public class Main extends AbstractGame {
 				GameObject buttonObj = new GameObject(new Vector2(300, 100), false);
 				Bounds b = new Bounds(new Vector2(-200, -50), new Vector2(100, 0)); //TODO POinter nicht an der richtigen Stelle und Bounds affecten Button nicht so richtig
 				buttonObj.addComponent(b);
-				buttonObj.addComponent(new InputField(b));
+				//buttonObj.addComponent(new InputField(b));
+				buttonObj.addComponent(new TransformController());
 				scene1.addGameObject(buttonObj);
 				
 				camera = new GameObject(new Vector2(0), true);

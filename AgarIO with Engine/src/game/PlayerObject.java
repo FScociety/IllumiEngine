@@ -66,11 +66,11 @@ public class PlayerObject extends GameBehaviour {
 	}
 	
 	private void split() {
-		GameObject newSplit = new GameObject(Vector2.add(this.gameObject.getTransformWithCaution().position, new Vector2(200)));
+		GameObject newSplit = new GameObject(Vector2.add(this.gameObject.getTransformWithCaution().position, new Vector2(200)), true);
 		newSplit.addComponent(new PlayerObject((int)(this.size), this.leader));
 		this.setSize(this.size);
 		SceneManager.activeScene.addGameObject(newSplit);
-		this.leader.childs.add(newSplit.getComponent(PlayerObject.class));
+		this.leader.childs.add((PlayerObject) newSplit.getComponent(PlayerObject.class));
 	}
 	
 	public void render() {

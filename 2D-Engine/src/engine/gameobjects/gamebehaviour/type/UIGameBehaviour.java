@@ -11,4 +11,8 @@ public abstract class UIGameBehaviour extends GameBehaviour {
 	//void update();
 	
 	//void render();
+	
+	public String getType() {
+		return "ui";
+	}
 }

@@ -21,29 +21,24 @@ public class Button extends UIGameBehaviour {
 
 	private ArrayList<ButtonListener> listener = new ArrayList<ButtonListener>();
 
-	public Button(Color c, Bounds b) {
+	public Button(Color c) {
 		this.setBaseColor(c);
-		this.bounds = b;
-	
 	}
 	
-	public Button(String t, Bounds b) {
+	public Button(String t) {
 		this.setBaseColor(Color.WHITE);
 		this.text = t;
-		this.bounds = b;
 	}
 	
-	public Button(String t, Color c, Bounds b) {
+	public Button(String t, Color c) {
 		this.text = t;
 		this.setBaseColor(c);
-		this.bounds = b;
 	}
 	
-	public Button(String t, Color c, boolean wire, Bounds b) {
+	public Button(String t, Color c, boolean wire) {
 		this.text = t;
 		this.setBaseColor(c);
 		this.wire = wire;
-		this.bounds = b;
 	}
 
 	public void addButtonListener(final ButtonListener bl) {

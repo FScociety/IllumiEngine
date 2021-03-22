@@ -44,11 +44,19 @@ public class Text extends UIGameBehaviour {
 		RIGHT_BOTTOM = new Vector2(RIGHT_int, RIGHT_int);
 
 	public Text(Bounds b) {
-		this.text = "texttexttext";
+		this.text = "";
 		this.prefferedSize = 20;
 		this.color = Color.RED;
 		this.font = Window.standartFont;
 		this.bounds = b;
+	}
+	
+	public Text(String text, int size, Color c, Bounds b) {
+		this.text = text;
+		this.prefferedSize = size;
+		this.color = c;
+		this.bounds = b;
+		this.font = Window.standartFont;
 	}
 	
 	@Override
