@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferStrategy;
@@ -26,7 +27,9 @@ public class Window extends Canvas {
 	public static String currentDir;
 	public BufferStrategy bs;
 
-	public Graphics g;
+	public Graphics2D g;
+	
+	public static BufferedImage engineLogo = null;
 
 	public Window(final GameContainer gc) {
 		try { //Load the Default Font
@@ -35,7 +38,6 @@ public class Window extends Canvas {
 			System.err.println("Could not LOAD the Default Font!");
 		}
 		
-		BufferedImage engineLogo = null; //Load the EngineLogo
 		try {
 			engineLogo = ImageIO.read(getClass().getResourceAsStream("/EngineLogo.png"));
 		} catch (IOException e) {
@@ -60,7 +62,7 @@ public class Window extends Canvas {
 				setSize(s);
 				createBufferStrategy(2);
 				bs = getBufferStrategy();
-				g = bs.getDrawGraphics();
+				g = (Graphics2D) bs.getDrawGraphics();
 				if (GameContainer.d != null) {
 					GameContainer.d.g = (Graphics2D) g;
 				}
@@ -72,6 +74,10 @@ public class Window extends Canvas {
 		Window.frame.setVisible(true);
 		createBufferStrategy(2);
 		bs = getBufferStrategy();
-		g = bs.getDrawGraphics();
+		g = (Graphics2D) bs.getDrawGraphics();
+	    RenderingHints rh = new RenderingHints(
+	             RenderingHints.KEY_ANTIALIASING,
+	             RenderingHints.VALUE_ANTIALIAS_ON);
+	    g.setRenderingHints(rh);
 	}
 }

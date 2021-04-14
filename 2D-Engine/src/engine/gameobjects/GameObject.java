@@ -200,8 +200,9 @@ public class GameObject implements Serializable {
 		if (parent.getInWorld() == this.getInWorld()) {
 			(this.parent = parent).addChildren(this);
 		} else {
-			System.err.println("You cant parent an Object with inWorld = " + parent.getInWorld()
-					+ " and an Object with InWorld = " + this.getInWorld());
+			System.err.println("Huch jez is aber ordentlich was schiefgelaufen");
+			System.err.println("Also wendern bin ich dumm, oooooooooder:");
+			System.err.println("Dein Computer ist kaputt. Entscheide weisse (:");
 		}
 	}
 
@@ -218,8 +219,6 @@ public class GameObject implements Serializable {
 	}
 
 	public void setTransform(final Transform transform) {
-		// Bei DiffTransform verbesserung: Ist dumm immer 'this.getTransform()' zu
-		// machen ist besser mit varibale
 		Transform diffTransform = new Transform(Vector2.substract(transform.position, this.getTransform().position),
 				transform.rotation - this.getTransform().rotation,
 				Vector2.substract(transform.scale, this.getTransform().scale));
@@ -236,6 +235,7 @@ public class GameObject implements Serializable {
 		}
 
 		if (this.children.size() > 0) {
+			//System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
 			this.updateTransform(diffTransform);
 		}
 	}

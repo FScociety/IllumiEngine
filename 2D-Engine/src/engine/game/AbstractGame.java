@@ -7,8 +7,7 @@ public abstract class AbstractGame {
 	public void render() {
 	}
 
-	public void start() {
-	}
+	public abstract void start();
 
 	public void update() {
 	}

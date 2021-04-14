@@ -55,11 +55,8 @@ public class Main extends AbstractGame {
 				buttonObj.addComponent(new TransformController());
 				scene1.addGameObject(buttonObj);
 				
-				camera = new GameObject(new Vector2(0), true);
-				cam = new Camera();
-				camera.addComponent(cam);	
-				camera.addComponent(new CameraController(true, true, true));
-				scene1.addGameObject(camera);
+				camera = scene1.getGameObject(0);
+				cam = (Camera) camera.getComponent(Camera.class);
 			}
 
 			public void sceneLoaded() {

@@ -85,8 +85,28 @@ public class Drawing {
 	}
 
 	public void drawImage(BufferedImage img) {
+		Vector2 scale = new Vector2(img.getWidth(), img.getHeight());
+		scale.multiply(obj.getTransformWithCaution().scale);
+		
 		this.g.drawImage(img, (int) -((img.getWidth() * zoom) / 2), (int) -((img.getHeight() * zoom) / 2),
 				(int) (img.getWidth() * zoom), (int) (img.getHeight() * zoom), null);
+	}
+	
+	public void drawImage(BufferedImage img, Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+		
+		this.g.drawImage(img, (int) -((scale.x * zoom) / 2), (int) -((scale.y * zoom) / 2),
+				(int) (scale.x * zoom), (int) (scale.y * zoom), null);
+	}
+	
+	public void drawImage(BufferedImage img, Vector2 pos, Vector2 scale2) {
+		Vector2 scale = scale2.getCopy();
+		scale.multiply(obj.getTransformWithCaution().scale);
+		pos.multiply(obj.getTransformWithCaution().scale);
+		
+		this.g.drawImage(img, (int) (pos.x * zoom), (int) (pos.y * zoom),
+				(int) (scale.x * zoom), (int) (scale.y * zoom), null);
 	}
 
 	public void drawLine(Vector2 vec2) {

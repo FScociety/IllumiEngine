@@ -19,11 +19,18 @@ public abstract class Scene {
 	private String name;
 	private boolean unload;
 	private boolean started = false;
+	
+	public final Camera defaultCamera = new Camera();
 
-	public Scene(final String name) {
+	public Scene(String name) {
 		this.unload = false;
 		this.setName(name);
 		SceneManager.scenes.add(this);
+		
+		//Create default Camera
+		GameObject camera = new GameObject(new Vector2(0), true);
+		camera.addComponent(defaultCamera);
+		this.gameObjectsInScene.add(camera); //TODO Funktioert aber ich glaube da fehlt noch start oder so
 	}
 
 	public void addGameObject(final GameObject gobj) {
@@ -37,6 +44,10 @@ public abstract class Scene {
 	public ArrayList<GameObject> getGameObjectsInScene() {
 		return this.gameObjectsInScene;
 	}
+	
+	public GameObject getGameObject(int arrayPosition) {
+		return this.gameObjectsInScene.get(arrayPosition);
+	}
 
 	public String getName() {
 		return this.name;
@@ -46,8 +57,7 @@ public abstract class Scene {
 		return this.objectCount;
 	}
 
-	public void instanceGameObjects() {
-	}
+	public abstract void instanceGameObjects();
 
 	public void removeGameObject(final GameObject gobj) {
 		this.gameObjectsToBeRemoved.add(gobj);
@@ -83,6 +93,7 @@ public abstract class Scene {
 	}
 
 	public void sceneLoaded() {
+	
 	}
 
 	public void sceneUnloaded() {
@@ -104,6 +115,10 @@ public abstract class Scene {
 
 		SceneManager.flipp();
 		started = true;
+		
+		//If user does not create a custom cam this will be loaded (:
+		this.defaultCamera.view();
+		
 		this.sceneLoaded();
 	}
 

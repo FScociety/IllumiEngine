@@ -117,8 +117,18 @@ public class Bounds extends GameBehaviour {
 		return this.point1;
 	}
 	
+	public Vector2 getGlobalPoint1() {
+		Vector2 globalPoint = Vector2.add(this.gameObject.getTransformWithCaution().position, this.point1);
+		return globalPoint;
+	}
+	
 	public Vector2 getPoint2() {
 		return this.point2;
+	}
+	
+	public Vector2 getGlobalPoint2() {
+		Vector2 globalPoint = Vector2.add(this.gameObject.getTransformWithCaution().position, this.point2);
+		return globalPoint;
 	}
 	
 	public Vector2 getSize() {
