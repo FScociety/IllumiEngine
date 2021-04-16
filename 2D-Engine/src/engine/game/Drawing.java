@@ -87,9 +87,10 @@ public class Drawing {
 	public void drawImage(BufferedImage img) {
 		Vector2 scale = new Vector2(img.getWidth(), img.getHeight());
 		scale.multiply(obj.getTransformWithCaution().scale);
+		scale.multiply(zoom);
 		
-		this.g.drawImage(img, (int) -((img.getWidth() * zoom) / 2), (int) -((img.getHeight() * zoom) / 2),
-				(int) (img.getWidth() * zoom), (int) (img.getHeight() * zoom), null);
+		this.g.drawImage(img, (int) -(scale.x) / 2, (int) -(scale.y) / 2,
+				(int) (scale.x), (int) (scale.y), null);
 	}
 	
 	public void drawImage(BufferedImage img, Vector2 scale2) {
