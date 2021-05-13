@@ -64,6 +64,8 @@ public class Drawing {
 	public void drawCircle(Bounds b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
+		p1.substract(this.obj.getTransformWithCaution().position);
+		p2.substract(this.obj.getTransformWithCaution().position);
 		this.drawRect(p1, Vector2.add(Vector2.invert(p1), p2));
 	}
 
@@ -123,6 +125,8 @@ public class Drawing {
 	public void drawRect(Bounds b) {
 		Vector2 p1 = b.getPoint1(); //-100
 		Vector2 p2 = b.getPoint2(); //100
+		p1.substract(this.obj.getTransformWithCaution().position);
+		p2.substract(this.obj.getTransformWithCaution().position);
 		this.drawRect(p1, Vector2.add(Vector2.invert(p1), p2)); //-100 ; 200
 	}
 
@@ -187,6 +191,8 @@ public class Drawing {
 	public void fillCircle(Bounds b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
+		p1.substract(this.obj.getTransformWithCaution().position);
+		p2.substract(this.obj.getTransformWithCaution().position);
 		this.drawCircle(p1, Vector2.add(Vector2.invert(p1), p2));
 	}
 
@@ -210,6 +216,8 @@ public class Drawing {
 	public void fillRect(Bounds b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
+		p1.substract(this.obj.getTransformWithCaution().position);
+		p2.substract(this.obj.getTransformWithCaution().position);
 		this.fillRect(p1, Vector2.add(Vector2.invert(p1), p2));
 	}
 

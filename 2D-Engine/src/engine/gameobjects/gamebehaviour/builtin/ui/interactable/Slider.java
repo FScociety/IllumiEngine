@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.builtin.ui.Text;
+import engine.gameobjects.gamebehaviour.builtin.ui.Text2;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.input.listener.SliderListener;
@@ -21,7 +21,7 @@ public class Slider extends GameBehaviour {
 	public boolean Xoriented;
 	private GameObject buttonObj;
 	private Button b;
-	private Text t;
+	private Text2 t;
 	private Color backColor;
 	private float value;
 	public int type;

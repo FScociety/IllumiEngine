@@ -4,14 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import engine.input.Input;
+import engine.io.Logger;
 import engine.math.Vector2;
 import engine.scenes.SceneManager;
 
 public class GameContainer {
 	
 	//DEBUG MODE
-	public static final boolean debug = false;
-
+	public static final boolean debug = true;
+	private String suffix = "GameContainer";
 	public static GameContainer gc;
 	
 	private static boolean running = false;
@@ -32,6 +33,7 @@ public class GameContainer {
 	private Thread updateThread, renderThread;
 
 	public GameContainer(final AbstractGame game) {
+		Logger.startLogger();
 		GameContainer.game = game;
 		GameContainer.gc = this;
 	}
@@ -45,22 +47,21 @@ public class GameContainer {
 	}
 
 	public void start() {
-		System.out.print("Starting...   => ");
+		Logger.println(suffix, "Starting Engine");
 		GameContainer.running = true;
-		System.out.println("Started");
 		
-		System.out.print("Creating Window...   => ");
+		Logger.println(suffix, "Creating Window");
 		GameContainer.window = new Window(gc);
-		System.out.println("Created");
+		Logger.println(suffix, "Created");
 		
-		System.out.print("Start Listening Input...   => ");
+		Logger.println(suffix, "Start Listening Input");
 		GameContainer.input = new Input(gc);
-		System.out.println("Started");
+		Logger.println(suffix, "Started");
 		
-		System.out.print("Creating Drawer...   => ");
+		Logger.println(suffix, "Creating Drawer");
 		GameContainer.d = new Drawing((Graphics2D) window.g);
 		GameContainer.game.d = GameContainer.d;
-		System.out.println("Created");
+		Logger.println(suffix, "Created");
 
 		startUpdateThread();
 		
@@ -69,7 +70,7 @@ public class GameContainer {
 	}
 
 	private void startRenderThread() {
-		System.out.print("RenderThread...   => ");
+		Logger.println(suffix, "Starting RenderThread");
 		
 		renderThread = new Thread(new Runnable() {
 
@@ -81,7 +82,7 @@ public class GameContainer {
 				double lastTime = 0;
 				double frameTime = 0;
 
-				System.out.println("Running");
+				Logger.println(suffix, "Running");
 
 				while (running) {
 
@@ -119,12 +120,12 @@ public class GameContainer {
 				}
 			}
 		});
-		renderThread.setName("Render-Thread");
+		renderThread.setName("Render");
 		renderThread.start();
 	}
 	
 	private void startUpdateThread() {
-		System.out.print("UpdateThread...   => ");
+		Logger.println(suffix, "Starting UpdateThread");
 		
 		updateThread = new Thread(new Runnable() {
 			@Override
@@ -136,7 +137,7 @@ public class GameContainer {
 				double frameTime = 0;
 				dt = 1; // So it isnt Stuck in the Beginning
 
-	 			System.out.println("Running");
+				Logger.println(suffix, "Running");
 
 				startRenderThread();
 
@@ -180,7 +181,7 @@ public class GameContainer {
 				}
 			}
 		});
-		updateThread.setName("Update-Thread");
+		updateThread.setName("Update");
 		updateThread.start();
 	}
 }

@@ -15,7 +15,7 @@ import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.builtin.ui.ColorLabel;
-import engine.gameobjects.gamebehaviour.builtin.ui.Text;
+import engine.gameobjects.gamebehaviour.builtin.ui.Text2;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
 import engine.math.Vector2;
@@ -27,7 +27,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 	private boolean clicked;
 	private Color[] colors = {Color.GRAY, Color.BLUE};
 	private Button b;
-	private Text text;
+	private Text2 text;
 	private GameObject pointer;
 	private ColorLabel selectArea;
 	
@@ -238,11 +238,11 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		this.b.addButtonListener(this);
 		
 		//Creating Text for Displaying the text;
-		this.text = new Text(buttonBounds);
+		this.text = new Text2(buttonBounds);
 		buttonObj.addComponent(this.text);
 		this.text.setSize(10);
 		this.text.setColor(Color.BLACK);
-		this.text.setAlignment(Text.LEFT_CENTER);
+		this.text.setAlignment(Text2.LEFT_CENTER);
 		
 		//Creating Pointer for "posInText"
 		pointer = new GameObject(new Vector2(0), this.gameObject);

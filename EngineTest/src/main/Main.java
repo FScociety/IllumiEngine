@@ -12,7 +12,7 @@ import engine.gameobjects.gamebehaviour.builtin.debug.Profile;
 import engine.gameobjects.gamebehaviour.builtin.debug.TransformController;
 import engine.gameobjects.gamebehaviour.builtin.debug.addObjects.addObjects;
 import engine.gameobjects.gamebehaviour.builtin.ui.ColorLabel;
-import engine.gameobjects.gamebehaviour.builtin.ui.Text;
+import engine.gameobjects.gamebehaviour.builtin.ui.Text2;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.Button;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.CheckBox;
 import engine.gameobjects.gamebehaviour.builtin.ui.interactable.InputField;

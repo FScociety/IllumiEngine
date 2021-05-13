@@ -14,16 +14,22 @@ import java.awt.event.ComponentEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import engine.io.LocalFileLoader;
 import engine.math.Vector2;
 
 public class Window extends Canvas {
 	public static JFrame frame;
-	public static Font standartFont;
+	public static Font standartFont_regular;
+	public static Font standartFont_bold;
+	public static Font standartFont_italic;
+	public static Font standartFont_bolditalic;
 	public static String currentDir;
 	public BufferStrategy bs;
 
@@ -32,17 +38,15 @@ public class Window extends Canvas {
 	public static BufferedImage engineLogo = null;
 
 	public Window(final GameContainer gc) {
-		try { //Load the Default Font
-			Window.standartFont = Font.createFont(0, getClass().getResourceAsStream("/DefaultFont.ttf"));
-		} catch (FontFormatException | IOException ex2) {
-			System.err.println("Could not LOAD the Default Font!");
-		}
 		
-		try {
-			engineLogo = ImageIO.read(getClass().getResourceAsStream("/EngineLogo.png"));
-		} catch (IOException e) {
-			System.err.println("Could not LOAD the EngineLogo");
-		}
+		LocalFileLoader.w = this;
+		
+		Window.standartFont_regular = LocalFileLoader.loadFont("/defaultfont/regular.otf");
+		Window.standartFont_bold = LocalFileLoader.loadFont("/defaultfont/bold.otf");
+		Window.standartFont_italic = LocalFileLoader.loadFont("/defaultfont/italic.otf");
+		Window.standartFont_bolditalic = LocalFileLoader.loadFont("/defaultfont/bolditalic.otf");
+		
+		Window.engineLogo = LocalFileLoader.loadImage("/EngineLogo.png");
 
 		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
 		setSize(s);
