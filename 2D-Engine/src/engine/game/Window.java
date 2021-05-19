@@ -76,6 +76,10 @@ public class Window extends Canvas {
 		Window.frame.setResizable(true);
 
 		Window.frame.setVisible(true);
+		Window.frame.setAlwaysOnTop(true);
+		Window.frame.toFront();
+		Window.frame.requestFocus();
+		Window.frame.setAlwaysOnTop(false);
 		createBufferStrategy(2);
 		bs = getBufferStrategy();
 		g = (Graphics2D) bs.getDrawGraphics();
