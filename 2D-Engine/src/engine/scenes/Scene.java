@@ -21,6 +21,7 @@ public abstract class Scene {
 	private boolean started = false;
 	
 	public final Camera defaultCamera = new Camera();
+	public final GameObject defaultCameraObject;
 
 	public Scene(String name) {
 		this.unload = false;
@@ -28,9 +29,9 @@ public abstract class Scene {
 		SceneManager.scenes.add(this);
 		
 		//Create default Camera
-		GameObject camera = new GameObject(new Vector2(0), true);
-		camera.addComponent(defaultCamera);
-		this.gameObjectsInScene.add(camera); //TODO Funktioert aber ich glaube da fehlt noch start oder so
+		defaultCameraObject = new GameObject(new Vector2(0), true);
+		defaultCameraObject.addComponent(defaultCamera);
+		this.gameObjectsInScene.add(defaultCameraObject);
 	}
 
 	public void addGameObject(final GameObject gobj) {
@@ -104,6 +105,8 @@ public abstract class Scene {
 	}
 
 	public void start() {
+		//DANGER Sollte eig vor eins vor "started = true" stehen aber sonst kann ich des mit dem Window Bounds nicht machen
+		SceneManager.flipp();
 
 		insertGameObjects();
 		for (int i = 0; i < this.gameObjectsInScene.size(); ++i) {
@@ -112,8 +115,7 @@ public abstract class Scene {
 		for (int i = 0; i < this.gameObjectsInUI.size(); ++i) {
 			this.gameObjectsInUI.get(i).start(this);
 		}
-
-		SceneManager.flipp();
+		
 		started = true;
 		
 		//If user does not create a custom cam this will be loaded (:

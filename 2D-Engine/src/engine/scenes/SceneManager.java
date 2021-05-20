@@ -14,7 +14,7 @@ public class SceneManager {
 		if (SceneManager.activeScene == null) {
 			System.err.println(
 					"No Idea why, but when loading scenes with big objectCounts the SceneManager.activeScene is 'null'");
-			System.err.println("This was called from SceneManager.flipp()");
+			System.err.println("BTW This was called from SceneManager.flipp()");
 		}
 	}
 

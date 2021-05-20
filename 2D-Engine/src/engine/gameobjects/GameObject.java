@@ -55,6 +55,7 @@ public class GameObject implements Serializable {
 		if (gb.getType().equals("ui")) {
 			if (this.b == null) {
 				System.err.println("First add a Bounds component");
+				System.exit(0);
 			}
 			UIGameBehaviour uigb = (UIGameBehaviour)gb;
 			uigb.bounds = this.b;
@@ -235,8 +236,13 @@ public class GameObject implements Serializable {
 		}
 
 		if (this.children.size() > 0) {
-			//System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
+			System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
 			this.updateTransform(diffTransform);
+		}
+		
+		//Das Bounds sein eigenes Parenting machen kann
+		if (this.b != null && this.parent != null) {
+			this.b.updateBounds(this.b, diffTransform.position);
 		}
 	}
 	
@@ -308,7 +314,7 @@ public class GameObject implements Serializable {
 				Vector2.add(this.parent.getTransform().position, this.localTransform.position),
 				this.parent.getTransform().rotation + this.localTransform.rotation,
 				Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale));
-
+		
 		if (this.children.size() > 0) {
 			this.updateTransform(diffTransform);
 		}
