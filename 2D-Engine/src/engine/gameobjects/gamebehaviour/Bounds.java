@@ -17,10 +17,9 @@ public class Bounds extends GameBehaviour {
 	private boolean hasToApplyObjPos = false;
 	private Vector2 newPos;
 	
+	private Bounds parentBounds;
 	private Vector2 alignment = Bounds.RIGHT_CENTER; //WURDE Umgestellt
 	private Vector2 alignmentOffset = new Vector2(0);
-	
-	public ArrayList<Bounds> childrenBounds = new ArrayList<Bounds>();
 	
 	private static final int
 		LEFT_int = -1, //Y: TOP
@@ -40,8 +39,6 @@ public class Bounds extends GameBehaviour {
 
 	public Bounds(Vector2 size) {
 		this.size = size;
-		
-		this.calcOffset();
 	}
 	
 	public Bounds(Vector2 p1, Vector2 p2) {
@@ -52,7 +49,21 @@ public class Bounds extends GameBehaviour {
 
 	public void calcOffset() {
 		//NUR TEST
-		this.alignmentOffset = new Vector2(100,100);
+		this.alignmentOffset = this.gameObject.getLocalTransform().position;
+		
+		/*
+		 * 
+		 * 
+		 * 
+		 * TODO 
+		 * Calc Offset wird 24/7 ausgeführt was glaub ich auch anders geht
+		 * Ich glaub es würde sogar auch gehen, wenn man sihc einfach die localPos vom GameObject holt
+		 * 
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
 	}
 	
 	public void start() {
@@ -61,11 +72,13 @@ public class Bounds extends GameBehaviour {
 			this.uigbUpdate();
 		}
 		
+		this.calcOffset();
+		
 		//Find Parent for Alignment (if there is one)
-		/*GameObject parentObj = this.gameObject.getParent();
+		GameObject parentObj = this.gameObject.getParent();
 		if (parentObj != null) {
-			this.parent = (Bounds) parentObj.getComponent(Bounds.class);
-		}*/
+			this.parentBounds = (Bounds) parentObj.getComponent(Bounds.class);
+		}
 	}
 	
 	public void setBounds(Vector2 p1, Vector2 p2) {
@@ -80,8 +93,6 @@ public class Bounds extends GameBehaviour {
 		} else {
 			this.hasToApplyObjPos = true;
 		}
-		
-		this.calcOffset();
 	}
 	
 	public void setSize(Vector2 size) {
@@ -117,14 +128,10 @@ public class Bounds extends GameBehaviour {
 	}
 	
 	public void updateBounds(final Bounds parent, final Vector2 change) {
-		//Kein Center, weil sich da nichts verändert
-		
-		 System.out.println("UpdateBounds");
-		
 		if (this.alignment.x == Bounds.LEFT_int) {
 			this.gameObject.setPosition(new Vector2(this.alignmentOffset.x + -this.size.x, 0));
 		} else if (this.alignment.x == Bounds.RIGHT_int) {
-			this.gameObject.setPosition(new Vector2(this.alignmentOffset.x +  this.size.x, 0));			
+			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 - this.alignmentOffset.x, 0));	
 		}
 	}
 	

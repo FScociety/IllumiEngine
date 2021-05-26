@@ -51,9 +51,8 @@ public class Window extends Canvas {
 		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
 		setSize(s);
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
-		//Window.frame.setLayout(new BorderLayout());
 		Window.frame.setIconImage(engineLogo);
-		JPanel panel = new JPanel(new BorderLayout());
+		JPanel panel = new JPanel(null);
 		panel.setBackground(Color.BLACK);
 		panel.add(this);
 		Window.frame.add(panel);
@@ -72,9 +71,10 @@ public class Window extends Canvas {
 				}
 			}
 		});
-		Window.frame.pack();
 		Window.frame.setResizable(true);
 		Window.frame.setVisible(true);
+		Window.frame.setPreferredSize(s);
+		Window.frame.pack();
 		createBufferStrategy(2);
 		bs = getBufferStrategy();
 		g = (Graphics2D) bs.getDrawGraphics();

@@ -32,10 +32,13 @@ public class GameContainer {
 	private boolean abstractGameStarted = false;
 	private Thread updateThread, renderThread;
 
-	public GameContainer(final AbstractGame game) {
+	public GameContainer() {
 		Logger.startLogger();
-		GameContainer.game = game;
 		GameContainer.gc = this;
+	}
+	
+	public void setGame(final AbstractGame game) {
+		GameContainer.game = game;
 	}
 
 	public Vector2 getSize() {
@@ -47,21 +50,20 @@ public class GameContainer {
 	}
 
 	public void start() {
-		Logger.println(suffix, "Starting Engine");
+		Logger.println(suffix, "Starting Engine", 0);
 		GameContainer.running = true;
 		
-		Logger.println(suffix, "Creating Window");
+		Logger.println(suffix, "Creating Window", 0);
 		GameContainer.window = new Window(gc);
-		Logger.println(suffix, "Created");
+		Logger.println(suffix, "Created", 0);
 		
-		Logger.println(suffix, "Start Listening Input");
+		Logger.println(suffix, "Start Listening Input", 0);
 		GameContainer.input = new Input(gc);
-		Logger.println(suffix, "Started");
-		
-		Logger.println(suffix, "Creating Drawer");
+		Logger.println(suffix, "Started", 0);
+		Logger.println(suffix, "Creating Drawer", 0);
 		GameContainer.d = new Drawing((Graphics2D) window.g);
 		GameContainer.game.d = GameContainer.d;
-		Logger.println(suffix, "Created");
+		Logger.println(suffix, "Created", 0);
 
 		startUpdateThread();
 		
@@ -70,7 +72,7 @@ public class GameContainer {
 	}
 
 	private void startRenderThread() {
-		Logger.println(suffix, "Starting RenderThread");
+		Logger.println(suffix, "Starting RenderThread", 0);
 		
 		renderThread = new Thread(new Runnable() {
 
@@ -82,7 +84,7 @@ public class GameContainer {
 				double lastTime = 0;
 				double frameTime = 0;
 
-				Logger.println(suffix, "Running");
+				Logger.println(suffix, "Running", 0);
 
 				while (running) {
 
@@ -125,7 +127,7 @@ public class GameContainer {
 	}
 	
 	private void startUpdateThread() {
-		Logger.println(suffix, "Starting UpdateThread");
+		Logger.println(suffix, "Starting UpdateThread", 0);
 		
 		updateThread = new Thread(new Runnable() {
 			@Override
@@ -135,9 +137,9 @@ public class GameContainer {
 				double startTime = System.nanoTime() / nd;
 				double endTime = 0;
 				double frameTime = 0;
-				dt = 1; // So it isnt Stuck in the Beginning
+				dt = 1; // So it is not Stuck in the Beginning
 
-				Logger.println(suffix, "Running");
+				Logger.println(suffix, "Running", 0);
 
 				startRenderThread();
 
@@ -147,7 +149,7 @@ public class GameContainer {
 						game.start();
 					}
 					
-					// Update
+					// GameUpdate BEGINN
 					
 					if (SceneManager.activeScene != null) {
 						SceneManager.activeScene.update();
@@ -159,7 +161,7 @@ public class GameContainer {
 						}
 					}
 
-					// Update
+					// GameUpdate END
 
 					endTime = startTime;
 					startTime = System.nanoTime() / nd;

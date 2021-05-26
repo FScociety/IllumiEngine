@@ -14,13 +14,15 @@ public class LocalFileLoader {
 	
 	public static Window w;
 	
+	private static final String prefix = "LocalFileLoader";
+	
 	public static Font loadFont(String localPath) {
 		Font f = null;
 		try {
 			f = Font.createFont(0, w.getClass().getResourceAsStream(localPath));
-			System.out.println("[FileLoader] : Loaded Font " + localPath);
+			Logger.println(prefix, "Loaded Font " + localPath, 0);
 		} catch (FontFormatException | IOException ex2) {
-			System.err.println("Could NOT load " + localPath);
+			Logger.println(prefix, "Failed loading Font " + localPath, 2);
 		}
 		return f;
 	}
@@ -29,9 +31,9 @@ public class LocalFileLoader {
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(w.getClass().getResourceAsStream("/EngineLogo.png"));
-			System.out.println("[FileLoader] : Loaded Image " + localPath);
+			Logger.println(prefix, "Loaded Image " + localPath, 0);
 		} catch (IOException e) {
-			System.err.println("Could not LOAD the EngineLogo");
+			Logger.println(prefix, "Failed loading Image " + localPath, 2);
 		}
 		return bi;
 	}

@@ -2,7 +2,12 @@ package engine.scenes;
 
 import java.util.ArrayList;
 
+import engine.io.Logger;
+
 public class SceneManager {
+	
+	private static String prefix = "SceneManager";
+	
 	public static ArrayList<Scene> scenes = new ArrayList<Scene>();
 	public static Scene activeScene;
 	public static Scene oldScene;
@@ -23,33 +28,41 @@ public class SceneManager {
 	}
 
 	public static void loadScene(final Scene newScene) {
+		/*
+		 * TODO
+		 * Everytime a scene gets loaded, a new Thread is created,
+		 * this maybe be very shitty for performance ):
+		 * Please change me
+		 */
+		
 		Thread sceneLoader = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
+				Thread.currentThread().setName("SceneLoader");
+				
 				if (SceneManager.scenes.contains(newScene)) {
 					if (SceneManager.activeScene != newScene) {
 						SceneManager.oldScene = SceneManager.activeScene;
 						bufferScene = newScene;
-						System.out.println();
-						System.out.println("Scene[" + newScene.getName() + "] loading...");
-						System.out.print("Creating Objects... ");
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] Loading", 0);
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] Creating objects", 0);
 						bufferScene.instanceGameObjects();
-						System.out.println("Created!");
-						System.out.println("Starting Objects... ");
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] Created", 0);
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] Starting objects", 0);
 						bufferScene.start();
-						System.out.println("Objects Started!");
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] Objects started objects", 0);
 						if (SceneManager.oldScene != null) {
 							SceneManager.oldScene.unload();
 						}
-						System.out.println("Scene[" + newScene.getName() + "] loaded!");
+						Logger.println(prefix, "Scene[" + newScene.getName() + "] loaded", 0);
 						System.out.println();
 					} else {
-						System.out.println("Why load Scene[" + newScene.getName() + "] when activeScene["
-								+ SceneManager.activeScene.getName() + "]");
+						Logger.println(prefix, "Why load Scene[" + newScene.getName() + "] when activeScene["
+								+ SceneManager.activeScene.getName() + "]", 1);
 					}
 				} else {
-					System.out.println("Scene[" + bufferScene.getName() + "] doesn't exist");
+					Logger.println(prefix, "Scene[" + bufferScene.getName() + "] doesn't exist", 2);
 				}
 			}
 		});

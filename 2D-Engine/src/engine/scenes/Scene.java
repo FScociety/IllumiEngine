@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
+import engine.gameobjects.gamebehaviour.Canvas;
 import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
+import engine.io.Logger;
 import engine.math.Vector2;
 
 public abstract class Scene {
@@ -22,6 +24,11 @@ public abstract class Scene {
 	
 	public final Camera defaultCamera = new Camera();
 	public final GameObject defaultCameraObject;
+	
+	public final Canvas canvas;
+	public final GameObject canvasGameObject;
+	
+	private static final String prefix = "Scene";
 
 	public Scene(String name) {
 		this.unload = false;
@@ -32,6 +39,12 @@ public abstract class Scene {
 		defaultCameraObject = new GameObject(new Vector2(0), true);
 		defaultCameraObject.addComponent(defaultCamera);
 		this.gameObjectsInScene.add(defaultCameraObject);
+		
+		//Create UICanvas
+		canvasGameObject = new GameObject(new Vector2(0), false);
+		canvas = new Canvas(GameContainer.gc.getSize());
+		canvasGameObject.addComponent(canvas);
+		this.gameObjectsInScene.add(canvasGameObject);
 	}
 
 	public void addGameObject(final GameObject gobj) {
@@ -131,7 +144,7 @@ public abstract class Scene {
 	public void update() {
 		if (this.unload) {
 			this.gameObjectsInScene.clear();
-			System.out.println("Unloaded Scene [" + this.name + "]");
+			Logger.println(prefix, "Unloaded Scene [" + this.name + "]", 0);
 			this.sceneUnloaded();
 			this.unload = false;
 			/*

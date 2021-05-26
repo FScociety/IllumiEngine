@@ -12,10 +12,13 @@ import engine.game.GameContainer;
 import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
+import engine.io.Logger;
 import engine.math.Vector2;
 import engine.scenes.Scene;
 
 public class GameObject implements Serializable {
+	
+	private static final String prefix = "GameObject";
 
 	private Transform localTransform = new Transform();
 	private Transform globalTransform = new Transform();
@@ -24,6 +27,8 @@ public class GameObject implements Serializable {
 	private GameObject parent;
 	public boolean started = false;
 	public boolean updatesOutOfView = false;
+	
+	private String name;
 
 	private final boolean inWorld;
 	private boolean active = true;
@@ -32,6 +37,20 @@ public class GameObject implements Serializable {
 	public int viewRange = 100; // Change if needed
 	
 	private Bounds b;
+	
+	public GameObject(String name, Vector2 pos, boolean inWorld) {
+		this.name = name;
+		this.setTransform(new Transform(pos, 0, new Vector2(1)));
+		this.inWorld = inWorld;
+	}
+	
+	public GameObject(String name, Vector2 pos, final GameObject parent) {
+		this.name = name;
+		this.inWorld = parent.getInWorld();
+		this.setParent(parent);
+		this.setTransform(new Transform(pos, 0, new Vector2(1)));
+	}
+
 
 	public GameObject(Vector2 pos, boolean inWorld) {
 		this.setTransform(new Transform(pos, 0, new Vector2(1)));
@@ -54,6 +73,7 @@ public class GameObject implements Serializable {
 
 		if (gb.getType().equals("ui")) {
 			if (this.b == null) {
+				Logger.println(prefix, "First add a Bounds component", 1);
 				System.err.println("First add a Bounds component");
 				System.exit(0);
 			}
@@ -201,9 +221,9 @@ public class GameObject implements Serializable {
 		if (parent.getInWorld() == this.getInWorld()) {
 			(this.parent = parent).addChildren(this);
 		} else {
-			System.err.println("Huch jez is aber ordentlich was schiefgelaufen");
-			System.err.println("Also wendern bin ich dumm, oooooooooder:");
-			System.err.println("Dein Computer ist kaputt. Entscheide weisse (:");
+			Logger.println(prefix, "Huch jez is aber ordentlich was schiefgelaufen", 2);
+			Logger.println(prefix, "Also wendern bin ich dumm, oooooooooder:", 2);
+			Logger.println(prefix, "Dein Computer ist kaputt. Entscheide weisse (:", 2);
 		}
 	}
 
@@ -236,13 +256,16 @@ public class GameObject implements Serializable {
 		}
 
 		if (this.children.size() > 0) {
-			System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
+			/*
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */
+			//System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
 			this.updateTransform(diffTransform);
-		}
-		
-		//Das Bounds sein eigenes Parenting machen kann
-		if (this.b != null && this.parent != null) {
-			this.b.updateBounds(this.b, diffTransform.position);
 		}
 	}
 	
@@ -280,17 +303,7 @@ public class GameObject implements Serializable {
 				this.children.get(i).start(loadingScene);
 			}
 		}
-		System.out.println("Started GameObject[" + this + "]");
-	}
-
-	@Override
-	public String toString() {
-		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
-				+ (this.parent != null ? true : false));
-	}
-
-	public String toStringShort() {
-		return this.globalTransform.position + "";
+		Logger.println(prefix, "Started GameObject[" + this + "]", 0);
 	}
 
 	public void update() {
@@ -318,6 +331,11 @@ public class GameObject implements Serializable {
 		if (this.children.size() > 0) {
 			this.updateTransform(diffTransform);
 		}
+		
+		//Das Bounds sein eigenes Parenting machen kann
+		if (this.b != null && this.parent != null) {
+			this.b.updateBounds(this.b, diffTransform.position);
+		}
 	}
 
 	public void updateTransform(Transform diffTransform) {
@@ -333,5 +351,23 @@ public class GameObject implements Serializable {
 			gb.start();
 			gb.started = true;
 		}
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	@Override
+	public String toString() {
+		return ("[Transform: " + this.globalTransform + ", Children: " + this.children.size() + ", Parent: "
+				+ (this.parent != null ? true : false));
+	}
+	
+	public String toStringShort() {
+		return this.name;
 	}
 }

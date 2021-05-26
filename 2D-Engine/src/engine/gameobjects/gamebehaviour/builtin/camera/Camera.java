@@ -15,8 +15,6 @@ public class Camera extends GameBehaviour {
 	public static Camera activeCam = null;
 
 	public float zoom = 1;
-	public GameObject windowBoundsObj;
-	public Bounds windowBounds;
 
 	public Camera() {
 		this.prefferedInWorldState = 1;
@@ -29,15 +27,12 @@ public class Camera extends GameBehaviour {
 	}
 	
 	public void update() {
-		windowBounds.setBounds(new Vector2(0), GameContainer.windowSize);
+
 	}
 
 	@Override
 	public void start() {
-		windowBoundsObj = new GameObject(new Vector2(0), false);
-		windowBounds = new Bounds(new Vector2(0), GameContainer.windowSize);
-		windowBoundsObj.addComponent(windowBounds);
-		SceneManager.activeScene.addGameObject(windowBoundsObj);
+
 	}
 
 	@Override
