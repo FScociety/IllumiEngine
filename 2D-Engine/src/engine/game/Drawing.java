@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 
 import engine.gameobjects.GameObject;
 import engine.gameobjects.Transform;
-import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 import engine.math.Vector2;
 
 public class Drawing {
@@ -61,7 +61,7 @@ public class Drawing {
 		this.g.translate(transform.position.x, transform.position.y); // Apply Object Position
 	}
 	
-	public void drawCircle(Bounds b) {
+	public void drawCircle(RectTransform b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
 		p1.substract(this.obj.getTransformWithCaution().position);
@@ -122,7 +122,7 @@ public class Drawing {
 		this.g.drawLine((int) (vec1.x * zoom), (int) (vec1.y * zoom), (int) (vec2.x * zoom), (int) (vec2.y * zoom));
 	}
 	
-	public void drawRect(Bounds b) {
+	public void drawRect(RectTransform b) {
 		/*Vector2 p1 = b.getPoint1(); //-100
 		Vector2 p2 = b.getPoint2(); //100
 		p1.substract(this.obj.getTransformWithCaution().position);
@@ -189,7 +189,7 @@ public class Drawing {
 		this.g.setFont(f);
 	}*/
 	
-	public void fillCircle(Bounds b) {
+	public void fillCircle(RectTransform b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
 		p1.substract(this.obj.getTransformWithCaution().position);
@@ -214,7 +214,7 @@ public class Drawing {
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 	
-	public void fillRect(Bounds b) {
+	public void fillRect(RectTransform b) {
 		Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
 		p1.substract(this.obj.getTransformWithCaution().position);

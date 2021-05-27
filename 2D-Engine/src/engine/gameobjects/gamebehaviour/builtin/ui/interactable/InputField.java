@@ -13,7 +13,7 @@ import java.io.IOException;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 import engine.gameobjects.gamebehaviour.builtin.ui.ColorLabel;
 import engine.gameobjects.gamebehaviour.builtin.ui.Text2;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
@@ -22,7 +22,7 @@ import engine.math.Vector2;
 
 public class InputField extends UIGameBehaviour implements KeyListener, ButtonListener {
 	
-	private Bounds bounds;
+	private RectTransform bounds;
 	
 	private boolean clicked;
 	private Color[] colors = {Color.GRAY, Color.BLUE};
@@ -44,7 +44,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 	
 	private UIGameBehaviour pointerColorLabel;
 	
-	public InputField(Bounds b) {
+	public InputField(RectTransform b) {
 		this.prefferedInWorldState = 0; //Not in World
 		
 		//Adding this Object as an KeyListener
@@ -231,7 +231,7 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		
 		//Creating Button so its clickable
 		GameObject buttonObj = new GameObject(new Vector2(0), this.gameObject);
-		Bounds buttonBounds = new Bounds(Vector2.add(this.bounds.getPoint1(), 3), Vector2.substract(this.bounds.getPoint2(), 3));
+		RectTransform buttonBounds = new RectTransform(Vector2.add(this.bounds.getPoint1(), 3), Vector2.substract(this.bounds.getPoint2(), 3));
 		buttonObj.addComponent(buttonBounds);
 		this.b = new Button(Color.WHITE);
 		buttonObj.addComponent(b);
@@ -246,13 +246,13 @@ public class InputField extends UIGameBehaviour implements KeyListener, ButtonLi
 		
 		//Creating Pointer for "posInText"
 		pointer = new GameObject(new Vector2(0), this.gameObject);
-		Bounds pointerBounds = new Bounds(new Vector2(5,20));
+		RectTransform pointerBounds = new RectTransform(new Vector2(5,20));
 		this.pointerColorLabel = new ColorLabel(Color.BLACK, pointerBounds);
 		pointer.addComponent(this.pointerColorLabel);
 		
 		//Creating SelectArea for text
 		GameObject selectObject = new GameObject(new Vector2(0), this.gameObject);
-		Bounds selectBounds = new Bounds(new Vector2(5,20));
+		RectTransform selectBounds = new RectTransform(new Vector2(5,20));
 		selectArea = new ColorLabel(new Color(100, 100, 100, 50), selectBounds);
 		selectObject.addComponent(selectArea);
 		

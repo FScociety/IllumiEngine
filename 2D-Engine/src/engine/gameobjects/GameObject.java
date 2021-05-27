@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.io.Logger;
@@ -36,7 +36,7 @@ public class GameObject implements Serializable {
 
 	public int viewRange = 100; // Change if needed
 	
-	private Bounds b;
+	private RectTransform b;
 	
 	public GameObject(String name, Vector2 pos, boolean inWorld) {
 		this.name = name;
@@ -79,8 +79,8 @@ public class GameObject implements Serializable {
 			}
 			UIGameBehaviour uigb = (UIGameBehaviour)gb;
 			uigb.bounds = this.b;
-		} else if (gb.getClass() == Bounds.class) {
-			this.b = (Bounds)gb;
+		} else if (gb.getClass() == RectTransform.class) {
+			this.b = (RectTransform)gb;
 		}
 		
 		if (this.started == true) {

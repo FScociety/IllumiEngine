@@ -2,7 +2,6 @@ package engine.gameobjects.gamebehaviour.builtin.ui;
 
 import java.awt.Color;
 
-import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.math.Vector2;
@@ -11,7 +10,7 @@ public class ColorLabel extends UIGameBehaviour {
 	
 	private Color c;
 
-	public ColorLabel(final Color c, Bounds b) {
+	public ColorLabel(final Color c, RectTransform b) {
 		this.c = c;
 		this.bounds = b;
 	}

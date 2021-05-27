@@ -40,3 +40,7 @@ public class Logger {
 		System.out.println("[" + sdf.format(cal.getTime()) + "][" + threadInfo + "/" + color + messageInfo + Logger.ANSI_RESET +"][" + prefix + "]: " + p);
 	}
 }
+
+/*
+*	Bessere Lösung wäre vllllllllllllllt aber nicht sicher das das das macht was ich will eigenen Print Stream zu machen
+*/ 

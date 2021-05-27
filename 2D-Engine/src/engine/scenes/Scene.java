@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.Canvas;
 import engine.gameobjects.gamebehaviour.builtin.camera.Camera;
+import engine.gameobjects.gamebehaviour.builtin.ui.Canvas;
 import engine.io.Logger;
 import engine.math.Vector2;
 

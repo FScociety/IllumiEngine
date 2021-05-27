@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
-import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.math.Vector2;
 import engine.scenes.SceneManager;

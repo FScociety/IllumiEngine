@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
-import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.input.listener.ButtonListener;
@@ -112,7 +112,7 @@ public class CheckBox extends UIGameBehaviour implements ButtonListener {
 
 	@Override
 	public void start() {
-		Bounds b = new Bounds(new Vector2(this.size));
+		RectTransform b = new RectTransform(new Vector2(this.size));
 		this.b = new Button(this.standaloneC, b);
 		this.b.setBaseColor(this.getStandaloneC());
 		this.b.addButtonListener(this);

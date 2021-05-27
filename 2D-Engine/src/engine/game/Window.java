@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 
 import engine.io.LocalFileLoader;
 import engine.math.Vector2;
+import engine.scenes.SceneManager;
 
 public class Window extends Canvas {
 	public static JFrame frame;
@@ -68,6 +69,9 @@ public class Window extends Canvas {
 				g = (Graphics2D) bs.getDrawGraphics();
 				if (GameContainer.d != null) {
 					GameContainer.d.g = (Graphics2D) g;
+				}
+				if (SceneManager.activeScene != null) {
+					SceneManager.activeScene.canvas.ScreenSizeChange();
 				}
 			}
 		});

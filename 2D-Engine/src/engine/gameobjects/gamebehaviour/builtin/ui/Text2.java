@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 
 import engine.game.GameContainer;
 import engine.game.Window;
-import engine.gameobjects.gamebehaviour.Bounds;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
 import engine.math.Vector2;

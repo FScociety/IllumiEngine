@@ -1,4 +1,4 @@
-package engine.gameobjects.gamebehaviour;
+package engine.gameobjects.gamebehaviour.builtin.ui;
 
 import java.awt.Color;
 import java.awt.event.MouseEvent;
@@ -8,17 +8,18 @@ import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
 import engine.gameobjects.gamebehaviour.type.GameBehaviour;
 import engine.gameobjects.gamebehaviour.type.UIGameBehaviour;
+import engine.io.Logger;
 import engine.math.Vector2;
 
-public class Bounds extends GameBehaviour {
+public class RectTransform extends GameBehaviour {
 	
 	private Vector2 size;
 	
 	private boolean hasToApplyObjPos = false;
 	private Vector2 newPos;
 	
-	private Bounds parentBounds;
-	private Vector2 alignment = Bounds.RIGHT_CENTER; //WURDE Umgestellt
+	private RectTransform parentBounds;
+	private Vector2 alignment = RectTransform.RIGHT_CENTER; //WURDE Umgestellt
 	private Vector2 alignmentOffset = new Vector2(0);
 	
 	private static final int
@@ -37,33 +38,23 @@ public class Bounds extends GameBehaviour {
 		RIGHT_TOP = new Vector2(RIGHT_int, LEFT_int),
 		RIGHT_BOTTOM = new Vector2(RIGHT_int, RIGHT_int);
 
-	public Bounds(Vector2 size) {
+	public RectTransform(Vector2 size) {
 		this.size = size;
 	}
 	
-	public Bounds(Vector2 p1, Vector2 p2) {
+	public RectTransform(Vector2 p1, Vector2 p2) {
 		this.setBounds(p1, p2);
-		
-		//calcOffset wird schon mit "this.setBounds();" ausgeführt
 	}
 
 	public void calcOffset() {
-		//NUR TEST
-		this.alignmentOffset = this.gameObject.getLocalTransform().position;
+		if (this.alignment.x == RectTransform.LEFT_int) {
+			this.alignmentOffset.x = this.gameObject.getLocalTransform().position.x;
+		} else if (this.alignment.x == RectTransform.RIGHT_int) {
+			//this.alignmentOffset.x = -this.getSize().x/2 + this.gameObject.getLocalTransform().position.x;
+			this.alignmentOffset.x = 250;
+		}
 		
-		/*
-		 * 
-		 * 
-		 * 
-		 * TODO 
-		 * Calc Offset wird 24/7 ausgeführt was glaub ich auch anders geht
-		 * Ich glaub es würde sogar auch gehen, wenn man sihc einfach die localPos vom GameObject holt
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
+		Logger.println(this.parentBounds+"",this.gameObject.getLocalTransform().position.x+"", 1);
 	}
 	
 	public void start() {
@@ -77,7 +68,7 @@ public class Bounds extends GameBehaviour {
 		//Find Parent for Alignment (if there is one)
 		GameObject parentObj = this.gameObject.getParent();
 		if (parentObj != null) {
-			this.parentBounds = (Bounds) parentObj.getComponent(Bounds.class);
+			this.parentBounds = (RectTransform) parentObj.getComponent(RectTransform.class);
 		}
 	}
 	
@@ -120,6 +111,7 @@ public class Bounds extends GameBehaviour {
 		//Updates smaller Components of this GameObject like "Button", "Input Field"
 		
 		for (GameBehaviour gb : this.gameObject.getComponents()) {
+			//Geht wahrscheinlich einfacher
 			if (gb.getClass().getSuperclass().getSimpleName().equals(UIGameBehaviour.class.getSimpleName())) {
 				UIGameBehaviour uigb = (UIGameBehaviour)gb;
 				uigb.uiUpdate();
@@ -127,10 +119,10 @@ public class Bounds extends GameBehaviour {
 		}
 	}
 	
-	public void updateBounds(final Bounds parent, final Vector2 change) {
-		if (this.alignment.x == Bounds.LEFT_int) {
-			this.gameObject.setPosition(new Vector2(this.alignmentOffset.x + -this.size.x, 0));
-		} else if (this.alignment.x == Bounds.RIGHT_int) {
+	public void updateBounds(final RectTransform parent, final Vector2 change) {
+		if (this.alignment.x == RectTransform.LEFT_int) {
+			this.gameObject.setPosition(new Vector2(-this.parentBounds.size.x/2 + this.alignmentOffset.x, 0));
+		} else if (this.alignment.x == RectTransform.RIGHT_int) {
 			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 - this.alignmentOffset.x, 0));	
 		}
 	}

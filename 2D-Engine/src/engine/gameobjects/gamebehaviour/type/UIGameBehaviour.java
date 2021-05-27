@@ -1,10 +1,10 @@
 package engine.gameobjects.gamebehaviour.type;
 
-import engine.gameobjects.gamebehaviour.Bounds;
+import engine.gameobjects.gamebehaviour.builtin.ui.RectTransform;
 
 public abstract class UIGameBehaviour extends GameBehaviour {
 	
-	public Bounds bounds; //Vllt protected
+	public RectTransform bounds; //Vllt protected
 	
 	public void uiUpdate() {}
 	
