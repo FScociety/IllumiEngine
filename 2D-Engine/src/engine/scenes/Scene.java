@@ -111,6 +111,7 @@ public abstract class Scene {
 	}
 
 	public void sceneUnloaded() {
+		
 	}
 
 	public void setName(final String name) {
@@ -129,10 +130,10 @@ public abstract class Scene {
 			this.gameObjectsInUI.get(i).start(this);
 		}
 		
-		started = true;
-		
 		//If user does not create a custom cam this will be loaded (:
 		this.defaultCamera.view();
+		
+		started = true;
 		
 		this.sceneLoaded();
 	}
@@ -147,27 +148,30 @@ public abstract class Scene {
 			Logger.println(prefix, "Unloaded Scene [" + this.name + "]", 0);
 			this.sceneUnloaded();
 			this.unload = false;
-			/*
+			/* WICHTIG
 			 * Scene wird nicht komplett aus dem ram gel�scht!!!!!!!!!!!!!!! Sollte noch
 			 * besser werden
 			 */
 			return;
 		}
-
-		for (final GameObject obj : this.gameObjectsInScene) {
-			if ((obj.updatesOutOfView || inView(obj)) && obj.started) {
-				obj.update();
-			}
-		}
 		
-		for (final GameObject obj : this.gameObjectsInUI) {
-			if (obj.started) {
-				obj.update();
+		if (this.started) {
+			for (final GameObject obj : this.gameObjectsInScene) {
+				if ((obj.updatesOutOfView || inView(obj)) && obj.started) {
+					obj.update();
+				}
 			}
+			
+			for (final GameObject obj : this.gameObjectsInUI) {
+				if (obj.started) {
+					obj.update();
+				}
+			}
+	
+			//Not sure if it should be in the "if"
+			insertGameObjects();
+			outsertGameObjects();
 		}
-
-		insertGameObjects();
-		outsertGameObjects();
 	}
 
 	private void insertGameObjects() {
