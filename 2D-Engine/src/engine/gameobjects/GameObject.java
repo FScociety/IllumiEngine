@@ -138,34 +138,6 @@ public class GameObject implements Serializable {
 		return this.components;
 	}
 
-	public GameObject getCopy() {
-		// MAGIC FUNKTION FROM STACK OVERFLOW FOR COPIING OBJECTS AND I HAVE NO IDEA
-		// HOW IT WORKS BUT IT WORKKKKKKKKKKKKKKSSSSSSSS!!!!!!!!!!
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		try {
-			ObjectOutputStream oos = new ObjectOutputStream(bos);
-			oos.writeObject(this);
-			oos.flush();
-			oos.close();
-			bos.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		byte[] byteData = bos.toByteArray();
-
-		ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
-		GameObject object = null;
-		try {
-			object = (GameObject) new ObjectInputStream(bais).readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return object;
-	}
-
 	public boolean getInWorld() {
 		return this.inWorld;
 	}
@@ -240,32 +212,24 @@ public class GameObject implements Serializable {
 	}
 
 	public void setTransform(final Transform transform) {
-		Transform diffTransform = new Transform(Vector2.substract(transform.position, this.getTransform().position),
+		//Unnötig I guesss
+		/*Transform diffTransform = new Transform(Vector2.substract(transform.position, this.getTransform().position),
 				transform.rotation - this.getTransform().rotation,
-				Vector2.substract(transform.scale, this.getTransform().scale));
+				Vector2.substract(transform.scale, this.getTransform().scale));*/
 		this.localTransform = transform;
 		if (this.parent != null) {
 			this.globalTransform = new Transform(
-					Vector2.add(this.parent.getTransform().position, this.localTransform.position), // Doesnt berehcnen
+					Vector2.add(this.parent.getTransformWithCaution().position, this.localTransform.position), // Doesnt berehcnen
 																									// the rotationg mit
 																									// ein
-					this.parent.getTransform().rotation + this.localTransform.rotation,
-					Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale));
+					this.parent.getTransformWithCaution().rotation + this.localTransform.rotation,
+					Vector2.multiply(this.parent.getTransformWithCaution().scale, this.localTransform.scale));
 		} else {
 			this.globalTransform = this.localTransform;
 		}
 
 		if (this.children.size() > 0) {
-			/*
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 */
-			//System.err.println("GameObject line: 238 oder so sind noch fehler bei 3 Parents");
-			this.updateTransform(diffTransform);
+			this.updateTransform();
 		}
 	}
 	
@@ -320,8 +284,9 @@ public class GameObject implements Serializable {
 		}
 	}
 
-	public void updateGlobalTransform(final GameObject parent, Transform diffTransform) {
-		this.localTransform.position.rotate(diffTransform.rotation);
+	public void updateGlobalTransform(final GameObject parent) {
+		//Uiiii geht das nciht anders?????
+		//this.localTransform.position.rotate(diffTransform.rotation);
 
 		this.globalTransform = new Transform(
 				Vector2.add(this.parent.getTransform().position, this.localTransform.position),
@@ -329,18 +294,18 @@ public class GameObject implements Serializable {
 				Vector2.multiply(this.parent.getTransform().scale, this.localTransform.scale));
 		
 		if (this.children.size() > 0) {
-			this.updateTransform(diffTransform);
+			this.updateTransform();
 		}
 		
 		//Das Bounds sein eigenes Parenting machen kann
 		if (this.b != null && this.parent != null) {
-			this.b.updateBounds(this.b, diffTransform.position);
+			this.b.updateBounds(this.b);
 		}
 	}
 
-	public void updateTransform(Transform diffTransform) {
+	public void updateTransform() {
 		for (int i = 0; i < this.children.size(); i++) {
-			this.children.get(i).updateGlobalTransform(this, diffTransform);
+			this.children.get(i).updateGlobalTransform(this);
 		}
 	}
 
@@ -359,6 +324,34 @@ public class GameObject implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public GameObject getCopy() {
+		// MAGIC FUNKTION FROM STACK OVERFLOW FOR COPIING OBJECTS AND I HAVE NO IDEA
+		// HOW IT WORKS BUT IT WORKKKKKKKKKKKKKKSSSSSSSS!!!!!!!!!!
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			ObjectOutputStream oos = new ObjectOutputStream(bos);
+			oos.writeObject(this);
+			oos.flush();
+			oos.close();
+			bos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		byte[] byteData = bos.toByteArray();
+
+		ByteArrayInputStream bais = new ByteArrayInputStream(byteData);
+		GameObject object = null;
+		try {
+			object = (GameObject) new ObjectInputStream(bais).readObject();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return object;
 	}
 	
 	@Override

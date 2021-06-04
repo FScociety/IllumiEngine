@@ -19,57 +19,18 @@ public class RectTransform extends GameBehaviour {
 	private Vector2 newPos;
 	
 	private RectTransform parentBounds;
-	private Vector2 alignment = RectTransform.RIGHT_CENTER; //WURDE Umgestellt
-	private Vector2 alignmentOffset = new Vector2(0);
-	
-	private static final int
-		LEFT_int = -1, //Y: TOP
-		CENTER_int = 0, //Y: CENTER
-		RIGHT_int = 1; //Y: BOTTOM
+	private Alignment alignment;
+	private Vector2 alignmentOffsetP1 = new Vector2(0);
+	private Vector2 alignmentOffsetP2 = new Vector2(0);
 
-	public static final Vector2 
-		CENTER = new Vector2(CENTER_int, CENTER_int), 
-		LEFT_CENTER = new Vector2(LEFT_int, CENTER_int), 
-		RIGHT_CENTER = new Vector2(RIGHT_int, CENTER_int), 
-		CENTER_TOP = new Vector2(CENTER_int, LEFT_int),
-		CENTER_BOTTOM = new Vector2(CENTER_int, RIGHT_int),
-		LEFT_TOP = new Vector2(LEFT_int, LEFT_int),
-		LEFT_BOTTOM = new Vector2(LEFT_int, RIGHT_int),
-		RIGHT_TOP = new Vector2(RIGHT_int, LEFT_int),
-		RIGHT_BOTTOM = new Vector2(RIGHT_int, RIGHT_int);
-
-	public RectTransform(Vector2 size) {
+	public RectTransform(Vector2 size, Alignment align) {
 		this.size = size;
+		this.alignment = align;
 	}
 	
-	public RectTransform(Vector2 p1, Vector2 p2) {
+	public RectTransform(Vector2 p1, Vector2 p2, Alignment align) {
 		this.setBounds(p1, p2);
-	}
-
-	public void calcOffset() {
-		if (this.alignment.x == RectTransform.LEFT_int) {
-			this.alignmentOffset.x = this.gameObject.getLocalTransform().position.x;
-		} else if (this.alignment.x == RectTransform.RIGHT_int) {
-			//this.alignmentOffset.x = -this.getSize().x/2 + this.gameObject.getLocalTransform().position.x;
-			this.alignmentOffset.x = 250;
-		}
-		
-		Logger.println(this.parentBounds+"",this.gameObject.getLocalTransform().position.x+"", 1);
-	}
-	
-	public void start() {
-		if (this.hasToApplyObjPos) {
-			this.gameObject.setPosition(newPos);
-			this.uigbUpdate();
-		}
-		
-		this.calcOffset();
-		
-		//Find Parent for Alignment (if there is one)
-		GameObject parentObj = this.gameObject.getParent();
-		if (parentObj != null) {
-			this.parentBounds = (RectTransform) parentObj.getComponent(RectTransform.class);
-		}
+		this.alignment = align;
 	}
 	
 	public void setBounds(Vector2 p1, Vector2 p2) {
@@ -78,21 +39,55 @@ public class RectTransform extends GameBehaviour {
 		diffVec.multiply(0.5f);
 		
 		this.newPos = Vector2.add(p1, diffVec);
+		
 		if (this.started) {
 			this.gameObject.setPosition(newPos);
-			this.uigbUpdate();
 		} else {
 			this.hasToApplyObjPos = true;
 		}
 	}
 	
+	public void setPoint1(Vector2 point) {
+		Vector2 diffVec = new Vector2(p2, p1);
+		this.size = diffVec.getCopy();
+		diffVec.multiply(0.5f);
+		
+		this.newPos = Vector2.add(p1, diffVec);
+		
+		if (this.started) {
+			this.gameObject.setPosition(newPos);
+		} else {
+			this.hasToApplyObjPos = true;
+		}
+	}
+	
+	public void setPoint2(Vector2 point) {
+		
+	}
+	
 	public void setSize(Vector2 size) {
 		this.size = size;
 	}
+
+	public void calcOffset() {
+		if (this.alignment.x == RectTransform.LEFT_int) {
+			this.alignmentOffset.x = this.gameObject.getLocalTransform().position.x;
+		} else if (this.alignment.x == RectTransform.RIGHT_int) {
+			this.alignmentOffset.x = -this.parentBounds.size.x/2 + this.gameObject.getTransformWithCaution().position.x;
+		}
+	}
 	
-	public void setAlignment(Vector2 alignment) {
-		this.alignment = alignment;
-		this.uigbUpdate();
+	public void start() {
+		if (this.hasToApplyObjPos) {
+			this.gameObject.setPosition(newPos);
+		}
+		
+		//Find Parent for Alignment (if there is one)
+		GameObject parentObj = this.gameObject.getParent();
+		if (parentObj != null) {
+			this.parentBounds = (RectTransform) parentObj.getComponent(RectTransform.class);
+			this.calcOffset();
+		}
 	}
 	
 	public void update() {
@@ -107,7 +102,7 @@ public class RectTransform extends GameBehaviour {
 		}
 	}
 	
-	private void uigbUpdate() {
+	/*private void uigbUpdate() {
 		//Updates smaller Components of this GameObject like "Button", "Input Field"
 		
 		for (GameBehaviour gb : this.gameObject.getComponents()) {
@@ -117,13 +112,20 @@ public class RectTransform extends GameBehaviour {
 				uigb.uiUpdate();
 			}
 		}
-	}
+	}*/
 	
-	public void updateBounds(final RectTransform parent, final Vector2 change) {
-		if (this.alignment.x == RectTransform.LEFT_int) {
+	public void updateBounds(final RectTransform parent) {
+		Vector2 pos = this.gameObject.getTransformWithCaution().position;
+		
+		/*if (this.alignment.x == RectTransform.LEFT_int) {
 			this.gameObject.setPosition(new Vector2(-this.parentBounds.size.x/2 + this.alignmentOffset.x, 0));
 		} else if (this.alignment.x == RectTransform.RIGHT_int) {
-			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 - this.alignmentOffset.x, 0));	
+			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 + this.alignmentOffset.x, 0));
+
+		}*/
+		
+		if (this.alignment.getAlignP1().x == Alignment.LEFT_int) {
+			
 		}
 	}
 	

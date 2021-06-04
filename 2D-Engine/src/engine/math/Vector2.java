@@ -173,6 +173,16 @@ public class Vector2 implements Serializable {
 		this.x = Math.round(this.x);
 		this.y = Math.round(this.y);
 	}
+	
+	public void floor() {
+		this.x = (float) Math.floor(x);
+		this.y = (float) Math.floor(y);
+	}
+	
+	public void ceil() {
+		this.x = (float) Math.ceil(x);
+		this.y = (float) Math.ceil(y);
+	}
 
 	public void scale(Vector2 pivot, float scaling) {
 		this.substract(pivot);

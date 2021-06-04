@@ -27,16 +27,24 @@ public class Transform implements Serializable {
 		this.rotation = rotation;
 		this.scale = scale;
 	}
-
-	public Transform getCopy() {
-		// System.out.println(this.position + " " + this.rotation + " " + this.scale);
-		return new Transform(this.position.getCopy(), this.rotation, this.scale.getCopy());
+	
+	public static Transform substract(Transform transform, Transform transform2) {
+		Vector2 newPos = Vector2.substract(transform.position, transform2.position);
+		float newRotation = transform.rotation - transform2.rotation;
+		Vector2 newScale = Vector2.substract(transform.scale, transform2.scale);
+		
+		return new Transform(newPos, newRotation, newScale);
 	}
 
 	public void parentTransform(Transform transform) {
 		this.position.add(transform.position);
 		this.rotation += transform.rotation;
 		this.scale.multiply(transform.scale);
+	}
+	
+	public Transform getCopy() {
+		// System.out.println(this.position + " " + this.rotation + " " + this.scale);
+		return new Transform(this.position.getCopy(), this.rotation, this.scale.getCopy());
 	}
 
 	@Override
