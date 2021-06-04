@@ -19,16 +19,15 @@ public class RectTransform extends GameBehaviour {
 	private Vector2 newPos;
 	
 	private RectTransform parentBounds;
-	private Alignment alignment;
-	private Vector2 alignmentOffsetP1 = new Vector2(0);
-	private Vector2 alignmentOffsetP2 = new Vector2(0);
+	private Vector2 alignment;
+	private Vector2 alignmentOffset = new Vector2(0);
 
-	public RectTransform(Vector2 size, Alignment align) {
+	public RectTransform(Vector2 size, Vector2 align) {
 		this.size = size;
 		this.alignment = align;
 	}
 	
-	public RectTransform(Vector2 p1, Vector2 p2, Alignment align) {
+	public RectTransform(Vector2 p1, Vector2 p2, Vector2 align) {
 		this.setBounds(p1, p2);
 		this.alignment = align;
 	}
@@ -47,34 +46,32 @@ public class RectTransform extends GameBehaviour {
 		}
 	}
 	
-	public void setPoint1(Vector2 point) {
-		Vector2 diffVec = new Vector2(p2, p1);
-		this.size = diffVec.getCopy();
-		diffVec.multiply(0.5f);
-		
-		this.newPos = Vector2.add(p1, diffVec);
-		
-		if (this.started) {
-			this.gameObject.setPosition(newPos);
-		} else {
-			this.hasToApplyObjPos = true;
-		}
-	}
-	
-	public void setPoint2(Vector2 point) {
-		
-	}
-	
 	public void setSize(Vector2 size) {
 		this.size = size;
 	}
 
 	public void calcOffset() {
-		if (this.alignment.x == RectTransform.LEFT_int) {
-			this.alignmentOffset.x = this.gameObject.getLocalTransform().position.x;
-		} else if (this.alignment.x == RectTransform.RIGHT_int) {
-			this.alignmentOffset.x = -this.parentBounds.size.x/2 + this.gameObject.getTransformWithCaution().position.x;
+		//X
+		if (this.alignment.x == Alignment.LEFT_int) {
+			this.alignmentOffset.x = this.parentBounds.size.x/2 + this.gameObject.getLocalTransform().position.x;
+		} else if (this.alignment.x == Alignment.RIGHT_int) {
+			this.alignmentOffset.x = -this.parentBounds.size.x/2 + this.gameObject.getLocalTransform().position.x;
+		} else if (this.alignment.x == Alignment.SCALE_int) {
+			//Not positon offset, this will be used for saving the scaling aspect with parent
+			this.alignmentOffset.x = this.parentBounds.size.x / this.size.x;
 		}
+		
+		//Y
+		if (this.alignment.y == Alignment.LEFT_int) {
+			this.alignmentOffset.y = this.parentBounds.size.y/2 + this.gameObject.getLocalTransform().position.y;
+		} else if (this.alignment.y == Alignment.RIGHT_int) {
+			this.alignmentOffset.y = -this.parentBounds.size.y/2 + this.gameObject.getLocalTransform().position.y;
+		} else if (this.alignment.y == Alignment.SCALE_int) {
+			//Not positon offset, this will be used for saving the scaling aspect with parent
+			this.alignmentOffset.y = this.parentBounds.size.y / this.size.y;
+		}
+		
+		System.out.println("AlignmentOffset = " + this.alignmentOffset + " with " + this.alignment);
 	}
 	
 	public void start() {
@@ -102,31 +99,32 @@ public class RectTransform extends GameBehaviour {
 		}
 	}
 	
-	/*private void uigbUpdate() {
-		//Updates smaller Components of this GameObject like "Button", "Input Field"
-		
-		for (GameBehaviour gb : this.gameObject.getComponents()) {
-			//Geht wahrscheinlich einfacher
-			if (gb.getClass().getSuperclass().getSimpleName().equals(UIGameBehaviour.class.getSimpleName())) {
-				UIGameBehaviour uigb = (UIGameBehaviour)gb;
-				uigb.uiUpdate();
-			}
-		}
-	}*/
-	
 	public void updateBounds(final RectTransform parent) {
-		Vector2 pos = this.gameObject.getTransformWithCaution().position;
+		Vector2 pos = this.gameObject.getLocalTransform().position;
 		
-		/*if (this.alignment.x == RectTransform.LEFT_int) {
-			this.gameObject.setPosition(new Vector2(-this.parentBounds.size.x/2 + this.alignmentOffset.x, 0));
-		} else if (this.alignment.x == RectTransform.RIGHT_int) {
-			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 + this.alignmentOffset.x, 0));
-
-		}*/
-		
-		if (this.alignment.getAlignP1().x == Alignment.LEFT_int) {
-			
+		//X
+		if (this.alignment.x == Alignment.LEFT_int) {
+			this.gameObject.setPosition(new Vector2(-this.parentBounds.size.x/2 + this.alignmentOffset.x, pos.y));
+		} else if (this.alignment.x == Alignment.RIGHT_int) {
+			this.gameObject.setPosition(new Vector2(this.parentBounds.size.x/2 + this.alignmentOffset.x, pos.y));
+		} else if (this.alignment.x == Alignment.SCALE_int) {
+			this.size.x = this.parentBounds.size.x / this.alignmentOffset.x;
 		}
+		
+		pos = this.gameObject.getLocalTransform().position;
+
+		System.out.println("Rendering at: " + this.gameObject.getTransformWithCaution().position);
+		
+		//Y
+		if (this.alignment.y == Alignment.LEFT_int) {
+			this.gameObject.setPosition(new Vector2(pos.x, -this.parentBounds.size.y/2 + this.alignmentOffset.y));
+		} else if (this.alignment.y == Alignment.RIGHT_int) {
+			this.gameObject.setPosition(new Vector2(pos.x, this.parentBounds.size.y/2 + this.alignmentOffset.y));
+		} else if (this.alignment.y == Alignment.SCALE_int) {
+			this.size.y = this.parentBounds.size.y / this.alignmentOffset.y;
+		}
+		
+		System.out.println("Rendering at: " + this.gameObject.getTransformWithCaution().position);
 	}
 	
 	public Vector2 getSize() {

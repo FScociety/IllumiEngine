@@ -7,7 +7,7 @@ import engine.math.Vector2;
 public class Canvas extends RectTransform {
 
 	public Canvas(Vector2 size) {
-		super(size);
+		super(size, Alignment.CENTER);
 	}
 	
 	public void ScreenSizeChange() {
