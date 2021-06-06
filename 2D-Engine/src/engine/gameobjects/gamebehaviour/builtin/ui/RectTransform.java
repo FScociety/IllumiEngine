@@ -51,6 +51,9 @@ public class RectTransform extends GameBehaviour {
 	}
 
 	public void calcOffset() {
+		//You could mix "LEFT" & "RIGHT", but the question is,
+		//is a "if" faster or slowed than "multi"
+		
 		//X
 		if (this.alignment.x == Alignment.LEFT_int) {
 			this.alignmentOffset.x = this.parentBounds.size.x/2 + this.gameObject.getLocalTransform().position.x;
@@ -70,8 +73,6 @@ public class RectTransform extends GameBehaviour {
 			//Not positon offset, this will be used for saving the scaling aspect with parent
 			this.alignmentOffset.y = this.parentBounds.size.y / this.size.y;
 		}
-		
-		System.out.println("AlignmentOffset = " + this.alignmentOffset + " with " + this.alignment);
 	}
 	
 	public void start() {
@@ -112,8 +113,6 @@ public class RectTransform extends GameBehaviour {
 		}
 		
 		pos = this.gameObject.getLocalTransform().position;
-
-		System.out.println("Rendering at: " + this.gameObject.getTransformWithCaution().position);
 		
 		//Y
 		if (this.alignment.y == Alignment.LEFT_int) {
@@ -124,11 +123,36 @@ public class RectTransform extends GameBehaviour {
 			this.size.y = this.parentBounds.size.y / this.alignmentOffset.y;
 		}
 		
-		System.out.println("Rendering at: " + this.gameObject.getTransformWithCaution().position);
+		this.updateComponents();
+	}
+	
+	public void updateComponents() {
+		for (GameBehaviour gb : this.gameObject.getComponents()) {
+			if (gb.getType().equals("ui")) {
+				UIGameBehaviour uigb = (UIGameBehaviour)gb;
+				uigb.uiUpdate();
+			}
+		}
 	}
 	
 	public Vector2 getSize() {
 		return this.size;
+	}
+	
+	public Vector2 getPoint1() {
+		return new Vector2(-this.size.x/2, -this.size.y/2);
+	}
+	
+	public Vector2 getPoint2() {
+		return new Vector2(this.size.x/2, -this.size.y/2);
+	}
+	
+	public Vector2 getPoint3() {
+		return new Vector2(this.size.x/2, this.size.y/2);
+	}
+	
+	public Vector2 getPoint4() {
+		return new Vector2(-this.size.x/2, this.size.y/2);
 	}
 	
 	public Vector2 getAlignment() {

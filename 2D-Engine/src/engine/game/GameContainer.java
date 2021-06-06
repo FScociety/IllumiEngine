@@ -15,7 +15,7 @@ public class GameContainer {
 	private String suffix = "GameContainer";
 	public static GameContainer gc;
 	
-	private static boolean running = false;
+	public static boolean running = false;
 	private static double nd = 1.0E9;
 	private static double targetFPS = 80;
 
@@ -29,7 +29,7 @@ public class GameContainer {
 	public static float ups = 0;
 
 	public static double dt;
-	private boolean abstractGameStarted = false;
+	private static boolean abstractGameStarted = false;
 	private Thread updateThread, renderThread;
 
 	public GameContainer() {
@@ -185,5 +185,9 @@ public class GameContainer {
 		});
 		updateThread.setName("Update");
 		updateThread.start();
+	}
+	
+	public static boolean isAbstractGameRunning() {
+		return GameContainer.abstractGameStarted;
 	}
 }

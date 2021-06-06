@@ -2,6 +2,7 @@ package engine.scenes;
 
 import java.util.ArrayList;
 
+import engine.game.GameContainer;
 import engine.io.Logger;
 
 public class SceneManager {
@@ -49,6 +50,7 @@ public class SceneManager {
 						Logger.println(prefix, "Scene[" + newScene.getName() + "] Creating objects", 0);
 						bufferScene.instanceGameObjects();
 						Logger.println(prefix, "Scene[" + newScene.getName() + "] Created", 0);
+						
 						Logger.println(prefix, "Scene[" + newScene.getName() + "] Starting objects", 0);
 						bufferScene.start();
 						Logger.println(prefix, "Scene[" + newScene.getName() + "] Objects started objects", 0);

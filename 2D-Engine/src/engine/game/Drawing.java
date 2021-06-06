@@ -214,12 +214,13 @@ public class Drawing {
 				(int) (scale.x * zoom), (int) (scale.y * zoom));
 	}
 	
-	public void fillRect(RectTransform b) {
-		Vector2 p1 = b.getPoint1();
+	public void fillRect() {
+		/*Vector2 p1 = b.getPoint1();
 		Vector2 p2 = b.getPoint2();
 		p1.substract(this.obj.getTransformWithCaution().position);
 		p2.substract(this.obj.getTransformWithCaution().position);
-		this.fillRect(p1, Vector2.add(Vector2.invert(p1), p2));
+		this.fillRect(p1, Vector2.add(Vector2.invert(p1), p2));*/
+		this.fillRect(obj.b.getSize());
 	}
 
 	public void fillRect(Vector2 scale2) {
@@ -248,13 +249,12 @@ public class Drawing {
 	}
 
 	public void resetTransform() {
-		this.g.setTransform(af);
-
 		if (GameContainer.debug == true) {
 			this.g.setColor(Color.GREEN);
-			this.g.fillRect((int) obj.getTransformWithCaution().position.x - 2,
-					(int) obj.getTransformWithCaution().position.y - 2, 4, 4);
+			this.g.fillRect(-2, -2, 4, 4);
 		}
+		
+		this.g.setTransform(af);
 	}
 
 	public void setColor(Color c) {

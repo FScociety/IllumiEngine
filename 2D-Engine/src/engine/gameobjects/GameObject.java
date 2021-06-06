@@ -36,7 +36,7 @@ public class GameObject implements Serializable {
 
 	public int viewRange = 100; // Change if needed
 	
-	private RectTransform b;
+	public RectTransform b;
 	
 	public GameObject(String name, Vector2 pos, boolean inWorld) {
 		this.name = name;
