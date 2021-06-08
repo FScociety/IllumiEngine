@@ -36,7 +36,6 @@ public class SimpleText extends UIGameBehaviour {
 	
 	public void uiUpdate() {
 		//this.d.setFont(f);
-		System.out.println("ui");
 		int stringWidth = this.d.g.getFontMetrics().stringWidth(text);
 		
 		System.out.println(stringWidth);

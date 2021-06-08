@@ -58,7 +58,6 @@ public class SceneManager {
 							SceneManager.oldScene.unload();
 						}
 						Logger.println(prefix, "Scene[" + newScene.getName() + "] loaded", 0);
-						System.out.println();
 					} else {
 						Logger.println(prefix, "Why load Scene[" + newScene.getName() + "] when activeScene["
 								+ SceneManager.activeScene.getName() + "]", 1);

@@ -42,7 +42,7 @@ public abstract class Scene {
 		
 		//Create UICanvas
 		canvasGameObject = new GameObject(new Vector2(0), false);
-		canvas = new Canvas(GameContainer.gc.getSize());
+		canvas = new Canvas(GameContainer.windowSize);
 		canvasGameObject.addComponent(canvas);
 		this.gameObjectsInScene.add(canvasGameObject);
 	}

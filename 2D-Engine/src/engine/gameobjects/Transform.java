@@ -43,7 +43,6 @@ public class Transform implements Serializable {
 	}
 	
 	public Transform getCopy() {
-		// System.out.println(this.position + " " + this.rotation + " " + this.scale);
 		return new Transform(this.position.getCopy(), this.rotation, this.scale.getCopy());
 	}
 

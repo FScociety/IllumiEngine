@@ -8,6 +8,8 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.RenderingHints;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -37,6 +39,8 @@ public class Window extends Canvas {
 	public Graphics2D g;
 	
 	public static BufferedImage engineLogo = null;
+	
+	private float timeAfterUpdate;
 
 	public Window(final GameContainer gc) {
 		
@@ -49,7 +53,7 @@ public class Window extends Canvas {
 		
 		Window.engineLogo = LocalFileLoader.loadImage("/EngineLogo.png");
 
-		final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
+		final Dimension s = new Dimension((int) gc.windowSize.x, (int) gc.windowSize.y);
 		setSize(s);
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
 		Window.frame.setIconImage(engineLogo);
@@ -61,18 +65,7 @@ public class Window extends Canvas {
 		Window.frame.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent evt) {
-				GameContainer.windowSize = new Vector2(Window.frame.getWidth(), Window.frame.getHeight());
-				final Dimension s = new Dimension((int) gc.getSize().x, (int) gc.getSize().y);
-				setSize(s);
-				createBufferStrategy(2);
-				bs = getBufferStrategy();
-				g = (Graphics2D) bs.getDrawGraphics();
-				if (GameContainer.d != null) {
-					GameContainer.d.g = (Graphics2D) g;
-				}
-				if (SceneManager.activeScene != null) {
-					SceneManager.activeScene.canvas.ScreenSizeChange();
-				}
+				timeAfterUpdate = 0.1f;
 			}
 		});
 		Window.frame.setResizable(true);
@@ -82,9 +75,35 @@ public class Window extends Canvas {
 		createBufferStrategy(2);
 		bs = getBufferStrategy();
 		g = (Graphics2D) bs.getDrawGraphics();
-	    RenderingHints rh = new RenderingHints(
+	   /* RenderingHints rh = new RenderingHints(
 	             RenderingHints.KEY_ANTIALIASING,
 	             RenderingHints.VALUE_ANTIALIAS_ON);
-	    g.setRenderingHints(rh);
+	    g.setRenderingHints(rh);*/
+	}
+	
+	private void updateWindowGraphics() {
+		GameContainer.windowSize = new Vector2(Window.frame.getWidth(), Window.frame.getHeight());
+		final Dimension s = new Dimension((int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
+		setSize(s);
+		createBufferStrategy(2);
+		bs = getBufferStrategy();
+		g = (Graphics2D) bs.getDrawGraphics();
+		if (GameContainer.d != null) {
+			GameContainer.d.g = (Graphics2D) g;
+		}
+		if (SceneManager.activeScene != null) {
+			SceneManager.activeScene.canvas.ScreenSizeChange();
+		}
+	}
+	
+	public void update() {
+		if (this.timeAfterUpdate >= 0.1f) {
+			this.timeAfterUpdate += GameContainer.dt;
+		
+			if (this.timeAfterUpdate >= 0.2f) {
+				this.updateWindowGraphics();
+				this.timeAfterUpdate = 0;
+			}
+		}
 	}
 }

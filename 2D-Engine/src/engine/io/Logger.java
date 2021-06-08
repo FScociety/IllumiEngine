@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Logger {
+	
 	static Calendar cal;
 	static SimpleDateFormat sdf;
 	
@@ -38,9 +39,10 @@ public class Logger {
 			break;
 		}
 		System.out.println("[" + sdf.format(cal.getTime()) + "][" + threadInfo + "/" + color + messageInfo + Logger.ANSI_RESET +"][" + prefix + "]: " + p);
+		
 	}
 }
 
 /*
-*	Bessere Lösung wäre vllllllllllllllt aber nicht sicher das das das macht was ich will eigenen Print Stream zu machen
+*	Bessere Lï¿½sung wï¿½re vllllllllllllllt aber nicht sicher das das das macht was ich will eigenen Print Stream zu machen
 */ 

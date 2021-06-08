@@ -8,9 +8,10 @@ public class Canvas extends RectTransform {
 
 	public Canvas(Vector2 size) {
 		super(size, Alignment.CENTER);
+		this.setBounds(new Vector2(0), GameContainer.windowSize);
 	}
 	
 	public void ScreenSizeChange() {
-		this.setBounds(new Vector2(0), GameContainer.gc.getSize());
+		this.setBounds(new Vector2(0), GameContainer.windowSize);
 	}
 }
