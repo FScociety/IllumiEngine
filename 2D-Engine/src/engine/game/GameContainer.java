@@ -2,6 +2,7 @@ package engine.game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,7 +21,7 @@ public class GameContainer {
 	
 	public static boolean running = false;
 	private static double nd = 1.0E9;
-	private static double targetFPS = 800;
+	private static double targetFPS = 80;
 	
 	private int frames = 0;
 	private double renderStartTime = System.nanoTime() / nd;
@@ -44,7 +45,8 @@ public class GameContainer {
 	public static double dt;
 	private static boolean abstractGameStarted = false;
 	public static boolean updateThreadRunning, renderThreadRunning;
-	private ScheduledExecutorService updateThread, renderThread;
+	private ScheduledExecutorService updateExecutor, renderExecutor;
+	private Runnable updateThread, renderThread;
 
 	public GameContainer(Vector2 size) {
 		Logger.startLogger();
@@ -84,16 +86,14 @@ public class GameContainer {
 	private void startRenderThread() {
 		Logger.println(suffix, "Starting RenderThread", 0);
 		
-		this.renderThread = Executors.newSingleThreadScheduledExecutor();
+		this.renderExecutor = Executors.newSingleThreadScheduledExecutor();
 		
 		GameContainer.renderThreadRunning = true;
 		
-		renderThread.scheduleAtFixedRate(new Runnable() {
+		renderThread = new Runnable() {
 
 			@Override
 			public void run() {
-					window.g.setColor(Color.BLACK);
-					window.g.fillRect(0, 0, (int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
 					
 					if (SceneManager.activeScene != null) {
 						game.render();
@@ -108,6 +108,7 @@ public class GameContainer {
 					renderEndTime = renderStartTime;
 					renderStartTime = System.nanoTime() / nd;
 					renderTimeElapsed += renderStartTime - renderEndTime;
+					
 					if (renderTimeElapsed >= 1) {
 						fps = frames;
 						frames = 0;
@@ -116,21 +117,27 @@ public class GameContainer {
 						//Add one fps
 						frames++;
 					}
+					
+					//IDK was des macht
+					//Toolkit.getDefaultToolkit().sync();
 
-					Window.frame.setTitle("Illumi-Engine | " + fps + " | " + ups);
+					Window.frame.setTitle("Illumi-Engine | " + Math.round((renderStartTime - renderEndTime) * 1000) + "ms | " + Math.round(dt*1000) +"ms");
 			}
-		}, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
+		
+		};
+		
+		renderExecutor.scheduleAtFixedRate(renderThread, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
 	}
 	
 	private void startUpdateThread() {
 		Logger.println(suffix, "Starting UpdateThread", 0);
 		
-		updateThread = Executors.newSingleThreadScheduledExecutor();
+		updateExecutor = Executors.newSingleThreadScheduledExecutor();
 		
 		GameContainer.updateThreadRunning = true;
 		dt = 1; // So it is not Stuck in the Beginning
-		
-		updateThread.scheduleAtFixedRate(new Runnable() {
+	
+		updateThread = new Runnable() {
 			@Override
 			public void run() {
 				//Rezising
@@ -169,7 +176,9 @@ public class GameContainer {
 					cycl++;
 				}
 			}
-		}, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
+		};
+		
+		updateExecutor.scheduleAtFixedRate(updateThread, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
 	}
 	
 	public double getStartTime() {

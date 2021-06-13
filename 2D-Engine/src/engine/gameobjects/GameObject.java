@@ -18,6 +18,8 @@ import engine.scenes.Scene;
 
 public class GameObject implements Serializable {
 	
+	public double _debugFrameTime_;
+	
 	private static final String prefix = "GameObject";
 
 	private Transform localTransform = new Transform();

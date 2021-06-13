@@ -111,6 +111,12 @@ public class Drawing {
 		this.g.drawImage(img, (int) (pos.x * zoom), (int) (pos.y * zoom),
 				(int) (scale.x * zoom), (int) (scale.y * zoom), null);
 	}
+	
+	public void drawImageFast(BufferedImage img, Vector2 pos) {
+		pos.multiply(obj.getTransformWithCaution().scale);
+		
+		this.g.drawImage(img, (int)pos.x, (int)pos.y, null);
+	}
 
 	public void drawLine(Vector2 vec2) {
 		Vector2 vec = vec2.getCopy();

@@ -1,6 +1,7 @@
 package engine.game;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,12 +18,14 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import engine.input.listener.ViewListener;
 import engine.io.LocalFileLoader;
 import engine.math.Vector2;
 import engine.scenes.SceneManager;
@@ -35,6 +38,8 @@ public class Window extends Canvas {
 	public static Font standartFont_bolditalic;
 	public static String currentDir;
 	public BufferStrategy bs;
+	
+	public static ArrayList<ViewListener> viewListener = new ArrayList<ViewListener>();
 
 	public Graphics2D g;
 	
@@ -52,33 +57,28 @@ public class Window extends Canvas {
 		Window.standartFont_bolditalic = LocalFileLoader.loadFont("/defaultfont/bolditalic.otf");
 		
 		Window.engineLogo = LocalFileLoader.loadImage("/EngineLogo.png");
+		
+        // activate opengl
+        System.setProperty("sun.java2d.opengl", "true");
 
-		final Dimension s = new Dimension((int) gc.windowSize.x, (int) gc.windowSize.y);
-		setSize(s);
+		final Dimension s = new Dimension((int) GameContainer.windowSize.x, (int) GameContainer.windowSize.y);
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
 		Window.frame.setIconImage(engineLogo);
 		JPanel panel = new JPanel(null);
-		panel.setBackground(Color.BLACK);
 		panel.add(this);
 		Window.frame.add(panel);
-
-		Window.frame.addComponentListener(new ComponentAdapter() {
+		/*Window.frame.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent evt) {
 				timeAfterUpdate = 0.1f;
 			}
-		});
+		});*/
 		Window.frame.setResizable(true);
 		Window.frame.setVisible(true);
 		Window.frame.setPreferredSize(s);
 		Window.frame.pack();
-		createBufferStrategy(2);
-		bs = getBufferStrategy();
-		g = (Graphics2D) bs.getDrawGraphics();
-	   /* RenderingHints rh = new RenderingHints(
-	             RenderingHints.KEY_ANTIALIASING,
-	             RenderingHints.VALUE_ANTIALIAS_ON);
-	    g.setRenderingHints(rh);*/
+		
+		updateWindowGraphics();
 	}
 	
 	private void updateWindowGraphics() {
@@ -102,6 +102,9 @@ public class Window extends Canvas {
 		
 			if (this.timeAfterUpdate >= 0.2f) {
 				this.updateWindowGraphics();
+				for (ViewListener vl : Window.viewListener) {
+					vl.rezise();
+				}
 				this.timeAfterUpdate = 0;
 			}
 		}

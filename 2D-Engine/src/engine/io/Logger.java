@@ -39,7 +39,6 @@ public class Logger {
 			break;
 		}
 		System.out.println("[" + sdf.format(cal.getTime()) + "][" + threadInfo + "/" + color + messageInfo + Logger.ANSI_RESET +"][" + prefix + "]: " + p);
-		
 	}
 }
 

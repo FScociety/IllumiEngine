@@ -1,5 +1,6 @@
 package engine.scenes;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import engine.game.GameContainer;
@@ -19,6 +20,7 @@ public abstract class Scene {
 	private int objectCount = 0;
 
 	private String name;
+	public Color backgroundC = Color.BLACK;
 	private boolean unload;
 	private boolean started = false;
 	
@@ -41,7 +43,7 @@ public abstract class Scene {
 		this.gameObjectsInScene.add(defaultCameraObject);
 		
 		//Create UICanvas
-		canvasGameObject = new GameObject(new Vector2(0), false);
+		canvasGameObject = new GameObject("canvas", new Vector2(0), false);
 		canvas = new Canvas(GameContainer.windowSize);
 		canvasGameObject.addComponent(canvas);
 		this.gameObjectsInScene.add(canvasGameObject);
@@ -86,13 +88,19 @@ public abstract class Scene {
 		if (!started) {
 			return;
 		}
+		
+		//FILLING BACKGROUND
+		GameContainer.d.g.setColor(this.backgroundC);
+		GameContainer.d.g.fillRect(0, 0, (int)GameContainer.windowSize.x, (int)GameContainer.windowSize.y);
 
 		Object[] objects = this.gameObjectsInScene.toArray();
 
 		for (int i = 0; i < objects.length; i++) {
 			GameObject obj = (GameObject) objects[i];
 			if (inView(obj) && obj.started) {
+				double startTime = System.nanoTime();
 				obj.render();
+				obj._debugFrameTime_ = (System.nanoTime() - startTime) / 1.0E9;
 			}
 		}
 		
