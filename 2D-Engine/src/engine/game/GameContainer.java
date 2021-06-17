@@ -52,11 +52,11 @@ public class GameContainer {
 		Logger.startLogger();
 		GameContainer.gc = this;
 		
-		this.windowSize = size;
+		GameContainer.windowSize = size;
 		
-		Logger.println(suffix, "Creating Window", 0);
+		Logger.log("Creating Window");
 		GameContainer.window = new Window(this);
-		Logger.println(suffix, "Created", 0);
+		Logger.fine("Created");
 	}
 	
 	public void setGame(final AbstractGame game) {
@@ -64,16 +64,14 @@ public class GameContainer {
 	}
 
 	public void start() {
-		Logger.println(suffix, "Starting Engine", 0);
+		Logger.log("Starting Engine");
 		GameContainer.running = true;
 		
-		Logger.println(suffix, "Start Listening Input", 0);
 		GameContainer.input = new Input(gc);
-		Logger.println(suffix, "Started", 0);
-		Logger.println(suffix, "Creating Drawer", 0);
+		Logger.log("Started Input Listener");
 		GameContainer.d = new Drawing((Graphics2D) window.g);
 		GameContainer.game.d = GameContainer.d;
-		Logger.println(suffix, "Created", 0);
+		Logger.log("Created Drawing Stuff");
 
 		startUpdateThread();
 		
@@ -84,9 +82,13 @@ public class GameContainer {
 	}
 
 	private void startRenderThread() {
-		Logger.println(suffix, "Starting RenderThread", 0);
+		//IDK was des macht
+		//Toolkit.getDefaultToolkit().sync();
+
+		Window.frame.setTitle("Illumi-Engine | " + Math.round((renderStartTime - renderEndTime) * 1000) + "ms | " + Math.round(dt*1000) +"ms");
+		Logger.log("Starting RenderThread");
 		
-		this.renderExecutor = Executors.newSingleThreadScheduledExecutor();
+		//this.renderExecutor = Executors.newSingleThreadScheduledExecutor();
 		
 		GameContainer.renderThreadRunning = true;
 		
@@ -126,11 +128,11 @@ public class GameContainer {
 		
 		};
 		
-		renderExecutor.scheduleAtFixedRate(renderThread, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
+		//renderExecutor.scheduleAtFixedRate(renderThread, 0, (long) (1000000/GameContainer.targetFPS), TimeUnit.MICROSECONDS);
 	}
 	
 	private void startUpdateThread() {
-		Logger.println(suffix, "Starting UpdateThread", 0);
+		Logger.log("Starting UpdateThread");
 		
 		updateExecutor = Executors.newSingleThreadScheduledExecutor();
 		
@@ -160,6 +162,48 @@ public class GameContainer {
 						SceneManager.oldScene.update();
 					}
 				}
+				
+				
+				
+				
+			
+				
+				if (SceneManager.activeScene != null) {
+					game.render();
+					SceneManager.activeScene.render();
+				}
+
+				try {
+					window.bs.show(); // Flipp the Buffer
+				} catch (IllegalStateException e) {
+				}
+
+				renderEndTime = renderStartTime;
+				renderStartTime = System.nanoTime() / nd;
+				renderTimeElapsed += renderStartTime - renderEndTime;
+				
+				if (renderTimeElapsed >= 1) {
+					fps = frames;
+					frames = 0;
+					renderTimeElapsed = 0;
+				} else {
+					//Add one fps
+					frames++;
+				}
+				
+				//IDK was des macht
+				//Toolkit.getDefaultToolkit().sync();
+
+				Window.frame.setTitle("Illumi-Engine | " + Math.round((renderStartTime - renderEndTime) * 1000) + "ms | " + Math.round(dt*1000) +"ms");
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
 				// GameUpdate END
 

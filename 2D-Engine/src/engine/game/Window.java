@@ -65,14 +65,15 @@ public class Window extends Canvas {
 		(Window.frame = new JFrame("Engine")).setDefaultCloseOperation(3);
 		Window.frame.setIconImage(engineLogo);
 		JPanel panel = new JPanel(null);
+		panel.setIgnoreRepaint(true);
 		panel.add(this);
 		Window.frame.add(panel);
-		/*Window.frame.addComponentListener(new ComponentAdapter() {
+		Window.frame.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent evt) {
 				timeAfterUpdate = 0.1f;
 			}
-		});*/
+		});
 		Window.frame.setResizable(true);
 		Window.frame.setVisible(true);
 		Window.frame.setPreferredSize(s);

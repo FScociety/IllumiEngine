@@ -3,45 +3,58 @@ package engine.io;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import engine.game.GameContainer;
+
 public class Logger {
 	
 	static Calendar cal;
 	static SimpleDateFormat sdf;
 	
-	public static final int INFO = 0, WARNING = 1, ERROR = 2;
+	private static final String ANSI_YELLOW = "\u001B[33m";
+	private static final String ANSI_RED = "\u001B[31m";
+	private static final String ANSI_RESET = "\u001B[0m";
+	private static final String ANSI_GREEN = "\u001b[32m";
 	
-	public static final String ANSI_YELLOW = "\u001B[33m";
-	public static final String ANSI_RED = "\u001B[31m";
-	public static final String ANSI_RESET = "\u001B[0m";
+	private static String lastPrefix = "null";
 	
 	public static void startLogger() {
         cal= Calendar.getInstance();
         sdf = new SimpleDateFormat("HH:mm:ss");
 	}
 	
-	public static void println(String prefix, String p, int state) {
+	public static void debug(String message) {
+		if (GameContainer.debug) {
+			Logger.log(message, Logger.ANSI_RESET, "DEBUG");
+		}
+	}
+	
+	public static void warn(String message) {
+		Logger.log(message, Logger.ANSI_YELLOW, "WARN ");
+	}
+	
+	public static void error(String message) {
+		Logger.log(message, Logger.ANSI_RED, "ERROR");
+	}
+	
+	public static void fine(String message) {
+		Logger.log(message, Logger.ANSI_GREEN, "FINE ");
+	}
+	
+	public static void log(String message) {
+		Logger.log(message, Logger.ANSI_RESET, "LOG  ");
+	}
+	
+	public static void log(String message, String colorCode, String suffix) {
         cal = Calendar.getInstance();
 		String threadInfo = Thread.currentThread().getName() + " thread";
-		//threadInfo = String.format("%-13s", threadInfo);
-		String messageInfo = "";
-		String color = "";
-		switch (state) {
-		case 0:
-			messageInfo = "INFO";
-			break;
-		case 1:
-			messageInfo = "WARNING";
-			color = Logger.ANSI_YELLOW;
-			break;
-		case 2:
-			messageInfo = "ERROR";
-			color = Logger.ANSI_RED;
-			break;
+		String prefix = Thread.currentThread().getStackTrace()[3].getClassName();
+		
+		if (!Logger.lastPrefix.equals(prefix)) { 
+			System.out.println();
+			System.out.println("from [" + prefix + "] in [" + Thread.currentThread().getName() +"] : ");
 		}
-		System.out.println("[" + sdf.format(cal.getTime()) + "][" + threadInfo + "/" + color + messageInfo + Logger.ANSI_RESET +"][" + prefix + "]: " + p);
+		System.out.println("[" + sdf.format(cal.getTime()) + "]" + colorCode + " [" + suffix + "] ---> " + message + Logger.ANSI_RESET);
+	
+		Logger.lastPrefix = prefix;
 	}
 }
-
-/*
-*	Bessere L�sung w�re vllllllllllllllt aber nicht sicher das das das macht was ich will eigenen Print Stream zu machen
-*/ 

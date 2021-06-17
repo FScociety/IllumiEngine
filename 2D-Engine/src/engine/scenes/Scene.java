@@ -2,6 +2,8 @@ package engine.scenes;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import engine.game.GameContainer;
 import engine.gameobjects.GameObject;
@@ -57,7 +59,7 @@ public abstract class Scene {
 		this.objectCount++;
 	}
 
-	public ArrayList<GameObject> getGameObjectsInScene() {
+	public List<GameObject> getGameObjectsInScene() {
 		return this.gameObjectsInScene;
 	}
 	
@@ -153,7 +155,7 @@ public abstract class Scene {
 	public void update() {
 		if (this.unload) {
 			this.gameObjectsInScene.clear();
-			Logger.println(prefix, "Unloaded Scene [" + this.name + "]", 0);
+			Logger.log("Unloaded Scene [" + this.name + "]");
 			this.sceneUnloaded();
 			this.unload = false;
 			/* WICHTIG

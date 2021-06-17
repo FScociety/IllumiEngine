@@ -75,8 +75,7 @@ public class GameObject implements Serializable {
 
 		if (gb.getType().equals("ui")) {
 			if (this.b == null) {
-				Logger.println(prefix, "First add a Bounds component", 1);
-				System.err.println("First add a Bounds component");
+				Logger.warn("First add a Bounds component");
 				System.exit(0);
 			}
 			UIGameBehaviour uigb = (UIGameBehaviour)gb;
@@ -195,9 +194,7 @@ public class GameObject implements Serializable {
 		if (parent.getInWorld() == this.getInWorld()) {
 			(this.parent = parent).addChildren(this);
 		} else {
-			Logger.println(prefix, "Huch jez is aber ordentlich was schiefgelaufen", 2);
-			Logger.println(prefix, "Also wendern bin ich dumm, oooooooooder:", 2);
-			Logger.println(prefix, "Dein Computer ist kaputt. Entscheide weisse (:", 2);
+			Logger.error("Weird Problem");
 		}
 	}
 
@@ -269,7 +266,7 @@ public class GameObject implements Serializable {
 				this.children.get(i).start(loadingScene);
 			}
 		}
-		Logger.println(prefix, "Started GameObject[" + this + "]", 0);
+		Logger.log("Started GameObject: '" + this.name + "'");
 	}
 
 	public void update() {

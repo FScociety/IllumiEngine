@@ -46,24 +46,24 @@ public class SceneManager {
 					if (SceneManager.activeScene != newScene) {
 						SceneManager.oldScene = SceneManager.activeScene;
 						bufferScene = newScene;
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] Loading", 0);
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] Creating objects", 0);
+						Logger.log("Scene[" + newScene.getName() + "] Loading");
+						Logger.log("Scene[" + newScene.getName() + "] Creating objects");
 						bufferScene.instanceGameObjects();
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] Created", 0);
+						Logger.fine("Scene[" + newScene.getName() + "] Created");
 						
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] Starting objects", 0);
+						Logger.log("Scene[" + newScene.getName() + "] Starting objects");
 						bufferScene.start();
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] Objects started objects", 0);
+						Logger.fine("Scene[" + newScene.getName() + "] Started objects");
 						if (SceneManager.oldScene != null) {
 							SceneManager.oldScene.unload();
 						}
-						Logger.println(prefix, "Scene[" + newScene.getName() + "] loaded", 0);
+						Logger.fine("Scene[" + newScene.getName() + "] loaded");
 					} else {
-						Logger.println(prefix, "Why load Scene[" + newScene.getName() + "] when activeScene["
-								+ SceneManager.activeScene.getName() + "]", 1);
+						Logger.warn("Why load Scene[" + newScene.getName() + "] when activeScene["
+								+ SceneManager.activeScene.getName() + "]");
 					}
 				} else {
-					Logger.println(prefix, "Scene[" + bufferScene.getName() + "] doesn't exist", 2);
+					Logger.error("Scene[" + bufferScene.getName() + "] doesn't exist");
 				}
 			}
 		});

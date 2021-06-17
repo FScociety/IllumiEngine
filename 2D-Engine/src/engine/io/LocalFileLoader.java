@@ -24,9 +24,9 @@ public class LocalFileLoader {
 		Font f = null;
 		try {
 			f = Font.createFont(0, w.getClass().getResourceAsStream(localPath));
-			Logger.println(prefix, "Loaded Font " + localPath, 0);
+			Logger.fine("Loaded Font " + localPath);
 		} catch (FontFormatException | IOException ex2) {
-			Logger.println(prefix, "Failed loading Font " + localPath, 2);
+			Logger.error("Failed loading Font " + localPath);
 		}
 		return f;
 	}
@@ -35,9 +35,9 @@ public class LocalFileLoader {
 		BufferedImage bi = null;
 		try {
 			bi = ImageIO.read(w.getClass().getResourceAsStream("/EngineLogo.png"));
-			Logger.println(prefix, "Loaded Image " + localPath, 0);
+			Logger.fine("Loaded Image " + localPath);
 		} catch (IOException e) {
-			Logger.println(prefix, "Failed loading Image " + localPath, 2);
+			Logger.error("Failed loading Image " + localPath);
 		}
 		return bi;
 	}
